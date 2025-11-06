@@ -1,9 +1,9 @@
 <?php
 
-namespace app\controllers;
+namespace backend\controllers;
 
-use app\models\HistoricoPreco;
-use app\models\HistoricoPrecoSearch;
+use common\models\HistoricoPreco;
+use common\models\HistoricoPrecoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

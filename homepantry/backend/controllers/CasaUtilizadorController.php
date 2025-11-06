@@ -1,9 +1,9 @@
 <?php
 
-namespace app\controllers;
+namespace backend\controllers;
 
-use app\models\CasaUtilizador;
-use app\models\CasaUtilizadorSearch;
+use common\models\CasaUtilizador;
+use common\models\CasaUtilizadorSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

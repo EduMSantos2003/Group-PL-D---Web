@@ -2,8 +2,8 @@
 
 namespace backend\controllers;
 
-use app\models\Casa;
-use app\models\CasaSearch;
+use common\models\Casa;
+use common\models\CasaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

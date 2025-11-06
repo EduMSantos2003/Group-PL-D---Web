@@ -1,9 +1,9 @@
 <?php
 
-namespace app\controllers;
+namespace backend\controllers;
 
-use app\models\ListaProduto;
-use app\models\ListaProdutoSearch;
+use common\models\ListaProduto;
+use common\models\ListaProdutoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
