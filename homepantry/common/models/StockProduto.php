@@ -38,7 +38,7 @@ class StockProduto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'idProduto', 'idUtilizador', 'idLocal', 'quantidade', 'validade', 'preco'], 'required'],
+            [['idProduto', 'idUtilizador', 'idLocal', 'quantidade', 'validade', 'preco'], 'required'],
             [['id', 'idProduto', 'idUtilizador', 'idLocal'], 'integer'],
             [['quantidade', 'preco'], 'number'],
             [['validade', 'dataCriacao'], 'safe'],

@@ -32,7 +32,7 @@ class HistoricoPreco extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'idProduto', 'preco'], 'required'],
+            [['idProduto', 'preco'], 'required'],
             [['id', 'idProduto'], 'integer'],
             [['preco'], 'number'],
             [['dataRegisto'], 'safe'],

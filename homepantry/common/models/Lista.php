@@ -35,7 +35,7 @@ class Lista extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'idUtilizador', 'nome', 'tipo', 'totalEstimado'], 'required'],
+            [['idUtilizador', 'nome', 'tipo', 'totalEstimado'], 'required'],
             [['id', 'idUtilizador'], 'integer'],
             [['totalEstimado'], 'number'],
             [['dataCriacao'], 'safe'],

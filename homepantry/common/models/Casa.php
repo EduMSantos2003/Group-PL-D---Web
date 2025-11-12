@@ -34,7 +34,7 @@ class Casa extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'nome', 'idUtilizadorPrincipal'], 'required'],
+            [['nome', 'idUtilizadorPrincipal'], 'required'],
             [['id', 'idUtilizadorPrincipal'], 'integer'],
             [['dataCriacao'], 'safe'],
             [['nome'], 'string', 'max' => 255],

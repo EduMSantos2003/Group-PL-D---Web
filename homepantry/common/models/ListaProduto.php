@@ -35,7 +35,7 @@ class ListaProduto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'idLista', 'idProduto', 'quantidade', 'precoUnitario', 'subTotal'], 'required'],
+            [['idLista', 'idProduto', 'quantidade', 'precoUnitario', 'subTotal'], 'required'],
             [['id', 'idLista', 'idProduto'], 'integer'],
             [['quantidade', 'precoUnitario', 'subTotal'], 'number'],
             [['id'], 'unique'],

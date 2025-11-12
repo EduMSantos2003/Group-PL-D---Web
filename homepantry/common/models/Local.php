@@ -32,7 +32,7 @@ class Local extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'idCasa', 'nome'], 'required'],
+            [['idCasa', 'nome'], 'required'],
             [['id', 'idCasa'], 'integer'],
             [['nome'], 'string', 'max' => 255],
             [['id'], 'unique'],

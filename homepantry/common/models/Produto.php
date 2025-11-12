@@ -38,7 +38,7 @@ class Produto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'idCategoria', 'nome', 'descricao', 'unidade', 'preco', 'validade'], 'required'],
+            [['idCategoria', 'nome', 'descricao', 'unidade', 'preco', 'validade'], 'required'],
             [['id', 'idCategoria', 'unidade'], 'integer'],
             [['preco'], 'number'],
             [['validade'], 'safe'],

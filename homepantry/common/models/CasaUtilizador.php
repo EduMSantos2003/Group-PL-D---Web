@@ -32,7 +32,7 @@ class CasaUtilizador extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'idUtilizador', 'idCasa'], 'required'],
+            [['idUtilizador', 'idCasa'], 'required'],
             [['id', 'idUtilizador', 'idCasa'], 'integer'],
             [['id'], 'unique'],
             [['idUtilizador'], 'exist', 'skipOnError' => true, 'targetClass' => Utilizadores::class, 'targetAttribute' => ['idUtilizador' => 'id']],
