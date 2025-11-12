@@ -10,7 +10,7 @@ use Yii;
  * @property int $id
  * @property string $nome
  *
- * @property Produtos[] $produtos
+ * @property Produto[] $produtos
  */
 class Categoria extends \yii\db\ActiveRecord
 {
@@ -55,7 +55,7 @@ class Categoria extends \yii\db\ActiveRecord
      */
     public function getProdutos()
     {
-        return $this->hasMany(Produtos::class, ['idCategoria' => 'id']);
+        return $this->hasMany(Produto::class, ['idCategoria' => 'id']);
     }
 
 }

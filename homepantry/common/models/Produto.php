@@ -15,10 +15,10 @@ use Yii;
  * @property float $preco
  * @property string $validade
  *
- * @property HistoricoPrecos[] $historicoPrecos
- * @property Categorias $idCategoria0
- * @property ListaProdutos[] $listaProdutos
- * @property StockProdutos[] $stockProdutos
+ * @property HistoricoPreco[] $historicoPrecos
+ * @property Categoria $idCategoria0
+ * @property ListaProduto[] $listaProdutos
+ * @property StockProduto[] $stockProdutos
  */
 class Produto extends \yii\db\ActiveRecord
 {
@@ -44,7 +44,7 @@ class Produto extends \yii\db\ActiveRecord
             [['validade'], 'safe'],
             [['nome', 'descricao'], 'string', 'max' => 255],
             [['id'], 'unique'],
-            [['idCategoria'], 'exist', 'skipOnError' => true, 'targetClass' => Categorias::class, 'targetAttribute' => ['idCategoria' => 'id']],
+            [['idCategoria'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::class, 'targetAttribute' => ['idCategoria' => 'id']],
         ];
     }
 
@@ -71,7 +71,7 @@ class Produto extends \yii\db\ActiveRecord
      */
     public function getHistoricoPrecos()
     {
-        return $this->hasMany(HistoricoPrecos::class, ['idProduto' => 'id']);
+        return $this->hasMany(HistoricoPreco::class, ['idProduto' => 'id']);
     }
 
     /**
@@ -79,9 +79,9 @@ class Produto extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdCategoria0()
+    public function getCategoria()
     {
-        return $this->hasOne(Categorias::class, ['id' => 'idCategoria']);
+        return $this->hasOne(Categoria::class, ['id' => 'idCategoria']);
     }
 
     /**
@@ -91,7 +91,7 @@ class Produto extends \yii\db\ActiveRecord
      */
     public function getListaProdutos()
     {
-        return $this->hasMany(ListaProdutos::class, ['idProduto' => 'id']);
+        return $this->hasMany(ListaProduto::class, ['idProduto' => 'id']);
     }
 
     /**
@@ -101,7 +101,7 @@ class Produto extends \yii\db\ActiveRecord
      */
     public function getStockProdutos()
     {
-        return $this->hasMany(StockProdutos::class, ['idProduto' => 'id']);
+        return $this->hasMany(StockProduto::class, ['idProduto' => 'id']);
     }
 
 }

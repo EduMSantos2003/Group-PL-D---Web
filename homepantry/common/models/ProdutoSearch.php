@@ -46,6 +46,7 @@ class ProdutoSearch extends Produto
 
         // add conditions that should always apply here
 
+        $query->joinWith('categoria');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
