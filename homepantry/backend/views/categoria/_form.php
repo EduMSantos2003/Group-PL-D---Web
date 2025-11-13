@@ -12,7 +12,8 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'id')->textInput() ?>
+    <!--     Comentei a linha para não pedir ID na página Create Categoria -->
+    <!-- <?= $form->field($model, 'id')->textInput() ?> -->
 
     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
     <br>
