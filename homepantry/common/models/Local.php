@@ -47,7 +47,7 @@ class Local extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'idCasa' => 'Id Casa',
+            'idCasa' => 'Casa',
             'nome' => 'Nome',
         ];
     }
