@@ -5,8 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bb7b1e56-dd09-4bf8-92ac-fd60a30ff4ef" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/homepantry/frontend/views/layouts/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/homepantry/frontend/views/layouts/main.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/homepantry/backend/views/layouts/blank.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/homepantry/backend/views/layouts/main.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/homepantry/backend/views/site/error.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/homepantry/backend/views/site/index.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/homepantry/backend/views/site/login.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/homepantry/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/homepantry/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/homepantry/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/homepantry/composer.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +29,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="PhpDebugGeneral" xdebug_debug_port="59648" listening_started="true">
+    <xdebug_debug_ports port="59648" />
+  </component>
+  <component name="PhpWebServerValidation" path_to_validation_script="C:\wamp64\www\Group-PL-D---Web" selected_validation_type="LOCAL" web_path_to_validation_script="http://127.0.0.1/" />
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\wamp64\bin\php\php8.1.31\php.exe">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/composer" />
@@ -194,6 +205,11 @@
       <path value="$PROJECT_DIR$/homepantry/vendor/symfony/mailer" />
       <path value="$PROJECT_DIR$/homepantry/vendor/codeception/module-filesystem" />
       <path value="$PROJECT_DIR$/vendor/cebe/markdown" />
+      <path value="$PROJECT_DIR$/homepantry/vendor/almasaeed2010/adminlte" />
+      <path value="$PROJECT_DIR$/homepantry/vendor/yiisoft/yii2-bootstrap4" />
+      <path value="$PROJECT_DIR$/homepantry/vendor/hail812/yii2-adminlte-widgets" />
+      <path value="$PROJECT_DIR$/homepantry/vendor/hail812/yii2-adminlte3" />
+      <path value="$PROJECT_DIR$/homepantry/vendor/npm-asset/bootstrap" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -204,21 +220,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/wamp64/www/Group-PL-D---Web&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/wamp64/www/Group-PL-D---Web",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.webide.settings.project.settings.php.debug",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Main" type="CodeceptionConfigurationType" factoryName="Codeception">
       <PhpTestRunnerSettings configuration_file="$PROJECT_DIR$/codeception.yml" scope="ConfigurationFile" use_alternative_configuration_file="true" />
@@ -243,7 +260,7 @@
       <updated>1761863664200</updated>
       <workItem from="1761863665555" duration="2195000" />
       <workItem from="1762984179827" duration="6021000" />
-      <workItem from="1763060693150" duration="2054000" />
+      <workItem from="1763060693150" duration="10287000" />
     </task>
     <servers />
   </component>

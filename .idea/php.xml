@@ -182,6 +182,11 @@
       <path value="$PROJECT_DIR$/homepantry/vendor/symfony/mailer" />
       <path value="$PROJECT_DIR$/homepantry/vendor/codeception/module-filesystem" />
       <path value="$PROJECT_DIR$/vendor/cebe/markdown" />
+      <path value="$PROJECT_DIR$/homepantry/vendor/almasaeed2010/adminlte" />
+      <path value="$PROJECT_DIR$/homepantry/vendor/yiisoft/yii2-bootstrap4" />
+      <path value="$PROJECT_DIR$/homepantry/vendor/hail812/yii2-adminlte-widgets" />
+      <path value="$PROJECT_DIR$/homepantry/vendor/hail812/yii2-adminlte3" />
+      <path value="$PROJECT_DIR$/homepantry/vendor/npm-asset/bootstrap" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4">
