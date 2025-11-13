@@ -1,11 +1,14 @@
 <?php
+
 use yii\helpers\Html;
+use yii\bootstrap4\ActiveForm;
+
 ?>
 <div class="card">
     <div class="card-body login-card-body">
         <p class="login-box-msg">Sign in to start your session</p>
 
-        <?php $form = \yii\bootstrap4\ActiveForm::begin(['id' => 'login-form']) ?>
+        <?php $form = ActiveForm::begin(['id' => 'login-form']) ?>
 
         <?= $form->field($model,'username', [
             'options' => ['class' => 'form-group has-feedback'],
