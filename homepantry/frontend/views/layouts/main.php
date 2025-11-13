@@ -30,8 +30,8 @@ AppAsset::register($this);
     <div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
         <div class="top-bar row gx-0 align-items-center d-none d-lg-flex">
             <div class="col-lg-6 px-5 text-start">
-                <small><i class="fa fa-map-marker-alt me-2"></i>123 Street, New York, USA</small>
-                <small class="ms-4"><i class="fa fa-envelope me-2"></i>info@example.com</small>
+                <small><i class="fa fa-map-marker-alt me-2"></i>123 Street MamaNaBoca, New York, USA</small>
+                <small class="ms-4"><i class="fa fa-envelope me-2"></i>homepantry@example.com</small>
             </div>
             <div class="col-lg-6 px-5 text-end">
                 <small>Follow us:</small>
@@ -51,11 +51,40 @@ AppAsset::register($this);
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <a href="index.html" class="nav-item nav-link active">Home</a>
+                    <ul class="navbar-nav ms-auto p-4 p-lg-0">
+                        <li class="nav-item"><?= Html::a('Home', ['/site/index'], ['class' => 'nav-link']) ?></li>
+                        <li class="nav-item"><?= Html::a('Listas', ['/lista/index'], ['class' => 'nav-link']) ?></li>
+                        <li class="nav-item"><?= Html::a('Produtos', ['/produto/index'], ['class' => 'nav-link']) ?></li>
+                        <li class="nav-item"><?= Html::a('Categorias', ['/categoria/index'], ['class' => 'nav-link']) ?></li>
+                        <li class="nav-item"><?= Html::a('Local', ['/local/index'], ['class' => 'nav-link']) ?></li>
+                    </ul>
+
+                    <?php
+                    if (Yii::$app->user->isGuest) {
+                        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
+                    }
+
+                    echo Nav::widget([
+                        'options' => ['class' => 'navbar-nav me-auto mb-2 mb-md-0'],
+                        'items' => $menuItems,
+                    ]);
+                    if (Yii::$app->user->isGuest) {
+                        echo Html::tag(
+                            'div',
+                            Html::a('Login', ['/site/login'], ['class' => 'nav-link']),
+                            ['class' => 'd-flex']
+                        );
+                    } else {
+                        echo Html::beginForm(['/site/logout'], 'post', ['class' => 'd-flex'])
+                            . Html::submitButton(
+                                'Logout (' . Yii::$app->user->identity->username . ')',
+                                ['class' => 'btn btn-link logout text-decoration-none']
+                            )
+                            . Html::endForm();
+                    }
+                    ?>
+
                     <a href="about.html" class="nav-item nav-link">About Us</a>
-                    <a href="product.html" class="nav-item nav-link">Products</a>
-                    <a href="product.html" class="nav-item nav-link">Login</a>
-                    <a href="product.html" class="nav-item nav-link">Registo</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                         <div class="dropdown-menu m-0">
