@@ -4,6 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< Updated upstream
     <list default="true" id="bb7b1e56-dd09-4bf8-92ac-fd60a30ff4ef" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
@@ -14,6 +15,11 @@
       <change beforePath="$PROJECT_DIR$/homepantry/backend/views/site/login.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/homepantry/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/homepantry/composer.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/homepantry/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/homepantry/composer.lock" afterDir="false" />
+=======
+    <list default="true" id="eaf1f9e8-96c1-4f0b-ac33-01fa2eb4ce23" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -220,6 +226,7 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+<<<<<<< Updated upstream
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
@@ -234,6 +241,20 @@
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;reference.webide.settings.project.settings.php.debug&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+=======
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/wamp64/www/Group-PL-D---Web",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+>>>>>>> Stashed changes
   }
 }</component>
   <component name="RunManager">
@@ -257,10 +278,19 @@
       <created>1761863664200</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
+<<<<<<< Updated upstream
       <updated>1761863664200</updated>
       <workItem from="1761863665555" duration="2195000" />
       <workItem from="1762984179827" duration="6021000" />
       <workItem from="1763060693150" duration="10287000" />
+=======
+      <updated>1761863311970</updated>
+      <workItem from="1761863313570" duration="1863000" />
+      <workItem from="1761865216609" duration="1119000" />
+      <workItem from="1761866364321" duration="677000" />
+      <workItem from="1762198519695" duration="1166000" />
+      <workItem from="1762465047027" duration="638000" />
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
