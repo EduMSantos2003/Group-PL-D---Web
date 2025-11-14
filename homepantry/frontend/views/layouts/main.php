@@ -21,6 +21,9 @@ AppAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <link rel="stylesheet" type="text/css" href="../web/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../web/css/site.css">
+    <link rel="stylesheet" type="text/css" href="../web/css/style.css">
 </head>
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
@@ -43,8 +46,12 @@ AppAsset::register($this);
         </div>
 
         <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
-            <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
-                <h1 class="fw-bold text-primary m-0">F<span class="text-secondary">oo</span>dy</h1>
+            <a href="main.php   " class="navbar-brand ms-4 ms-lg-0">
+                <a href="/site/index" class="navbar-brand ms-4 ms-lg-0 d-flex align-items-center">
+                    <!--<img src="/img/assets/HomePantryLogo.png" alt="Home Pantry" style="height:60px; width:auto; margin-right:10px;">-->
+                    <h1 class="fw-bold text-primary m-0">HOME <span class="text-secondary">PANTRY</span></h1>
+                </a>
+                <!--<h1 class="fw-bold text-primary m-0">F<span class="text-secondary">oo</span>dy</h1>-->
             </a>
             <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
@@ -52,11 +59,11 @@ AppAsset::register($this);
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
                     <ul class="navbar-nav ms-auto p-4 p-lg-0">
-                        <li class="nav-item"><?= Html::a('Home', ['/site/index'], ['class' => 'nav-link']) ?></li>
-                        <li class="nav-item"><?= Html::a('Listas', ['/lista/index'], ['class' => 'nav-link']) ?></li>
-                        <li class="nav-item"><?= Html::a('Produtos', ['/produto/index'], ['class' => 'nav-link']) ?></li>
-                        <li class="nav-item"><?= Html::a('Categorias', ['/categoria/index'], ['class' => 'nav-link']) ?></li>
-                        <li class="nav-item"><?= Html::a('Local', ['/local/index'], ['class' => 'nav-link']) ?></li>
+                        <li class="nav-item"><?= Html::a('Home', ['/site/index'], ['class' => 'nav-link fw-bold']) ?></li>
+                        <li class="nav-item"><?= Html::a('Listas', ['/lista/index'], ['class' => 'nav-link fw-bold']) ?></li>
+                        <li class="nav-item"><?= Html::a('Produtos', ['/produto/index'], ['class' => 'nav-link fw-bold']) ?></li>
+                        <li class="nav-item"><?= Html::a('Categorias', ['/categoria/index'], ['class' => 'nav-link fw-bold']) ?></li>
+                        <li class="nav-item"><?= Html::a('Local', ['/local/index'], ['class' => 'nav-link fw-bold']) ?></li>
                     </ul>
 
                     <?php
@@ -65,13 +72,13 @@ AppAsset::register($this);
                     }
 
                     echo Nav::widget([
-                        'options' => ['class' => 'navbar-nav me-auto mb-2 mb-md-0'],
+                        'options' => ['class' => 'navbar-nav me-auto mb-2 mb-md-0 fw-bold'],
                         'items' => $menuItems,
                     ]);
                     if (Yii::$app->user->isGuest) {
                         echo Html::tag(
                             'div',
-                            Html::a('Login', ['/site/login'], ['class' => 'nav-link']),
+                            Html::a('Login', ['/site/login'], ['class' => 'nav-link fw-bold']),
                             ['class' => 'd-flex']
                         );
                     } else {
@@ -84,7 +91,8 @@ AppAsset::register($this);
                     }
                     ?>
 
-                    <a href="about.html" class="nav-item nav-link">About Us</a>
+
+                    <a href="about.html" class="nav-item nav-link">Utilizador</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                         <div class="dropdown-menu m-0">
@@ -127,8 +135,25 @@ AppAsset::register($this);
     <div class="container py-5">
         <div class="row g-5">
             <div class="col-lg-3 col-md-6">
-                <h1 class="fw-bold text-primary mb-4">F<span class="text-secondary">oo</span>dy</h1>
-                <p>Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita</p>
+                <div class="footer-logo mb-4">
+                    <?= Html::a(
+                        Html::img('/img/HomePantryLogo.png', [
+                            'alt' => 'Home Pantry',
+                            'style' => 'height:60px; width:auto; margin-right:10px;'
+                        ]) .
+                        Html::tag('h1', 'HOME ' . Html::tag('span', 'PANTRY', ['class' => 'text-secondary']), [
+                            'class' => 'fw-bold text-primary m-0'
+                        ]),
+                        ['/site/index'],
+                        ['class' => 'navbar-brand ms-4 ms-lg-0 d-flex align-items-center']
+                    ) ?>
+
+                </div>
+
+
+
+                <!--<h1 class="fw-bold text-primary mb-4">H<span class="text-secondary">oo</span>dy</h1>-->
+                <p>Linha 131 do frontend Main</p>
                 <div class="d-flex pt-2">
                     <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i class="fab fa-twitter"></i></a>
                     <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i class="fab fa-facebook-f"></i></a>
@@ -137,21 +162,21 @@ AppAsset::register($this);
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
-                <h4 class="text-light mb-4">Address</h4>
+                <h4 class="mb-4">Morada</h4>
                 <p><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
                 <p><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                <p><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                <p><i class="fa fa-envelope me-3"></i>homepantry@example.com</p>
             </div>
             <div class="col-lg-3 col-md-6">
-                <h4 class="text-light mb-4">Quick Links</h4>
-                <a class="btn btn-link" href="">About Us</a>
-                <a class="btn btn-link" href="">Contact Us</a>
-                <a class="btn btn-link" href="">Our Services</a>
-                <a class="btn btn-link" href="">Terms & Condition</a>
-                <a class="btn btn-link" href="">Support</a>
+                <h4 class="mb-4">Quick Links</h4>
+                <a class="btn text" href="">About Us</a>
+                <a class="btn text" href="">Contact Us</a>
+                <a class="btn text" href="">Our Services</a>
+                <a class="btn text" href="">Terms & Condition</a>
+                <a class="btn text" href="">Support</a>
             </div>
             <div class="col-lg-3 col-md-6">
-                <h4 class="text-light mb-4">Newsletter</h4>
+                <h4 class="mb-4">Newsletter</h4>
                 <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
                 <div class="position-relative mx-auto" style="max-width: 400px;">
                     <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
@@ -174,6 +199,8 @@ AppAsset::register($this);
         </div>
     </div>
 </div>
+
+<script src="../web/js/main.js"></script>
 
 <?php $this->endBody() ?>
 </body>

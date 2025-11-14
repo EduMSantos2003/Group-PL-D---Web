@@ -15,9 +15,9 @@ $this->title = 'HomePantry';
                     <div class="container">
                         <div class="row justify-content-start">
                             <div class="col-lg-7">
-                                <h1 class="display-2 mb-5 animated slideInDown">Organic Food Is Good For Health</h1>
+                                <h1 class="display-2 mb-5 animated slideInDown">Vai ou Racha</h1>
                                 <a href="" class="btn btn-primary rounded-pill py-sm-3 px-sm-5">Products</a>
-                                <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3">Services</a>
+                                <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3">Criar Produto</a>
                             </div>
                         </div>
                     </div>
@@ -63,7 +63,7 @@ $this->title = 'HomePantry';
                 </div>
             </div>
             <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
-                <h1 class="display-5 mb-4">Best Organic Fruits And Vegetables</h1>
+                <h1 class="display-5 mb-4">BTá tudo Fudido</h1>
                 <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet</p>
                 <p><i class="fa fa-check text-primary me-3"></i>Tempor erat elitr rebum at clita</p>
                 <p><i class="fa fa-check text-primary me-3"></i>Aliqu diam amet diam et eos</p>
@@ -120,7 +120,7 @@ $this->title = 'HomePantry';
         <div class="row g-0 gx-5 align-items-end">
             <div class="col-lg-6">
                 <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-                    <h1 class="display-5 mb-3">Our Products</h1>
+                    <h1 class="display-5 mb-3">Stock Disponivel</h1>
                     <p>Tempor ut dolore lorem kasd vero ipsum sit eirmod sit. Ipsum diam justo sed rebum vero dolor duo.</p>
                 </div>
             </div>
