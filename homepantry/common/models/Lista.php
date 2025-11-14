@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\models\User;
 
 /**
  * This is the model class for table "listas".
@@ -14,7 +15,7 @@ use Yii;
  * @property float $totalEstimado
  * @property string $dataCriacao
  *
- * @property Utilizadores $idUtilizador0
+ * @property User $idUtilizador0
  * @property ListaProdutos[] $listaProdutos
  */
 class Lista extends \yii\db\ActiveRecord
@@ -41,7 +42,7 @@ class Lista extends \yii\db\ActiveRecord
             [['dataCriacao'], 'safe'],
             [['nome', 'tipo'], 'string', 'max' => 255],
             [['id'], 'unique'],
-            [['idUtilizador'], 'exist', 'skipOnError' => true, 'targetClass' => Utilizadores::class, 'targetAttribute' => ['idUtilizador' => 'id']],
+            [['idUtilizador'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['idUtilizador' => 'id']],
         ];
     }
 
@@ -67,7 +68,7 @@ class Lista extends \yii\db\ActiveRecord
      */
     public function getIdUtilizador0()
     {
-        return $this->hasOne(Utilizadores::class, ['id' => 'idUtilizador']);
+        return $this->hasOne(User::class, ['id' => 'idUtilizador']);
     }
 
     /**
