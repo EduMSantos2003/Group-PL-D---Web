@@ -10,6 +10,7 @@ use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
 
+
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -21,9 +22,10 @@ AppAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <!-- Comentei porque era indiferente a presença disto para o carrossel funcionar
     <link rel="stylesheet" type="text/css" href="../web/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../web/css/site.css">
-    <link rel="stylesheet" type="text/css" href="../web/css/style.css">
+    <link rel="stylesheet" type="text/css" href="../web/css/style.css">-->
 </head>
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
@@ -67,6 +69,8 @@ AppAsset::register($this);
                     </ul>
 
                     <?php
+                    $menuItems = [];
+
                     if (Yii::$app->user->isGuest) {
                         $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
                     }

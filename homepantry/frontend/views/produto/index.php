@@ -13,6 +13,7 @@ use yii\grid\GridView;
 $this->title = 'Produtos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="produto-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -21,8 +22,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Create Produto', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -30,22 +29,20 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'idCategoria',
+            [
+                'attribute' => 'idCategoria',
+                'label' => 'Categoria',
+            ],
             'nome',
             'descricao',
             'unidade',
-            //'preco',
-            //'validade',
+
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Produto $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                }
             ],
         ],
     ]); ?>
 </div>
-
-
-
-
