@@ -3,6 +3,9 @@
 /** @var yii\web\View $this */
 
 $this->title = 'HomePantry';
+
+use yii\helpers\Html;
+
 ?>
 
 <!-- Carousel Start -->
@@ -15,9 +18,20 @@ $this->title = 'HomePantry';
                     <div class="container">
                         <div class="row justify-content-start">
                             <div class="col-lg-7">
-                                <h1 class="display-2 mb-5 animated slideInDown">Organic Food Is Good For Health</h1>
-                                <a href="" class="btn btn-primary rounded-pill py-sm-3 px-sm-5">Products</a>
-                                <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3">Services</a>
+                                <h1 class="display-2 mb-5 animated slideInDown">Vai ou Racha<br><br></h1>
+                                <!--<a href="" class="btn btn-primary rounded-pill py-sm-3 px-sm-5">Produtos</a>-->
+                                <?= Html::a(
+                                    'Produtos',
+                                    ['/produto/index'],
+                                    ['class' => 'btn btn-primary rounded-pill py-sm-3 px-sm-5']
+                                ) ?>
+
+                                <?= Html::a(
+                                    'Criar Produto',
+                                    ['/produto/create'],
+                                    ['class' => 'btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3']
+                                ) ?>
+
                             </div>
                         </div>
                     </div>
@@ -63,7 +77,7 @@ $this->title = 'HomePantry';
                 </div>
             </div>
             <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
-                <h1 class="display-5 mb-4">Best Organic Fruits And Vegetables</h1>
+                <h1 class="display-5 mb-4">BTá tudo Fudido</h1>
                 <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet</p>
                 <p><i class="fa fa-check text-primary me-3"></i>Tempor erat elitr rebum at clita</p>
                 <p><i class="fa fa-check text-primary me-3"></i>Aliqu diam amet diam et eos</p>
@@ -120,20 +134,20 @@ $this->title = 'HomePantry';
         <div class="row g-0 gx-5 align-items-end">
             <div class="col-lg-6">
                 <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-                    <h1 class="display-5 mb-3">Our Products</h1>
+                    <h1 class="display-5 mb-3">Stock Disponivel</h1>
                     <p>Tempor ut dolore lorem kasd vero ipsum sit eirmod sit. Ipsum diam justo sed rebum vero dolor duo.</p>
                 </div>
             </div>
             <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
                 <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
                     <li class="nav-item me-2">
-                        <a class="btn btn-outline-primary border-2 active" data-bs-toggle="pill" href="#tab-1">Vegetable</a>
+                        <a class="btn btn-outline-primary border-2 active" data-bs-toggle="pill" href="#tab-1">Vegatais</a>
                     </li>
                     <li class="nav-item me-2">
-                        <a class="btn btn-outline-primary border-2" data-bs-toggle="pill" href="#tab-2">Fruits </a>
+                        <a class="btn btn-outline-primary border-2" data-bs-toggle="pill" href="#tab-2">Fruitas </a>
                     </li>
                     <li class="nav-item me-0">
-                        <a class="btn btn-outline-primary border-2" data-bs-toggle="pill" href="#tab-3">Fresh</a>
+                        <a class="btn btn-outline-primary border-2" data-bs-toggle="pill" href="#tab-3">Congelados</a>
                     </li>
                 </ul>
             </div>
@@ -154,10 +168,10 @@ $this->title = 'HomePantry';
                             </div>
                             <div class="d-flex border-top">
                                 <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
+                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>Ver Produto</a>
                                 </small>
                                 <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
+                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Adicionar à Lista</a>
                                 </small>
                             </div>
                         </div>
@@ -660,7 +674,7 @@ $this->title = 'HomePantry';
                         </div>
                     </div>
                     <div class="col-12 text-center">
-                        <a class="btn btn-primary rounded-pill py-3 px-5" href="">Browse More Products</a>
+                        <a class="btn btn-primary rounded-pill py-3 px-5" href="">Ver mais produtos</a>
                     </div>
                 </div>
             </div>
