@@ -9,6 +9,7 @@ use hail812\adminlte\widgets\Menu;
         <span class="brand-text font-weight-light">Home Pantry</span>
     </a>
 
+
     <!-- Sidebar -->
     <div class="sidebar">
 
@@ -31,7 +32,7 @@ use hail812\adminlte\widgets\Menu;
                     [
                         'label' => 'User',
                         'icon' => 'users',
-                        'url' => ['/User/index'],
+                        'url' => ['/user/index'],
                     ],
                     [
                         'label' => 'Produtos',
