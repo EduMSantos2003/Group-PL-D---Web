@@ -29,7 +29,6 @@ AppAsset::register($this);
         <!-- BRAND / LOGO -->
         <?= Html::a(
             '<div class="d-flex align-items-center">
-                <!-- Se quiseres usar a imagem, descomenta a linha abaixo -->
                 <img src="' . Url::to('@web/img/HomePantryLogo.png') . '" alt="Home Pantry" style="height:60px; width:auto; margin-right:10px;">
                 <h1 class="fw-bold text-primary m-0">HOME <span class="text-secondary">PANTRY</span></h1>
             </div>',
@@ -50,10 +49,8 @@ AppAsset::register($this);
                 <?= Html::a('Categorias', ['/categoria/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
                 <?= Html::a('Local', ['/local/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
 
-                <?php if (Yii::$app->user->isGuest): ?>
-                    <?= Html::a('Signup', ['/site/signup'], ['class' => 'nav-item nav-link fw-bold']) ?>
-                    <?= Html::a('Login', ['/site/login'], ['class' => 'nav-item nav-link fw-bold']) ?>
-                <?php else: ?>
+                <?php if (!Yii::$app->user->isGuest): ?>
+                    <!-- Dropdown com username APENAS quando está autenticado -->
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle fw-bold" data-bs-toggle="dropdown">
                             <?= Html::encode(Yii::$app->user->identity->username) ?>
@@ -66,21 +63,27 @@ AppAsset::register($this);
                         </div>
                     </div>
                 <?php endif; ?>
-
-                <!-- Links “fake” do template original, ajusta ou remove se não usares -->
-                <!--
-                <?= Html::a('Contact Us', ['/site/contact'], ['class' => 'nav-item nav-link']) ?>
-                -->
             </div>
 
-            <!-- ICONES LADO DIREITO (OPCIONAL) -->
+            <!-- ICONES LADO DIREITO -->
             <div class="d-none d-lg-flex ms-2">
+                <!-- Search -->
                 <a class="btn-sm-square bg-white rounded-circle ms-3" href="#">
                     <small class="fa fa-search text-body"></small>
                 </a>
-                <a class="btn-sm-square bg-white rounded-circle ms-3" href="#">
-                    <small class="fa fa-user text-body"></small>
-                </a>
+
+                <!-- User icon = LOGIN quando guest / PERFIL (ou outra rota) quando autenticado -->
+                <?php if (Yii::$app->user->isGuest): ?>
+                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="<?= Url::to(['/site/login']) ?>">
+                        <small class="fa fa-user text-body"></small>
+                    </a>
+                <?php else: ?>
+                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="#">
+                        <small class="fa fa-user text-body"></small>
+                    </a>
+                <?php endif; ?>
+
+                <!-- Carrinho / saco -->
                 <a class="btn-sm-square bg-white rounded-circle ms-3" href="#">
                     <small class="fa fa-shopping-bag text-body"></small>
                 </a>
@@ -133,7 +136,7 @@ AppAsset::register($this);
                 <h4 class="mb-4 text-white">Morada</h4>
                 <p><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
                 <p><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                <p><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                <p><i class="fa fa-envelope me-3"></i>homepantry@example.com</p>
             </div>
 
             <!-- Quick Links -->
