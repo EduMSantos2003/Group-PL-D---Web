@@ -4,67 +4,98 @@
 
 $this->title = 'HomePantry';
 
-use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\bootstrap5\Html;
 
 ?>
 
 <!-- Carousel Start -->
-<div class="container-fluid p-0 mb-5 wow fadeIn" data-wow-delay="0.1s">
+<div class="container-fluid px-0 mb-5 wow fadeIn" data-wow-delay="0.1s">
     <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
+
+            <!-- SLIDE 1 -->
             <div class="carousel-item active">
-                <img class="w-100 h-100" src="img/carousel-1.jpg" alt="Image">
-                <div class="carousel-caption">
+                <img
+                        src="<?= Url::to('@web/img/carousel-1.jpg') ?>"
+                        class="d-block w-100 h-100 carousel-img"
+                        alt="Image 1"
+                >
+                <div class="carousel-caption d-flex align-items-center h-100">
                     <div class="container">
                         <div class="row justify-content-start">
-                            <div class="col-lg-7">
-                                <h1 class="display-2 mb-5 animated slideInDown">Vai ou Racha<br><br></h1>
-                                <!--<a href="" class="btn btn-primary rounded-pill py-sm-3 px-sm-5">Produtos</a>-->
+                            <div class="col-lg-6 col-md-8">
+                                <h1 class="display-2 mb-5 animated slideInDown">Vai ou Racha</h1>
+
                                 <?= Html::a(
                                     'Produtos',
                                     ['/produto/index'],
-                                    ['class' => 'btn btn-primary rounded-pill py-sm-3 px-sm-5']
+                                    ['class' => 'btn btn-success rounded-pill py-sm-3 px-sm-5 me-3']
                                 ) ?>
 
                                 <?= Html::a(
                                     'Criar Produto',
                                     ['/produto/create'],
-                                    ['class' => 'btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3']
+                                    ['class' => 'btn btn-warning rounded-pill py-sm-3 px-sm-5']
                                 ) ?>
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- SLIDE 2 -->
             <div class="carousel-item">
-                <img class="w-100" src="img/carousel-2.jpg" alt="Image">
-                <div class="carousel-caption">
+                <img
+                        src="<?= Url::to('@web/img/carousel-2.jpg') ?>"
+                        class="d-block w-100 h-100 carousel-img"
+                        alt="Image 2"
+                >
+                <div class="carousel-caption d-flex align-items-center h-100">
                     <div class="container">
                         <div class="row justify-content-start">
-                            <div class="col-lg-7">
-                                <h1 class="display-2 mb-5 animated slideInDown">Natural Food Is Always Healthy</h1>
-                                <a href="" class="btn btn-primary rounded-pill py-sm-3 px-sm-5">Products</a>
-                                <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3">Services</a>
+                            <div class="col-lg-6 col-md-8">
+                                <h1 class="display-2 mb-5 animated slideInDown">
+                                    Natural Food Is Always Healthy
+                                </h1>
+                                <a href="#" class="btn btn-primary rounded-pill py-sm-3 px-sm-5 me-3">Products</a>
+                                <a href="#" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5">Services</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel"
-                data-bs-slide="prev">
+
+        <!-- Controles -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#header-carousel"
-                data-bs-slide="next">
+
+        <button class="carousel-control-next" type="button" data-bs-target="#header-carousel" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
     </div>
 </div>
-<!-- Carousel End -->
+<!-- Carousel End d-->
+
+
+<!-- CSS extra para overlay -->
+<style>
+    .carousel-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.35);
+        z-index: 1;
+    }
+    .carousel-caption {
+        z-index: 2;
+    }
+</style>
+
 
 
 <!-- About Start -->
