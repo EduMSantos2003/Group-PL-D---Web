@@ -15,10 +15,13 @@ class AppAsset extends AssetBundle
         'css/bootstrap.min.css',
         'css/style.css',
         'css/site.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css',
     ];
     public $js = [
         'js/main.js',
     ];
+
+
 
     public $depends = [
         'yii\web\YiiAsset',
