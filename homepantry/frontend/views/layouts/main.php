@@ -133,7 +133,7 @@ AppAsset::register($this);
                 <h4 class="mb-4 text-white">Morada</h4>
                 <p><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
                 <p><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                <p><i class="fa fa-envelope me-3"></i>homepantry@example.com</p>
+                <p><i class="fa fa-envelope me-3"></i>info@example.com</p>
             </div>
 
             <!-- Quick Links -->

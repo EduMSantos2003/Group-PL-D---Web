@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use common\models\User;
 
 ?>
 <!-- Navbar -->
@@ -11,7 +12,7 @@ use yii\helpers\Html;
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="<?=\yii\helpers\Url::home()?>" class="nav-link">Home</a>
+            <a href="<?=\yii\helpers\Url::home()?>" class="nav-link">Utilizadores</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a href="#" class="nav-link">Contact</a>

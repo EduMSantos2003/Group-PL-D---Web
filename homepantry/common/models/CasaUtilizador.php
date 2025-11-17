@@ -12,7 +12,7 @@ use Yii;
  * @property int $idCasa
  *
  * @property Casas $idCasa0
- * @property Utilizadores $idUtilizador0
+ * @property User $idUtilizador0
  */
 class CasaUtilizador extends \yii\db\ActiveRecord
 {
@@ -35,7 +35,7 @@ class CasaUtilizador extends \yii\db\ActiveRecord
             [['idUtilizador', 'idCasa'], 'required'],
             [['id', 'idUtilizador', 'idCasa'], 'integer'],
             [['id'], 'unique'],
-            [['idUtilizador'], 'exist', 'skipOnError' => true, 'targetClass' => Utilizadores::class, 'targetAttribute' => ['idUtilizador' => 'id']],
+            [['idUtilizador'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['idUtilizador' => 'id']],
             [['idCasa'], 'exist', 'skipOnError' => true, 'targetClass' => Casas::class, 'targetAttribute' => ['idCasa' => 'id']],
         ];
     }
@@ -69,7 +69,7 @@ class CasaUtilizador extends \yii\db\ActiveRecord
      */
     public function getIdUtilizador0()
     {
-        return $this->hasOne(Utilizadores::class, ['id' => 'idUtilizador']);
+        return $this->hasOne(User::class, ['id' => 'idUtilizador']);
     }
 
 }

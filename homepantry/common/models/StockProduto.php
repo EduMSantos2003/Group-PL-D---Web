@@ -18,7 +18,7 @@ use Yii;
  *
  * @property Locais $idLocal0
  * @property Produtos $idProduto0
- * @property Utilizadores $idUtilizador0
+ * @property User $idUtilizador0
  */
 class StockProduto extends \yii\db\ActiveRecord
 {
@@ -44,7 +44,7 @@ class StockProduto extends \yii\db\ActiveRecord
             [['validade', 'dataCriacao'], 'safe'],
             [['id'], 'unique'],
             [['idProduto'], 'exist', 'skipOnError' => true, 'targetClass' => Produtos::class, 'targetAttribute' => ['idProduto' => 'id']],
-            [['idUtilizador'], 'exist', 'skipOnError' => true, 'targetClass' => Utilizadores::class, 'targetAttribute' => ['idUtilizador' => 'id']],
+            [['idUtilizador'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['idUtilizador' => 'id']],
             [['idLocal'], 'exist', 'skipOnError' => true, 'targetClass' => Locais::class, 'targetAttribute' => ['idLocal' => 'id']],
         ];
     }
@@ -93,7 +93,7 @@ class StockProduto extends \yii\db\ActiveRecord
      */
     public function getIdUtilizador0()
     {
-        return $this->hasOne(Utilizadores::class, ['id' => 'idUtilizador']);
+        return $this->hasOne(User::class, ['id' => 'idUtilizador']);
     }
 
 }

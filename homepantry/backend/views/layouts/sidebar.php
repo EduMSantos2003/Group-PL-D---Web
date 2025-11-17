@@ -15,7 +15,7 @@ use hail812\adminlte\widgets\Menu;
         <!-- User Info (opcional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="info">
-                <a href="#" class="d-block">Utilizador</a>
+                <a href="#" class="d-block">User</a>
             </div>
         </div>
 
@@ -29,9 +29,9 @@ use hail812\adminlte\widgets\Menu;
                         'url' => ['/site/index'],
                     ],
                     [
-                        'label' => 'Utilizadores',
+                        'label' => 'User',
                         'icon' => 'users',
-                        'url' => ['/utilizador/index'],
+                        'url' => ['/User/index'],
                     ],
                     [
                         'label' => 'Produtos',
