@@ -92,6 +92,10 @@ AppAsset::register($this);
     </nav>
 </header>
 
+<?php if (isset($this->blocks['hero'])): ?>
+    <?= $this->blocks['hero'] ?>
+<?php endif; ?>
+
 <main role="main" class="flex-shrink-0">
     <div class="container">
         <?= Breadcrumbs::widget([
@@ -177,6 +181,7 @@ AppAsset::register($this);
         </div>
     </div>
 </div>
+
 
 <!-- JS extra do template -->
 <?= Html::jsFile('@web/js/main.js') ?>

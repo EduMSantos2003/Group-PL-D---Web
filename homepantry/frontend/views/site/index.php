@@ -9,6 +9,8 @@ use yii\bootstrap5\Html;
 
 ?>
 
+<?php $this->beginBlock('hero');?>
+
 <!-- Carousel Start -->
 <div class="container-fluid px-0 mb-5 wow fadeIn" data-wow-delay="0.1s">
     <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
@@ -80,8 +82,8 @@ use yii\bootstrap5\Html;
         </button>
     </div>
 </div>
-<!-- Carousel End d-->
-
+<!-- Carousel End -->
+<?php $this -> endBlock() ?>
 
 <!-- CSS extra para overlay -->
 <style>
@@ -108,11 +110,11 @@ use yii\bootstrap5\Html;
                 </div>
             </div>
             <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
-                <h1 class="display-5 mb-4">BTá tudo Fudido</h1>
-                <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet</p>
-                <p><i class="fa fa-check text-primary me-3"></i>Tempor erat elitr rebum at clita</p>
-                <p><i class="fa fa-check text-primary me-3"></i>Aliqu diam amet diam et eos</p>
-                <p><i class="fa fa-check text-primary me-3"></i>Clita duo justo magna dolore erat amet</p>
+                <h1 class="display-5 mb-4">HomePantry Organizada</h1>
+                <p class="mb-4">A aplicação HomePantry permite gerir de forma simples o inventário doméstico. O utilizador pode adicionar e atualizar produtos, controlar quantidades e datas de validade, e consultar rapidamente o que tem em casa. Com uma interface intuitiva e ferramentas de pesquisa, a plataforma facilita a organização diária e reduz o desperdício, garantindo uma gestão mais eficiente dos recursos.</p>
+                <p><i class="fa fa-check text-primary me-3"></i>Gestão de produtos</p>
+                <p><i class="fa fa-check text-primary me-3"></i>Controlo de quantidades e validade</p>
+                <p><i class="fa fa-check text-primary me-3"></i>Interface intuitiva</p>
                 <a class="btn btn-primary rounded-pill py-3 px-5 mt-3" href="">Read More</a>
             </div>
         </div>
