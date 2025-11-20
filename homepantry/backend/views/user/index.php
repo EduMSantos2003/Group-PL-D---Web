@@ -1,6 +1,6 @@
 <?php
 
-use backend\models\User;
+use common\models\User;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -17,10 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
@@ -31,22 +27,37 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'username',
-            'auth_key',
-            'password_hash',
-            'password_reset_token',
-            //'email:email',
-            //'status',
-            //'created_at',
-            //'updated_at',
-            //'verification_token',
+            'email:email',
+            [
+                'attribute' => 'status',
+                'label' => 'Estado',
+                'value' => function($model) {
+                    return $model->statusName;
+                },
+                'filter' => [
+                    10 => 'Ativo',
+                    9  => 'Inativo',
+                    0  => 'Eliminado',
+                ],
+            ],
+
+
+            [
+                'label' => 'Role',
+                'value' => function ($model) {
+                    return $model->roleName;
+                },
+            ],
+
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                }
             ],
         ],
     ]); ?>
+
 
 
 </div>
