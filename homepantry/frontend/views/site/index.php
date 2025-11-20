@@ -11,35 +11,41 @@ use yii\bootstrap5\Html;
 
 <?php $this->beginBlock('hero');?>
 
+
 <!-- Carousel Start -->
 <div class="container-fluid px-0 mb-5 wow fadeIn" data-wow-delay="0.1s">
     <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
-
             <!-- SLIDE 1 -->
-            <div class="carousel-item active">
-                <img
-                        src="<?= Url::to('@web/img/carousel-1.jpg') ?>"
-                        class="d-block w-100 h-100 carousel-img"
-                        alt="Image 1"
-                >
-                <div class="carousel-caption d-flex align-items-center h-100">
-                    <div class="container">
-                        <div class="row justify-content-start">
-                            <div class="col-lg-6 col-md-8">
-                                <h1 class="display-2 mb-5 animated slideInDown">Vai ou Racha</h1>
+            <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <!-- <div class="carousel-caption"> -->
+                    <div class="carousel-item active">
+                        <img
+                                src="<?= Url::to('@web/img/carousel-1.jpg') ?>"
+                                class="d-block w-100 h-100 carousel-img"
+                                alt="Image 1">
 
-                                <?= Html::a(
-                                    'Produtos',
-                                    ['/produto/index'],
-                                    ['class' => 'btn btn-success rounded-pill py-sm-3 px-sm-5 me-3']
-                                ) ?>
+                        <div class="carousel-caption d-flex align-items-center h-100">
+                            <div class="container">
+                                <div class="row justify-content-start">
+                                    <!--<div class="col-lg-7">-->
+                                    <div class="col-lg-6 col-md-8">
+                                        <h1 class="display-2 mb-5 animated slideInDown">Produtos</h1>
 
-                                <?= Html::a(
-                                    'Criar Produto',
-                                    ['/produto/create'],
-                                    ['class' => 'btn btn-warning rounded-pill py-sm-3 px-sm-5']
-                                ) ?>
+                                        <?= Html::a(
+                                            'Produtos',
+                                            ['/produto/index'],
+                                            ['class' => 'btn btn-success rounded-pill py-sm-3 px-sm-5 me-3'])
+                                        ?>
+
+                                        <?= Html::a(
+                                            'Criar Produto',
+                                            ['/produto/create'],
+                                            ['class' => 'btn btn-warning rounded-pill py-sm-3 px-sm-5'])
+                                        ?>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -51,41 +57,48 @@ use yii\bootstrap5\Html;
                 <img
                         src="<?= Url::to('@web/img/carousel-2.jpg') ?>"
                         class="d-block w-100 h-100 carousel-img"
-                        alt="Image 2"
-                >
+                        alt="Image 2">
+
                 <div class="carousel-caption d-flex align-items-center h-100">
                     <div class="container">
                         <div class="row justify-content-start">
                             <div class="col-lg-6 col-md-8">
                                 <h1 class="display-2 mb-5 animated slideInDown">
-                                    Natural Food Is Always Healthy
+                                    Categorias Disponíveis
                                 </h1>
-                                <a href="#" class="btn btn-primary rounded-pill py-sm-3 px-sm-5 me-3">Products</a>
-                                <a href="#" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5">Services</a>
+                                <?= Html::a(
+                                    'Categorias',
+                                    ['/categoria/index'],
+                                    ['class' => 'btn btn-primary rounded-pill py-sm-3 px-sm-5 me-3']
+                                ) ?>
+
+                                <?= Html::a(
+                                    'Criar Categoria',
+                                    ['/categoria/create'],
+                                    ['class' => 'btn btn-secondary rounded-pill py-sm-3 px-sm-5']
+                                ) ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-
-        <!-- Controles -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel" data-bs-slide="prev">
+        <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel"
+                data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
+            <span class="visually-hidden">Anterior</span>
         </button>
-
-        <button class="carousel-control-next" type="button" data-bs-target="#header-carousel" data-bs-slide="next">
+        <button class="carousel-control-next" type="button" data-bs-target="#header-carousel"
+                data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
+            <span class="visually-hidden">Seguinte</span>
         </button>
     </div>
 </div>
 <!-- Carousel End -->
 <?php $this -> endBlock() ?>
 
-<!-- CSS extra para overlay -->
+<!--CSS extra para overlay -->
 <style>
     .carousel-overlay {
         position: absolute;
@@ -115,7 +128,7 @@ use yii\bootstrap5\Html;
                 <p><i class="fa fa-check text-primary me-3"></i>Gestão de produtos</p>
                 <p><i class="fa fa-check text-primary me-3"></i>Controlo de quantidades e validade</p>
                 <p><i class="fa fa-check text-primary me-3"></i>Interface intuitiva</p>
-                <a class="btn btn-primary rounded-pill py-3 px-5 mt-3" href="">Read More</a>
+                <a class="btn btn-primary rounded-pill py-3 px-5 mt-3" href="">Mais informações</a>
             </div>
         </div>
     </div>
@@ -127,8 +140,8 @@ use yii\bootstrap5\Html;
 <div class="container-fluid bg-light bg-icon my-5 py-6">
     <div class="container">
         <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-            <h1 class="display-5 mb-3">Our Features</h1>
-            <p>Tempor ut dolore lorem kasd vero ipsum sit eirmod sit. Ipsum diam justo sed rebum vero dolor duo.</p>
+            <h1 class="display-5 mb-3">Suas Categorias </h1>
+            <p>Mantenha a sua dispensa organizada podendo fazer a divisão pela respetiva categoria.</p>
         </div>
         <div class="row g-4">
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
@@ -168,16 +181,16 @@ use yii\bootstrap5\Html;
             <div class="col-lg-6">
                 <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
                     <h1 class="display-5 mb-3">Stock Disponivel</h1>
-                    <p>Tempor ut dolore lorem kasd vero ipsum sit eirmod sit. Ipsum diam justo sed rebum vero dolor duo.</p>
+                    <p>Esteja sempre atualizado relativamente stock real.</p>
                 </div>
             </div>
             <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
                 <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
                     <li class="nav-item me-2">
-                        <a class="btn btn-outline-primary border-2 active" data-bs-toggle="pill" href="#tab-1">Vegatais</a>
+                        <a class="btn btn-outline-primary border-2 active" data-bs-toggle="pill" href="#tab-1">Vegetais</a>
                     </li>
                     <li class="nav-item me-2">
-                        <a class="btn btn-outline-primary border-2" data-bs-toggle="pill" href="#tab-2">Fruitas </a>
+                        <a class="btn btn-outline-primary border-2" data-bs-toggle="pill" href="#tab-2">Frutas </a>
                     </li>
                     <li class="nav-item me-0">
                         <a class="btn btn-outline-primary border-2" data-bs-toggle="pill" href="#tab-3">Congelados</a>
@@ -357,7 +370,7 @@ use yii\bootstrap5\Html;
                         </div>
                     </div>
                     <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
-                        <a class="btn btn-primary rounded-pill py-3 px-5" href="">Browse More Products</a>
+                        <a class="btn btn-primary rounded-pill py-3 px-5" href="">Ver mais Produtos</a>
                     </div>
                 </div>
             </div>
@@ -376,10 +389,10 @@ use yii\bootstrap5\Html;
                             </div>
                             <div class="d-flex border-top">
                                 <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
+                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>Ver detalhes</a>
                                 </small>
                                 <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
+                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Adicionar à Lista</a>
                                 </small>
                             </div>
                         </div>
@@ -460,7 +473,7 @@ use yii\bootstrap5\Html;
                             </div>
                             <div class="d-flex border-top">
                                 <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
+                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i><Vi></Vi>ew detail</a>
                                 </small>
                                 <small class="w-50 text-center py-2">
                                     <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
@@ -532,7 +545,7 @@ use yii\bootstrap5\Html;
                         </div>
                     </div>
                     <div class="col-12 text-center">
-                        <a class="btn btn-primary rounded-pill py-3 px-5" href="">Browse More Products</a>
+                        <a class="btn btn-primary rounded-pill py-3 px-5" href="">Ver mais Produtos</a>
                     </div>
                 </div>
             </div>
@@ -551,10 +564,10 @@ use yii\bootstrap5\Html;
                             </div>
                             <div class="d-flex border-top">
                                 <small class="w-50 text-center border-end py-2">
-                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View detail</a>
+                                    <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>Ver Produto</a>
                                 </small>
                                 <small class="w-50 text-center py-2">
-                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
+                                    <a class="text-body" href=""><i class="fa fa-shopping-bag text-primary me-2"></i>Adicionar à Lista</a>
                                 </small>
                             </div>
                         </div>
