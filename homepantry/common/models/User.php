@@ -29,6 +29,22 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
 
+    public $roleName;
+
+    public function getStatusName()
+    {
+        switch ($this->status) {
+            case self::STATUS_ACTIVE:
+                return 'Ativo';
+            case self::STATUS_INACTIVE:
+                return 'Inativo';
+            case self::STATUS_DELETED:
+                return 'Eliminado';
+            default:
+                return 'Desconhecido';
+        }
+    }
+
 
     /**
      * {@inheritdoc}
@@ -56,8 +72,41 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            ['roleName', 'safe'],
         ];
     }
+
+    public function afterFind()
+    {
+        parent::afterFind();
+
+        $auth = Yii::$app->authManager;
+        $roles = $auth->getRolesByUser($this->id);
+
+        if (!empty($roles)) {
+            $this->roleName = array_keys($roles)[0];
+        }
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if ($this->roleName !== null) {
+            $auth = Yii::$app->authManager;
+
+            // Remove roles anteriores
+            $auth->revokeAll($this->id);
+
+            // Atribui o novo role
+            $role = $auth->getRole($this->roleName);
+            if ($role !== null) {
+                $auth->assign($role, $this->id);
+            }
+        }
+    }
+
+
 
     /**
      * {@inheritdoc}
