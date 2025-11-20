@@ -2,12 +2,11 @@
 
 namespace backend\controllers;
 
-use common\models\User;
+use backend\models\User;
 use backend\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -19,27 +18,17 @@ class UserController extends Controller
      */
     public function behaviors()
     {
-        $behaviors = parent::behaviors();
-
-        // só quem tiver a permissão "manageUsers" pode usar este controller
-        $behaviors['access'] = [
-            'class' => AccessControl::class,
-            'rules' => [
-                [
-                    'allow' => true,
-                    'roles' => ['manageUsers'],
+        return array_merge(
+            parent::behaviors(),
+            [
+                'verbs' => [
+                    'class' => VerbFilter::className(),
+                    'actions' => [
+                        'delete' => ['POST'],
+                    ],
                 ],
-            ],
-        ];
-
-        $behaviors['verbs'] = [
-            'class' => VerbFilter::class,
-            'actions' => [
-                'delete' => ['POST'],
-            ],
-        ];
-
-        return $behaviors;
+            ]
+        );
     }
 
     /**
@@ -78,7 +67,19 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
-        return $this->redirect(['index']);
+        $model = new User();
+
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        } else {
+            $model->loadDefaultValues();
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**

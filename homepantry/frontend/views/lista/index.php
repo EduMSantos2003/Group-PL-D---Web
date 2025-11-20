@@ -13,6 +13,7 @@ use yii\grid\GridView;
 $this->title = 'Listas';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="lista-index">
 
     <h1><?= Html::encode($this->title) ?></h1>

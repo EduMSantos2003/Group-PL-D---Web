@@ -11,11 +11,11 @@ $this->title = 'HomePantry';
 
 <?php $this->beginBlock('hero'); ?>
 
+
 <!-- Carousel Start -->
 <div class="container-fluid px-0 mb-5 wow fadeIn" data-wow-delay="0.1s">
     <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
-
             <!-- SLIDE 1 -->
             <div class="carousel-item active">
                 <img
@@ -96,7 +96,6 @@ $this->title = 'HomePantry';
                     </div>
                 </div>
             </div>
-
         </div>
 
         <!-- Controles -->
@@ -128,7 +127,7 @@ $this->title = 'HomePantry';
 
 <?php $this->endBlock(); ?>
 
-<!-- CSS extra para overlay -->
+<!--CSS extra para overlay -->
 <style>
     .carousel-overlay {
         position: absolute;

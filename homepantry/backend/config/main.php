@@ -11,26 +11,6 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'as access' => [
-        'class' => \yii\filters\AccessControl::class,
-        'except' => ['site/login', 'site/error', 'site/logout'],
-        'rules' => [
-            [
-                'allow' => true,
-                'roles' => ['admin', 'gestorCasa'],
-            ],
-        ],
-        'denyCallback' => function ($rule, $action) {
-            if (\Yii::$app->user->isGuest) {
-                // não autenticado → vai para login
-                return \Yii::$app->response->redirect(['/site/login']);
-            }
-            // autenticado mas sem permissões → 403
-            throw new \yii\web\ForbiddenHttpException(
-                'Não tem permissões para aceder ao back-office.'
-            );
-        },
-    ],
     'modules' => [],
     'components' => [
         'request' => [
