@@ -13,11 +13,17 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/bootstrap.min.css',
+        'css/animate.min.css',
+        'css/owl.carousel.min.css',
         'css/style.css',
         'css/site.css',
         'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css',
+        'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css',
     ];
     public $js = [
+        'js/bootstrap.bundle.min.js',
+        'js/wow.min.js',
+        'js/owl.carousel.min.js',
         'js/main.js',
     ];
 
@@ -25,8 +31,8 @@ class AppAsset extends AssetBundle
 
     public $depends = [
         'yii\web\YiiAsset',
-        'yii\bootstrap5\BootstrapAsset',
-        'yii\bootstrap5\BootstrapPluginAsset',
+        //'yii\bootstrap5\BootstrapAsset',
+        //'yii\bootstrap5\BootstrapPluginAsset',
     ];
 
     public $publishOptions = [

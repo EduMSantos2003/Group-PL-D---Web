@@ -10,10 +10,12 @@
         }, 1);
     };
     spinner();
-    
-    
-    // Initiate the wowjs
-    new WOW().init();
+
+
+    // Initiate WOW.js (animações)
+    if (typeof WOW !== "undefined") {
+        new WOW().init();
+    }
 
 
     // Fixed Navbar
@@ -32,8 +34,8 @@
             }
         }
     });
-    
-    
+
+
     // Back to top button
     $(window).scroll(function () {
         if ($(this).scrollTop() > 300) {
@@ -42,38 +44,34 @@
             $('.back-to-top').fadeOut('slow');
         }
     });
-    $('.back-to-top').click(function () {
+
+    $('.back-to-top').on('click', function (e) {
+        e.preventDefault();
         $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
         return false;
     });
 
 
-    // Testimonials carousel
-    $(".testimonial-carousel").owlCarousel({
-        autoplay: true,
-        smartSpeed: 1000,
-        margin: 25,
-        loop: true,
-        center: true,
-        dots: false,
-        nav: true,
-        navText : [
-            '<i class="bi bi-chevron-left"></i>',
-            '<i class="bi bi-chevron-right"></i>'
-        ],
-        responsive: {
-            0:{
-                items:1
-            },
-            768:{
-                items:2
-            },
-            992:{
-                items:3
+    // Testimonials Carousel (OwlCarousel)
+    if ($.fn.owlCarousel) {
+        $(".testimonial-carousel").owlCarousel({
+            autoplay: true,
+            smartSpeed: 1000,
+            margin: 25,
+            loop: true,
+            center: true,
+            dots: false,
+            nav: true,
+            navText : [
+                '<i class="bi bi-chevron-left"></i>',
+                '<i class="bi bi-chevron-right"></i>'
+            ],
+            responsive: {
+                0:{ items:1 },
+                768:{ items:2 },
+                992:{ items:3 }
             }
-        }
-    });
+        });
+    }
 
-    
 })(jQuery);
-

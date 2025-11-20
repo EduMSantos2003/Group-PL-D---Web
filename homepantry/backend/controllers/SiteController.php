@@ -38,7 +38,7 @@ class SiteController extends Controller
                         // só admin pode ver o dashboard
                         'actions' => ['index'],
                         'allow' => true,
-                        'roles' => ['admin'],
+                        'roles' => ['admin', 'gestorCasa'],
                     ],
                 ],
             ],
