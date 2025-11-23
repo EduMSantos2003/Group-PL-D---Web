@@ -1,0 +1,18 @@
+.img-produto {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #fff;
+}
+.preview-wrapper {
+    margin: 10px 0 15px 0;
+}
+
+.preview-imagem {
+    max-width: 120px;
+    border: 1px solid #ddd;
+    padding: 5px;
+    border-radius: 5px;
+}

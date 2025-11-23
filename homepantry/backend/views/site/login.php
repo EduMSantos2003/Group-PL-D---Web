@@ -1,56 +1,58 @@
 <?php
 use yii\helpers\Html;
+use yii\bootstrap4\ActiveForm;
+
+$this->title = 'Login';
+$this->registerCssFile('@web/css/login.css');   // importa o CSS externo
 ?>
-<div class="card">
-    <div class="card-body login-card-body">
-        <p class="login-box-msg">Sign in to start your session</p>
 
-        <?php $form = \yii\bootstrap4\ActiveForm::begin(['id' => 'login-form']) ?>
+<div class="login-card">
 
-        <?= $form->field($model,'username', [
-            'options' => ['class' => 'form-group has-feedback'],
-            'inputTemplate' => '{input}<div class="input-group-append"><div class="input-group-text"><span class="fas fa-envelope"></span></div></div>',
-            'template' => '{beginWrapper}{input}{error}{endWrapper}',
-            'wrapperOptions' => ['class' => 'input-group mb-3']
-        ])
-            ->label(false)
-            ->textInput(['placeholder' => $model->getAttributeLabel('username')]) ?>
+    <div class="login-header">Sign in</div>
 
-        <?= $form->field($model, 'password', [
-            'options' => ['class' => 'form-group has-feedback'],
-            'inputTemplate' => '{input}<div class="input-group-append"><div class="input-group-text"><span class="fas fa-lock"></span></div></div>',
-            'template' => '{beginWrapper}{input}{error}{endWrapper}',
-            'wrapperOptions' => ['class' => 'input-group mb-3']
-        ])
-            ->label(false)
-            ->passwordInput(['placeholder' => $model->getAttributeLabel('password')]) ?>
+    <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
-        <div class="row">
-            <div class="col-8">
-                <?= $form->field($model, 'rememberMe')->checkbox([
-                    'template' => '<div class="icheck-primary">{input}{label}</div>',
-                    'labelOptions' => [
-                        'class' => ''
-                    ],
-                    'uncheck' => null
-                ]) ?>
-            </div>
-            <div class="col-4">
-                <?= Html::submitButton('Sign In', ['class' => 'btn btn-primary btn-block']) ?>
-            </div>
-        </div>
-
-        <?php \yii\bootstrap4\ActiveForm::end(); ?>
-
-
-        <!-- /.social-auth-links -->
-
-        <p class="mb-1">
-            <a href="forgot-password.html">I forgot my password</a>
-        </p>
-        <p class="mb-0">
-            <a href="register.html" class="text-center">Register a new membership</a>
-        </p>
+    <!-- Campo Username -->
+    <div style="position: relative;">
+        <span class="fas fa-envelope input-icon"></span>
+        <?= $form->field($model, 'username')
+            ->textInput([
+                'placeholder' => 'Email',
+                'class' => 'form-control login-input'
+            ])
+            ->label(false) ?>
     </div>
-    <!-- /.login-card-body -->
+
+    <!-- Campo Password -->
+    <div style="position: relative; margin-top: 20px;">
+        <span class="fas fa-lock input-icon"></span>
+        <?= $form->field($model, 'password')
+            ->passwordInput([
+                'placeholder' => 'Password',
+                'class' => 'form-control login-input'
+            ])
+            ->label(false) ?>
+    </div>
+
+    <!-- Remember me -->
+    <div style="margin-top: 10px;">
+        <?= $form->field($model, 'rememberMe')->checkbox(['label' => 'Relembrar']) ?>
+    </div>
+
+    <!-- Botão login -->
+    <?= Html::submitButton('LOGIN', [
+        'class' => 'btn btn-login',
+        'name' => 'login-button'
+    ]) ?>
+
+    <?php ActiveForm::end(); ?>
+
+    <div class="small-links">
+        <a href="#">Forgot Password?</a><br>
+        <a href="#">Register new account</a>
+    </div>
+
 </div>
+
+<!-- Ícones FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

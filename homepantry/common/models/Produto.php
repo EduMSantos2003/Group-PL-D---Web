@@ -45,6 +45,7 @@ class Produto extends \yii\db\ActiveRecord
             [['nome', 'descricao'], 'string', 'max' => 255],
             [['id'], 'unique'],
             [['idCategoria'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::class, 'targetAttribute' => ['idCategoria' => 'id']],
+            [['imagem'], 'string', 'max' => 255],
         ];
     }
 
@@ -61,6 +62,7 @@ class Produto extends \yii\db\ActiveRecord
             'unidade' => 'Unidade',
             'preco' => 'Preco',
             'validade' => 'Validade',
+            'imagem' => 'Imagem',
         ];
     }
 
@@ -103,5 +105,17 @@ class Produto extends \yii\db\ActiveRecord
     {
         return $this->hasMany(StockProduto::class, ['idProduto' => 'id']);
     }
+
+    public function getImagemUrl()
+    {
+        if (!empty($this->imagem)) {
+            return '/img/produtos/' . $this->imagem;
+        }
+
+        return '/img/produtos/default.png';
+    }
+
+
+
 
 }

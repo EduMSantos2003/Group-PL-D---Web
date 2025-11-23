@@ -12,6 +12,14 @@ use yii\grid\GridView;
 
 $this->title = 'Produtos';
 $this->params['breadcrumbs'][] = $this->title;
+
+//css
+$this->registerCssFile('@web/css/produtos.css', [
+    'depends' => [\yii\web\YiiAsset::class]
+]);
+//css
+
+
 ?>
 
 <?php $this->beginBlock('hero');?>
@@ -55,17 +63,53 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>-->
 
     <div>
+
+
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
 
-                'id',
+                // COLUNA DA IMAGEM
+                [
+                    'label' => 'Imagem',
+                    'format' => 'html',
+                    'value' => function ($model) {
+
+                        // cria o nome da imagem a partir do nome do produto
+                        $nome = strtolower(trim($model->nome));
+                        $nome = str_replace(' ', '-', $nome);
+
+                        // caminho da imagem na pasta do frontend
+                        $ficheiro = "/images/produtos/{$nome}.png";
+
+                        // caminho real no servidor
+                        $caminhoServidor = Yii::getAlias("@webroot{$ficheiro}");
+
+                        // se existir, usa essa imagem
+                        if (file_exists($caminhoServidor)) {
+                            return Html::img($ficheiro, [
+                                'class' => 'img-produto'
+                            ]);
+                        }
+
+                        // senão, usa a imagem padrão
+                        return Html::img('/images/produtos/default.png', [
+                            'class' => 'img-produto'
+                        ]);
+                    }
+                ],
+
+                // COLUNA COM NOME DA CATEGORIA
                 [
                     'attribute' => 'idCategoria',
                     'label' => 'Categoria',
+                    'value' => function ($model) {
+                        return $model->categoria ? $model->categoria->nome : '—';
+                    }
                 ],
+
                 'nome',
                 'descricao',
                 'unidade',
@@ -78,6 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
         ]); ?>
+
     </div>
 </div>
 
