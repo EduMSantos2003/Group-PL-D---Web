@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'nome',
             'dataCriacao',
-            'idUtilizadorPrincipal',
+            'utilizadorPrincipal_id',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Casa $model, $key, $index, $column) {

@@ -17,7 +17,7 @@ class LocalSearch extends Local
     public function rules()
     {
         return [
-            [['id', 'idCasa'], 'integer'],
+            [['id', 'casa_id'], 'integer'],
             [['nome'], 'safe'],
         ];
     }
@@ -60,7 +60,7 @@ class LocalSearch extends Local
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'idCasa' => $this->idCasa,
+            'casa_id' => $this->casa_id,
         ]);
 
         $query->andFilterWhere(['like', 'nome', $this->nome]);

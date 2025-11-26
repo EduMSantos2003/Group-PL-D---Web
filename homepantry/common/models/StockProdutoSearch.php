@@ -17,7 +17,7 @@ class StockProdutoSearch extends StockProduto
     public function rules()
     {
         return [
-            [['id', 'idProduto', 'idUtilizador', 'idLocal'], 'integer'],
+            [['id', 'produto_id', 'utilizador_id', 'local_id'], 'integer'],
             [['quantidade', 'preco'], 'number'],
             [['validade', 'dataCriacao'], 'safe'],
         ];
@@ -61,9 +61,9 @@ class StockProdutoSearch extends StockProduto
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'idProduto' => $this->idProduto,
-            'idUtilizador' => $this->idUtilizador,
-            'idLocal' => $this->idLocal,
+            'produto_id' => $this->produto_id,
+            'utilizador_id' => $this->utilizador_id,
+            'local_id' => $this->local_id,
             'quantidade' => $this->quantidade,
             'validade' => $this->validade,
             'preco' => $this->preco,

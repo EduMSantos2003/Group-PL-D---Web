@@ -8,11 +8,11 @@ use Yii;
  * This is the model class for table "historico_precos".
  *
  * @property int $id
- * @property int $idProduto
+ * @property int $produto_id
  * @property float $preco
  * @property string $dataRegisto
  *
- * @property Produtos $idProduto0
+ * @property Produtos $produto
  */
 class HistoricoPreco extends \yii\db\ActiveRecord
 {
@@ -32,12 +32,11 @@ class HistoricoPreco extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idProduto', 'preco'], 'required'],
-            [['id', 'idProduto'], 'integer'],
+            [['produto_id', 'preco'], 'required'],
+            [['produto_id'], 'integer'],
             [['preco'], 'number'],
             [['dataRegisto'], 'safe'],
-            [['id'], 'unique'],
-            [['idProduto'], 'exist', 'skipOnError' => true, 'targetClass' => Produtos::class, 'targetAttribute' => ['idProduto' => 'id']],
+            [['produto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Produtos::class, 'targetAttribute' => ['produto_id' => 'id']],
         ];
     }
 
@@ -48,20 +47,20 @@ class HistoricoPreco extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'idProduto' => 'Id Produto',
+            'produto_id' => 'Produto ID',
             'preco' => 'Preco',
             'dataRegisto' => 'Data Registo',
         ];
     }
 
     /**
-     * Gets query for [[IdProduto0]].
+     * Gets query for [[Produto]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdProduto0()
+    public function getProduto()
     {
-        return $this->hasOne(Produtos::class, ['id' => 'idProduto']);
+        return $this->hasOne(Produtos::class, ['id' => 'produto_id']);
     }
 
 }

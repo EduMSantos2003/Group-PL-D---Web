@@ -4,19 +4,20 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var common\models\Categoria $model */
+/** @var common\models\HistoricoPreco $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="categoria-form">
+<div class="historico-preco-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <!--     Comentei a linha para não pedir ID na página Create Categoria -->
-    <!-- <?= $form->field($model, 'id')->textInput() ?> -->
+    <?= $form->field($model, 'produto_id')->textInput() ?>
 
-    <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
-    <br>
+    <?= $form->field($model, 'preco')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'dataRegisto')->textInput() ?>
+
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

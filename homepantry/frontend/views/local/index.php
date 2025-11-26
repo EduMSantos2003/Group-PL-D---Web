@@ -10,41 +10,18 @@ use yii\grid\GridView;
 /** @var common\models\LocalSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Locais';
+$this->title = 'Locals';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
 <div class="local-index">
 
-    <?php $this->beginBlock('hero');?>
-    <!-- Page Header Start -->
-    <div class="container-fluid page-header mb-5 wow fadeIn" data-wow-delay="0.1s">
-        <div class="container">
-            <h1 class="display-3 mb-3 animated slideInDown">Locais</h1>
-            <nav aria-label="breadcrumb animated slideInDown">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a class="text-body" href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a class="text-body" href="#">Pages</a></li>
-                    <li class="breadcrumb-item text-dark active" aria-current="page">Locais</li>
-                </ol>
-            </nav>
-        </div>
-    </div>
-    <!-- Page Header End -->
-    <?php $this -> endBlock() ?>
+    <h1><?= Html::encode($this->title) ?></h1>
 
-    <div>
-        <h1><?= Html::encode($this->title) ?></h1>
+    <p>
+        <?= Html::a('Create Local', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
 
-        <p>
-            <?= Html::a('Create Categoria', ['create'], ['class' => 'btn btn-success']) ?>
-        </p>
-    </div>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-</div>
-
-
-
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -53,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'idCasa',
+            'casa_id',
             'nome',
             [
                 'class' => ActionColumn::className(),
@@ -63,3 +40,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+
+
+</div>

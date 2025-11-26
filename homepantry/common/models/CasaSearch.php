@@ -17,7 +17,7 @@ class CasaSearch extends Casa
     public function rules()
     {
         return [
-            [['id', 'idUtilizadorPrincipal'], 'integer'],
+            [['id', 'utilizadorPrincipal_id'], 'integer'],
             [['nome', 'dataCriacao'], 'safe'],
         ];
     }
@@ -61,7 +61,7 @@ class CasaSearch extends Casa
         $query->andFilterWhere([
             'id' => $this->id,
             'dataCriacao' => $this->dataCriacao,
-            'idUtilizadorPrincipal' => $this->idUtilizadorPrincipal,
+            'utilizadorPrincipal_id' => $this->utilizadorPrincipal_id,
         ]);
 
         $query->andFilterWhere(['like', 'nome', $this->nome]);

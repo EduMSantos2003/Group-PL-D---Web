@@ -2,8 +2,6 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\helpers\ArrayHelper;
-use common\models\Utilizador;
 
 /** @var yii\web\View $this */
 /** @var common\models\Lista $model */
@@ -14,22 +12,16 @@ use common\models\Utilizador;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <!-- Retirar o pedido do ID na página create de local
-    <?= $form->field($model, 'id')->textInput() ?> -->
+    <?= $form->field($model, 'utilizador_id')->textInput() ?>
 
-    <!-- <?= $form->field($model, 'idUtilizador')->textInput() ?> -->
-    <?= $form->field($model, 'idUtilizador')->dropDownList(
-        ArrayHelper::map(Utilizador::find()->all(), 'id', 'nome'),
-        ['prompt' => 'Selecione um utilizador']
-    ) ?>
     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'tipo')->textInput(['maxlength' => true]) ?>
 
-    <!-- <?= $form->field($model, 'totalEstimado')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'dataCriacao')->textInput() ?> -->
+    <?= $form->field($model, 'totalEstimado')->textInput(['maxlength' => true]) ?>
 
-    <br>
+    <?= $form->field($model, 'dataCriacao')->textInput() ?>
+
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

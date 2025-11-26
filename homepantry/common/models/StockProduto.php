@@ -8,17 +8,17 @@ use Yii;
  * This is the model class for table "stock_produtos".
  *
  * @property int $id
- * @property int $idProduto
- * @property int $idUtilizador
- * @property int $idLocal
+ * @property int $produto_id
+ * @property int $utilizador_id
+ * @property int $local_id
  * @property float $quantidade
  * @property string $validade
  * @property float $preco
  * @property string $dataCriacao
  *
- * @property Locais $idLocal0
- * @property Produtos $idProduto0
- * @property User $idUtilizador0
+ * @property Locais $local
+ * @property Produtos $produto
+ * @property User $utilizador
  */
 class StockProduto extends \yii\db\ActiveRecord
 {
@@ -38,14 +38,13 @@ class StockProduto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idProduto', 'idUtilizador', 'idLocal', 'quantidade', 'validade', 'preco'], 'required'],
-            [['id', 'idProduto', 'idUtilizador', 'idLocal'], 'integer'],
+            [['produto_id', 'utilizador_id', 'local_id', 'quantidade', 'validade', 'preco'], 'required'],
+            [['produto_id', 'utilizador_id', 'local_id'], 'integer'],
             [['quantidade', 'preco'], 'number'],
             [['validade', 'dataCriacao'], 'safe'],
-            [['id'], 'unique'],
-            [['idProduto'], 'exist', 'skipOnError' => true, 'targetClass' => Produtos::class, 'targetAttribute' => ['idProduto' => 'id']],
-            [['idUtilizador'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['idUtilizador' => 'id']],
-            [['idLocal'], 'exist', 'skipOnError' => true, 'targetClass' => Locais::class, 'targetAttribute' => ['idLocal' => 'id']],
+            [['utilizador_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['utilizador_id' => 'id']],
+            [['produto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Produtos::class, 'targetAttribute' => ['produto_id' => 'id']],
+            [['local_id'], 'exist', 'skipOnError' => true, 'targetClass' => Locais::class, 'targetAttribute' => ['local_id' => 'id']],
         ];
     }
 
@@ -56,9 +55,9 @@ class StockProduto extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'idProduto' => 'Id Produto',
-            'idUtilizador' => 'Id Utilizador',
-            'idLocal' => 'Id Local',
+            'produto_id' => 'Produto ID',
+            'utilizador_id' => 'Utilizador ID',
+            'local_id' => 'Local ID',
             'quantidade' => 'Quantidade',
             'validade' => 'Validade',
             'preco' => 'Preco',
@@ -67,33 +66,33 @@ class StockProduto extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[IdLocal0]].
+     * Gets query for [[Local]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdLocal0()
+    public function getLocal()
     {
-        return $this->hasOne(Locais::class, ['id' => 'idLocal']);
+        return $this->hasOne(Locais::class, ['id' => 'local_id']);
     }
 
     /**
-     * Gets query for [[IdProduto0]].
+     * Gets query for [[Produto]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdProduto0()
+    public function getProduto()
     {
-        return $this->hasOne(Produtos::class, ['id' => 'idProduto']);
+        return $this->hasOne(Produtos::class, ['id' => 'produto_id']);
     }
 
     /**
-     * Gets query for [[IdUtilizador0]].
+     * Gets query for [[Utilizador]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdUtilizador0()
+    public function getUtilizador()
     {
-        return $this->hasOne(User::class, ['id' => 'idUtilizador']);
+        return $this->hasOne(User::class, ['id' => 'utilizador_id']);
     }
 
 }

@@ -10,8 +10,6 @@ $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Produtos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
-//var_dump('categorias.nome');
-//die();
 ?>
 <div class="produto-view">
 
@@ -32,19 +30,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'idCategoria',
+            'categoria_id',
             'nome',
-            [
-                'label' => 'Nome da Categoria',
-                'value' => function ($model) {
-                    return $model->categoria ? $model->categoria->nome : '(sem categoria)';
-                },
-            ],
-
             'descricao',
             'unidade',
             'preco',
             'validade',
+            'imagem',
         ],
     ]) ?>
 

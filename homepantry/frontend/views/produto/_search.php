@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'idCategoria') ?>
+    <?= $form->field($model, 'categoria_id') ?>
 
     <?= $form->field($model, 'nome') ?>
 
@@ -28,6 +28,8 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'preco') ?>
 
     <?php // echo $form->field($model, 'validade') ?>
+
+    <?php // echo $form->field($model, 'imagem') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

@@ -8,11 +8,11 @@ use Yii;
  * This is the model class for table "casas_utilizadores".
  *
  * @property int $id
- * @property int $idUtilizador
- * @property int $idCasa
+ * @property int $utilizador_id
+ * @property int $casa_id
  *
- * @property Casas $idCasa0
- * @property User $idUtilizador0
+ * @property Casas $casa
+ * @property User $utilizador
  */
 class CasaUtilizador extends \yii\db\ActiveRecord
 {
@@ -32,11 +32,10 @@ class CasaUtilizador extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idUtilizador', 'idCasa'], 'required'],
-            [['id', 'idUtilizador', 'idCasa'], 'integer'],
-            [['id'], 'unique'],
-            [['idUtilizador'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['idUtilizador' => 'id']],
-            [['idCasa'], 'exist', 'skipOnError' => true, 'targetClass' => Casas::class, 'targetAttribute' => ['idCasa' => 'id']],
+            [['utilizador_id', 'casa_id'], 'required'],
+            [['utilizador_id', 'casa_id'], 'integer'],
+            [['casa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Casas::class, 'targetAttribute' => ['casa_id' => 'id']],
+            [['utilizador_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['utilizador_id' => 'id']],
         ];
     }
 
@@ -47,29 +46,29 @@ class CasaUtilizador extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'idUtilizador' => 'Id Utilizador',
-            'idCasa' => 'Id Casa',
+            'utilizador_id' => 'Utilizador ID',
+            'casa_id' => 'Casa ID',
         ];
     }
 
     /**
-     * Gets query for [[IdCasa0]].
+     * Gets query for [[Casa]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdCasa0()
+    public function getCasa()
     {
-        return $this->hasOne(Casas::class, ['id' => 'idCasa']);
+        return $this->hasOne(Casas::class, ['id' => 'casa_id']);
     }
 
     /**
-     * Gets query for [[IdUtilizador0]].
+     * Gets query for [[Utilizador]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdUtilizador0()
+    public function getUtilizador()
     {
-        return $this->hasOne(User::class, ['id' => 'idUtilizador']);
+        return $this->hasOne(User::class, ['id' => 'utilizador_id']);
     }
 
 }

@@ -17,7 +17,7 @@ class HistoricoPrecoSearch extends HistoricoPreco
     public function rules()
     {
         return [
-            [['id', 'idProduto'], 'integer'],
+            [['id', 'produto_id'], 'integer'],
             [['preco'], 'number'],
             [['dataRegisto'], 'safe'],
         ];
@@ -61,7 +61,7 @@ class HistoricoPrecoSearch extends HistoricoPreco
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'idProduto' => $this->idProduto,
+            'produto_id' => $this->produto_id,
             'preco' => $this->preco,
             'dataRegisto' => $this->dataRegisto,
         ]);

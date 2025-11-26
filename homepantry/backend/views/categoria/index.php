@@ -1,24 +1,24 @@
 <?php
 
-use common\models\Categoria;
+use common\models\HistoricoPreco;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var common\models\CategoriaSearch $searchModel */
+/** @var common\models\HistoricoPrecoSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Categorias';
+$this->title = 'Historico Precos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="categoria-index">
+<div class="historico-preco-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Categoria', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Historico Preco', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -30,10 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'nome',
+            'produto_id',
+            'preco',
+            'dataRegisto',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Categoria $model, $key, $index, $column) {
+                'urlCreator' => function ($action, HistoricoPreco $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],

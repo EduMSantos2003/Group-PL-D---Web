@@ -13,7 +13,6 @@ use yii\grid\GridView;
 $this->title = 'Listas';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
 <div class="lista-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -31,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'idUtilizador',
+            'utilizador_id',
             'nome',
             'tipo',
             'totalEstimado',

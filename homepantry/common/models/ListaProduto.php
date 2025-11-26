@@ -8,14 +8,14 @@ use Yii;
  * This is the model class for table "lista_produtos".
  *
  * @property int $id
- * @property int $idLista
- * @property int $idProduto
+ * @property int $lista_id
+ * @property int $produto_id
  * @property float $quantidade
  * @property float $precoUnitario
  * @property float $subTotal
  *
- * @property Listas $idLista0
- * @property Produtos $idProduto0
+ * @property Listas $lista
+ * @property Produtos $produto
  */
 class ListaProduto extends \yii\db\ActiveRecord
 {
@@ -35,12 +35,11 @@ class ListaProduto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idLista', 'idProduto', 'quantidade', 'precoUnitario', 'subTotal'], 'required'],
-            [['id', 'idLista', 'idProduto'], 'integer'],
+            [['lista_id', 'produto_id', 'quantidade', 'precoUnitario', 'subTotal'], 'required'],
+            [['lista_id', 'produto_id'], 'integer'],
             [['quantidade', 'precoUnitario', 'subTotal'], 'number'],
-            [['id'], 'unique'],
-            [['idLista'], 'exist', 'skipOnError' => true, 'targetClass' => Listas::class, 'targetAttribute' => ['idLista' => 'id']],
-            [['idProduto'], 'exist', 'skipOnError' => true, 'targetClass' => Produtos::class, 'targetAttribute' => ['idProduto' => 'id']],
+            [['lista_id'], 'exist', 'skipOnError' => true, 'targetClass' => Listas::class, 'targetAttribute' => ['lista_id' => 'id']],
+            [['produto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Produtos::class, 'targetAttribute' => ['produto_id' => 'id']],
         ];
     }
 
@@ -51,8 +50,8 @@ class ListaProduto extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'idLista' => 'Id Lista',
-            'idProduto' => 'Id Produto',
+            'lista_id' => 'Lista ID',
+            'produto_id' => 'Produto ID',
             'quantidade' => 'Quantidade',
             'precoUnitario' => 'Preco Unitario',
             'subTotal' => 'Sub Total',
@@ -60,23 +59,23 @@ class ListaProduto extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[IdLista0]].
+     * Gets query for [[Lista]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdLista0()
+    public function getLista()
     {
-        return $this->hasOne(Listas::class, ['id' => 'idLista']);
+        return $this->hasOne(Listas::class, ['id' => 'lista_id']);
     }
 
     /**
-     * Gets query for [[IdProduto0]].
+     * Gets query for [[Produto]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdProduto0()
+    public function getProduto()
     {
-        return $this->hasOne(Produtos::class, ['id' => 'idProduto']);
+        return $this->hasOne(Produtos::class, ['id' => 'produto_id']);
     }
 
 }

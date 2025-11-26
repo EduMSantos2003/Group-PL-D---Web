@@ -17,8 +17,8 @@ class ProdutoSearch extends Produto
     public function rules()
     {
         return [
-            [['id', 'idCategoria', 'unidade'], 'integer'],
-            [['nome', 'descricao', 'validade'], 'safe'],
+            [['id', 'categoria_id', 'unidade'], 'integer'],
+            [['nome', 'descricao', 'validade', 'imagem'], 'safe'],
             [['preco'], 'number'],
         ];
     }
@@ -46,7 +46,6 @@ class ProdutoSearch extends Produto
 
         // add conditions that should always apply here
 
-        $query->joinWith('categoria');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -62,14 +61,15 @@ class ProdutoSearch extends Produto
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'idCategoria' => $this->idCategoria,
+            'categoria_id' => $this->categoria_id,
             'unidade' => $this->unidade,
             'preco' => $this->preco,
             'validade' => $this->validade,
         ]);
 
         $query->andFilterWhere(['like', 'nome', $this->nome])
-            ->andFilterWhere(['like', 'descricao', $this->descricao]);
+            ->andFilterWhere(['like', 'descricao', $this->descricao])
+            ->andFilterWhere(['like', 'imagem', $this->imagem]);
 
         return $dataProvider;
     }

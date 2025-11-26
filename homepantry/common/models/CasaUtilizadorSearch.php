@@ -17,7 +17,7 @@ class CasaUtilizadorSearch extends CasaUtilizador
     public function rules()
     {
         return [
-            [['id', 'idUtilizador', 'idCasa'], 'integer'],
+            [['id', 'utilizador_id', 'casa_id'], 'integer'],
         ];
     }
 
@@ -59,8 +59,8 @@ class CasaUtilizadorSearch extends CasaUtilizador
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'idUtilizador' => $this->idUtilizador,
-            'idCasa' => $this->idCasa,
+            'utilizador_id' => $this->utilizador_id,
+            'casa_id' => $this->casa_id,
         ]);
 
         return $dataProvider;

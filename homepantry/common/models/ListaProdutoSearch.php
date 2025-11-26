@@ -17,7 +17,7 @@ class ListaProdutoSearch extends ListaProduto
     public function rules()
     {
         return [
-            [['id', 'idLista', 'idProduto'], 'integer'],
+            [['id', 'lista_id', 'produto_id'], 'integer'],
             [['quantidade', 'precoUnitario', 'subTotal'], 'number'],
         ];
     }
@@ -60,8 +60,8 @@ class ListaProdutoSearch extends ListaProduto
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'idLista' => $this->idLista,
-            'idProduto' => $this->idProduto,
+            'lista_id' => $this->lista_id,
+            'produto_id' => $this->produto_id,
             'quantidade' => $this->quantidade,
             'precoUnitario' => $this->precoUnitario,
             'subTotal' => $this->subTotal,

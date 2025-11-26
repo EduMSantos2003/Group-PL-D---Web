@@ -2,7 +2,6 @@
 
 namespace frontend\controllers;
 
-use Yii;
 use common\models\Produto;
 use common\models\ProdutoSearch;
 use yii\web\Controller;
@@ -70,37 +69,18 @@ class ProdutoController extends Controller
     {
         $model = new Produto();
 
-        // Carregar imagens da pasta correta
-        $path = Yii::getAlias('@frontend/web/img/produtos');
-        $imagens = [];
-
-        if (is_dir($path)) {
-            foreach (scandir($path) as $ficheiro) {
-                if (preg_match('/\.(png|jpg|jpeg|webp)$/i', $ficheiro)) {
-
-                    // Remover extensão
-                    $nomeSemExt = pathinfo($ficheiro, PATHINFO_FILENAME);
-
-                    // key = ficheiro real | value = nome sem extensão
-                    $imagens[$ficheiro] = $nomeSemExt;
-                }
-            }
-
-        }
-
-        if ($model->load(Yii::$app->request->post())) {
-
-            if ($model->save()) {
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
+        } else {
+            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
             'model' => $model,
-            'imagens' => $imagens,
         ]);
     }
-
 
     /**
      * Updates an existing Produto model.

@@ -8,10 +8,10 @@ use Yii;
  * This is the model class for table "locais".
  *
  * @property int $id
- * @property int $idCasa
+ * @property int $casa_id
  * @property string $nome
  *
- * @property Casas $idCasa0
+ * @property Casas $casa
  * @property StockProdutos[] $stockProdutos
  */
 class Local extends \yii\db\ActiveRecord
@@ -32,11 +32,10 @@ class Local extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idCasa', 'nome'], 'required'],
-            [['id', 'idCasa'], 'integer'],
+            [['casa_id', 'nome'], 'required'],
+            [['casa_id'], 'integer'],
             [['nome'], 'string', 'max' => 255],
-            [['id'], 'unique'],
-            [['idCasa'], 'exist', 'skipOnError' => true, 'targetClass' => Casas::class, 'targetAttribute' => ['idCasa' => 'id']],
+            [['casa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Casa::class, 'targetAttribute' => ['casa_id' => 'id']],
         ];
     }
 
@@ -47,19 +46,19 @@ class Local extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'idCasa' => 'Casa',
+            'casa_id' => 'Casa ID',
             'nome' => 'Nome',
         ];
     }
 
     /**
-     * Gets query for [[IdCasa0]].
+     * Gets query for [[Casa]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getIdCasa0()
+    public function getCasa()
     {
-        return $this->hasOne(Casas::class, ['id' => 'idCasa']);
+        return $this->hasOne(Casa::class, ['id' => 'casa_id']);
     }
 
     /**
@@ -69,7 +68,7 @@ class Local extends \yii\db\ActiveRecord
      */
     public function getStockProdutos()
     {
-        return $this->hasMany(StockProdutos::class, ['idLocal' => 'id']);
+        return $this->hasMany(StockProduto::class, ['local_id' => 'id']);
     }
 
 }

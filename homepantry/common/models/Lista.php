@@ -3,20 +3,19 @@
 namespace common\models;
 
 use Yii;
-use common\models\User;
 
 /**
  * This is the model class for table "listas".
  *
  * @property int $id
- * @property int $idUtilizador
+ * @property int $utilizador_id
  * @property string $nome
  * @property string $tipo
  * @property float $totalEstimado
  * @property string $dataCriacao
  *
- * @property User $idUtilizador0
  * @property ListaProdutos[] $listaProdutos
+ * @property User $utilizador
  */
 class Lista extends \yii\db\ActiveRecord
 {
@@ -36,13 +35,12 @@ class Lista extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idUtilizador', 'nome', 'tipo'], 'required'],
-            [['id', 'idUtilizador'], 'integer'],
+            [['utilizador_id', 'nome', 'tipo', 'totalEstimado'], 'required'],
+            [['utilizador_id'], 'integer'],
             [['totalEstimado'], 'number'],
             [['dataCriacao'], 'safe'],
             [['nome', 'tipo'], 'string', 'max' => 255],
-            [['id'], 'unique'],
-            [['idUtilizador'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['idUtilizador' => 'id']],
+            [['utilizador_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['utilizador_id' => 'id']],
         ];
     }
 
@@ -53,22 +51,12 @@ class Lista extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'idUtilizador' => 'Id Utilizador',
+            'utilizador_id' => 'Utilizador ID',
             'nome' => 'Nome',
             'tipo' => 'Tipo',
             'totalEstimado' => 'Total Estimado',
             'dataCriacao' => 'Data Criacao',
         ];
-    }
-
-    /**
-     * Gets query for [[IdUtilizador0]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getIdUtilizador0()
-    {
-        return $this->hasOne(User::class, ['id' => 'idUtilizador']);
     }
 
     /**
@@ -78,7 +66,17 @@ class Lista extends \yii\db\ActiveRecord
      */
     public function getListaProdutos()
     {
-        return $this->hasMany(ListaProdutos::class, ['idLista' => 'id']);
+        return $this->hasMany(ListaProdutos::class, ['lista_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Utilizador]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUtilizador()
+    {
+        return $this->hasOne(User::class, ['id' => 'utilizador_id']);
     }
 
 }

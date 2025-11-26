@@ -8,17 +8,18 @@ use Yii;
  * This is the model class for table "produtos".
  *
  * @property int $id
- * @property int $idCategoria
+ * @property int $categoria_id
  * @property string $nome
  * @property string $descricao
  * @property int $unidade
  * @property float $preco
  * @property string $validade
+ * @property string $imagem
  *
- * @property HistoricoPreco[] $historicoPrecos
- * @property Categoria $idCategoria0
- * @property ListaProduto[] $listaProdutos
- * @property StockProduto[] $stockProdutos
+ * @property Categorias $categoria
+ * @property HistoricoPrecos[] $historicoPrecos
+ * @property ListaProdutos[] $listaProdutos
+ * @property StockProdutos[] $stockProdutos
  */
 class Produto extends \yii\db\ActiveRecord
 {
@@ -38,14 +39,12 @@ class Produto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idCategoria', 'nome', 'descricao', 'unidade', 'preco', 'validade'], 'required'],
-            [['id', 'idCategoria', 'unidade'], 'integer'],
+            [['categoria_id', 'nome', 'descricao', 'unidade', 'preco', 'validade', 'imagem'], 'required'],
+            [['categoria_id', 'unidade'], 'integer'],
             [['preco'], 'number'],
             [['validade'], 'safe'],
-            [['nome', 'descricao'], 'string', 'max' => 255],
-            [['id'], 'unique'],
-            [['idCategoria'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::class, 'targetAttribute' => ['idCategoria' => 'id']],
-            [['imagem'], 'string', 'max' => 255],
+            [['nome', 'descricao', 'imagem'], 'string', 'max' => 255],
+            [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categorias::class, 'targetAttribute' => ['categoria_id' => 'id']],
         ];
     }
 
@@ -56,7 +55,7 @@ class Produto extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'idCategoria' => 'Categoria',
+            'categoria_id' => 'Categoria ID',
             'nome' => 'Nome',
             'descricao' => 'Descricao',
             'unidade' => 'Unidade',
@@ -67,23 +66,23 @@ class Produto extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Categoria]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategoria()
+    {
+        return $this->hasOne(Categorias::class, ['id' => 'categoria_id']);
+    }
+
+    /**
      * Gets query for [[HistoricoPrecos]].
      *
      * @return \yii\db\ActiveQuery
      */
     public function getHistoricoPrecos()
     {
-        return $this->hasMany(HistoricoPreco::class, ['idProduto' => 'id']);
-    }
-
-    /**
-     * Gets query for [[IdCategoria0]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCategoria()
-    {
-        return $this->hasOne(Categoria::class, ['id' => 'idCategoria']);
+        return $this->hasMany(HistoricoPrecos::class, ['produto_id' => 'id']);
     }
 
     /**
@@ -93,7 +92,7 @@ class Produto extends \yii\db\ActiveRecord
      */
     public function getListaProdutos()
     {
-        return $this->hasMany(ListaProduto::class, ['idProduto' => 'id']);
+        return $this->hasMany(ListaProdutos::class, ['produto_id' => 'id']);
     }
 
     /**
@@ -103,19 +102,7 @@ class Produto extends \yii\db\ActiveRecord
      */
     public function getStockProdutos()
     {
-        return $this->hasMany(StockProduto::class, ['idProduto' => 'id']);
+        return $this->hasMany(StockProdutos::class, ['produto_id' => 'id']);
     }
-
-    public function getImagemUrl()
-    {
-        if (!empty($this->imagem)) {
-            return '/img/produtos/' . $this->imagem;
-        }
-
-        return '/img/produtos/default.png';
-    }
-
-
-
 
 }

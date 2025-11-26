@@ -17,7 +17,7 @@ class ListaSearch extends Lista
     public function rules()
     {
         return [
-            [['id', 'idUtilizador'], 'integer'],
+            [['id', 'utilizador_id'], 'integer'],
             [['nome', 'tipo', 'dataCriacao'], 'safe'],
             [['totalEstimado'], 'number'],
         ];
@@ -61,7 +61,7 @@ class ListaSearch extends Lista
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'idUtilizador' => $this->idUtilizador,
+            'utilizador_id' => $this->utilizador_id,
             'totalEstimado' => $this->totalEstimado,
             'dataCriacao' => $this->dataCriacao,
         ]);
