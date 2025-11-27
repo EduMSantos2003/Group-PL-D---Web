@@ -11,9 +11,28 @@ use yii\grid\GridView;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Listas';
-$this->params['breadcrumbs'][] = $this->title;
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="lista-index">
+
+    <?php $this->beginBlock('hero');?>
+
+    <!-- Page Header Start -->
+    <div class="container-fluid page-header mb-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container">
+            <!--<h1 class="display-3 mb-3 animated slideInDown">Listas</h1>-->
+            <h1><?= Html::encode($this->title) ?></h1>
+            <nav aria-label="breadcrumb animated slideInDown">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a class="text-body" href="<?= Url::to(['site/index']) ?>">Home</a></li>
+                    <li class="breadcrumb-item"><a class="text-body" href="<?= Url::to(['']) ?>">Pages</a></li>
+                    <li class="breadcrumb-item"><a class="text-body" href="<?= Url::to(['']) ?>">Listas</a></li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <!-- Page Header End -->
+    <?php $this -> endBlock() ?>
 
     <h1><?= Html::encode($this->title) ?></h1>
 
