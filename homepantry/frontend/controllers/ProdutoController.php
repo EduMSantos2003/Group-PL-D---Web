@@ -2,11 +2,14 @@
 
 namespace frontend\controllers;
 
+use yii;
 use common\models\Produto;
 use common\models\ProdutoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
+
 
 /**
  * ProdutoController implements the CRUD actions for Produto model.
@@ -38,14 +41,13 @@ class ProdutoController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new ProdutoSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $produtos = Produto::find()->all();
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'produtos' => $produtos,
         ]);
     }
+
 
     /**
      * Displays a single Produto model.
@@ -69,18 +71,33 @@ class ProdutoController extends Controller
     {
         $model = new Produto();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+
+            // Guarda primeiro os dados básicos
+            if ($model->save()) {
+
+                // Se foi enviada imagem, faz upload
+                if ($model->imageFile) {
+                    $filePath = 'uploads/produtos/' . $model->id . '_' . $model->imageFile->baseName . '.' . $model->imageFile->extension;
+
+                    if ($model->imageFile->saveAs($filePath)) {
+                        $model->imagem = $filePath;
+                        $model->save(false); // atualiza só a imagem
+                    }
+                }
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
-        } else {
-            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
     }
+
+
 
     /**
      * Updates an existing Produto model.
@@ -131,4 +148,6 @@ class ProdutoController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
 }

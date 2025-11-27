@@ -24,6 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::img('@web/' . $model->imagem, ['width' => '150']) ?>
+
     </p>
 
     <?= DetailView::widget([

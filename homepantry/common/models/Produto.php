@@ -4,6 +4,8 @@ namespace common\models;
 
 use Yii;
 
+
+
 /**
  * This is the model class for table "produtos".
  *
@@ -16,14 +18,16 @@ use Yii;
  * @property string $validade
  * @property string $imagem
  *
- * @property Categorias $categoria
- * @property HistoricoPrecos[] $historicoPrecos
- * @property ListaProdutos[] $listaProdutos
- * @property StockProdutos[] $stockProdutos
+ * @property Categoria $categoria
+ * @property HistoricoPreco[] $historicoPrecos
+ * @property ListaProduto[] $listaProdutos
+ * @property StockProduto[] $stockProdutos
  */
 class Produto extends \yii\db\ActiveRecord
 {
 
+
+    public $imageFile;
 
     /**
      * {@inheritdoc}
@@ -39,12 +43,14 @@ class Produto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['categoria_id', 'nome', 'descricao', 'unidade', 'preco', 'validade', 'imagem'], 'required'],
+            [['categoria_id', 'nome', 'descricao', 'unidade', 'preco', 'validade'], 'required'],
             [['categoria_id', 'unidade'], 'integer'],
             [['preco'], 'number'],
             [['validade'], 'safe'],
             [['nome', 'descricao', 'imagem'], 'string', 'max' => 255],
-            [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categorias::class, 'targetAttribute' => ['categoria_id' => 'id']],
+            [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::class, 'targetAttribute' => ['categoria_id' => 'id']],
+            //img file
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
         ];
     }
 
@@ -72,7 +78,7 @@ class Produto extends \yii\db\ActiveRecord
      */
     public function getCategoria()
     {
-        return $this->hasOne(Categorias::class, ['id' => 'categoria_id']);
+        return $this->hasOne(Categoria::class, ['id' => 'categoria_id']);
     }
 
     /**
@@ -82,7 +88,7 @@ class Produto extends \yii\db\ActiveRecord
      */
     public function getHistoricoPrecos()
     {
-        return $this->hasMany(HistoricoPrecos::class, ['produto_id' => 'id']);
+        return $this->hasMany(HistoricoPreco::class, ['produto_id' => 'id']);
     }
 
     /**
@@ -92,7 +98,7 @@ class Produto extends \yii\db\ActiveRecord
      */
     public function getListaProdutos()
     {
-        return $this->hasMany(ListaProdutos::class, ['produto_id' => 'id']);
+        return $this->hasMany(ListaProduto::class, ['produto_id' => 'id']);
     }
 
     /**
@@ -102,7 +108,27 @@ class Produto extends \yii\db\ActiveRecord
      */
     public function getStockProdutos()
     {
-        return $this->hasMany(StockProdutos::class, ['produto_id' => 'id']);
+        return $this->hasMany(StockProduto::class, ['produto_id' => 'id']);
     }
+
+
+    public function upload()
+    {
+        if ($this->validate()) {
+            // caminho onde a imagem será salva
+            $filePath = 'uploads/produtos/' . $this->imageFile->baseName . '.' . $this->imageFile->extension;
+
+            // guarda a imagem
+            $this->imageFile->saveAs($filePath);
+
+            // se quiseres guardar o nome no BD
+            $this->imagem = $filePath;
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
 }

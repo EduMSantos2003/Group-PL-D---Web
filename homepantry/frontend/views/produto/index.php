@@ -1,50 +1,63 @@
 <?php
 
-use common\models\Produto;
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\ActionColumn;
-use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var common\models\ProdutoSearch $searchModel */
-/** @var yii\data\ActiveDataProvider $dataProvider */
+/** @var common\models\Produto[] $produtos */
 
 $this->title = 'Produtos';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="produto-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="container mt-4">
 
-    <p>
-        <?= Html::a('Create Produto', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <h1 class="mb-4"><?= Html::encode($this->title) ?></h1>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <div class="row">
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+        <?php foreach ($produtos as $produto): ?>
+            <div class="col-md-4 mb-4">
 
-            'id',
-            'categoria_id',
-            'nome',
-            'descricao',
-            'unidade',
-            //'preco',
-            //'validade',
-            //'imagem',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Produto $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
-        ],
-    ]); ?>
+                <div class="card shadow-sm">
 
+                    <!-- Imagem -->
+                    <?php if ($produto->imagem): ?>
+                        <img src="<?= Yii::getAlias('@web/' . $produto->imagem) ?>"
+                             class="card-img-top"
+                             style="height: 200px; object-fit: cover;">
+                    <?php else: ?>
+                        <img src="https://via.placeholder.com/400x200?text=Sem+Imagem"
+                             class="card-img-top">
+                    <?php endif; ?>
+
+                    <div class="card-body">
+
+                        <h5 class="card-title" ><?= Html::encode($produto->nome) ?></h5>
+
+                        <p class="card-text">
+                            <strong>Preço:</strong> <?= $produto->preco ?> € <br>
+                            <strong>Unidade:</strong> <?= $produto->unidade ?> <br>
+                            <strong>Validade:</strong> <?= $produto->validade ?> <br>
+                        </p>
+
+                        <div class="d-flex justify-content-between">
+                            <?= Html::a('Ver', ['view', 'id' => $produto->id], ['class' => 'btn btn-primary btn-sm']) ?>
+                            <?= Html::a('Editar', ['update', 'id' => $produto->id], ['class' => 'btn btn-warning btn-sm']) ?>
+                            <?= Html::a('Apagar', ['delete', 'id' => $produto->id], [
+                                'class' => 'btn btn-danger btn-sm',
+                                'data' => [
+                                    'confirm' => 'Tem a certeza que deseja eliminar este produto?',
+                                    'method' => 'post',
+                                ],
+                            ]) ?>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        <?php endforeach; ?>
+
+    </div>
 
 </div>
