@@ -12,6 +12,10 @@ $this->title = 'Produtos';
 
     <h1 class="mb-4"><?= Html::encode($this->title) ?></h1>
 
+    <p>
+        <?= Html::a('Create Produto', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+
     <div class="row">
 
         <?php foreach ($produtos as $produto): ?>
