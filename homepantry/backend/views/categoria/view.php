@@ -4,14 +4,14 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
-/** @var common\models\HistoricoPreco $model */
+/** @var common\models\Categoria $model */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Historico Precos', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Categorias', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="historico-preco-view">
+<div class="categoria-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -30,9 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'produto_id',
-            'preco',
-            'dataRegisto',
+            'nome',
         ],
     ]) ?>
 
