@@ -80,5 +80,6 @@ class RbacController extends Controller
         $auth->assign($adminRole, $userId);
         echo "Utilizador {$userId} agora é admin.\n";
     }
-
 }
+
+
