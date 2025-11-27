@@ -111,6 +111,30 @@ class Produto extends \yii\db\ActiveRecord
         return $this->hasMany(StockProduto::class, ['produto_id' => 'id']);
     }
 
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+
+        if ($insert) {
+            // Se houver utilizador autenticado, usar esse
+            if (!Yii::$app->user->isGuest && Yii::$app->user->id !== null) {
+                $this->utilizador_id = Yii::$app->user->id;
+            } else {
+                // Se não houver login, usar um utilizador "default"
+                // ⚠️ GARANTE que existe um user com este ID na tabela `user`
+                $this->utilizador_id = 1;
+            }
+
+            // Preencher dataCriacao se vier vazia
+            if (empty($this->dataCriacao)) {
+                $this->dataCriacao = date('Y-m-d H:i:s');
+            }
+        }
+
+        return true;
+    }
 
     public function upload()
     {

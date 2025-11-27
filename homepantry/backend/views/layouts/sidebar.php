@@ -48,6 +48,11 @@ use yii\helpers\Url;
                         'url' => ['/user/index'],
                     ],
                     [
+                        'label' => 'Casas',
+                        'icon' => 'box',
+                        'url' => ['/casa/index'],
+                    ],
+                    [
                         'label' => 'Produtos',
                         'icon' => 'box',
                         'url' => ['/produto/index'],

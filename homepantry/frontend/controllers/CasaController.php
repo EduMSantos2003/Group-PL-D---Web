@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+
 class CasaController extends \yii\web\Controller
 {
     public function actionIndex()
