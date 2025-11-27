@@ -35,6 +35,11 @@ use hail812\adminlte\widgets\Menu;
                         'url' => ['/user/index'],
                     ],
                     [
+                        'label' => 'Casas',
+                        'icon' => 'box',
+                        'url' => ['/casa/index'],
+                    ],
+                    [
                         'label' => 'Produtos',
                         'icon' => 'box',
                         'url' => ['/produto/index'],

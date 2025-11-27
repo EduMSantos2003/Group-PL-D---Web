@@ -35,8 +35,8 @@ class Lista extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['utilizador_id', 'nome', 'tipo', 'totalEstimado'], 'required'],
-            [['utilizador_id'], 'integer'],
+            [['nome', 'tipo', 'totalEstimado'], 'required'],
+            //[['utilizador_id'], 'integer'],
             [['totalEstimado'], 'number'],
             [['dataCriacao'], 'safe'],
             [['nome', 'tipo'], 'string', 'max' => 255],
@@ -51,7 +51,7 @@ class Lista extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'utilizador_id' => 'Utilizador ID',
+            //'utilizador_id' => 'Utilizador ID',
             'nome' => 'Nome',
             'tipo' => 'Tipo',
             'totalEstimado' => 'Total Estimado',
@@ -78,5 +78,18 @@ class Lista extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'utilizador_id']);
     }
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+            if (empty($this->utilizador_id) && !\Yii::$app->user->isGuest) {
+                $this->utilizador_id = \Yii::$app->user->id;
+            }
 
+            if (empty($this->dataCriacao)) {
+                $this->dataCriacao = date('Y-m-d H:i:s');
+            }
+        }
+
+        return parent::beforeSave($insert);
+    }
 }
