@@ -23,6 +23,15 @@ class SiteController extends Controller
             'access' => [
                 'class' => AccessControl::class,
                 'only' => ['login', 'logout', 'index', 'error'],
+                'denyCallback' => function ($rule, $action) {
+                    if (Yii::$app->user->isGuest) {
+                        // guest → manda para login
+                        return Yii::$app->response->redirect(['/site/login']);
+                    }
+
+                    // autenticado mas sem permissão
+                    throw new \yii\web\ForbiddenHttpException('Não tens permissões para aceder ao backend.');
+                },
                 'rules' => [
                     [
                         'actions' => ['login', 'error'],
@@ -30,12 +39,12 @@ class SiteController extends Controller
                     ],
                     [
                         // qualquer user autenticado pode fazer logout
-                        'actions' => ['index', 'logout'],
+                        'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                     [
-                        // só admin pode ver o dashboard
+                        // só admin e gestorCasa podem ver o dashboard
                         'actions' => ['index'],
                         'allow' => true,
                         'roles' => ['admin', 'gestorCasa'],
@@ -70,8 +79,35 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        // Ajusta os namespaces/model names se for preciso
+        $stats = [
+            'utilizadores' => \common\models\User::find()->count(),
+            'casas'        => \common\models\Casa::find()->count(),
+            'produtos'     => \common\models\Produto::find()->count(),
+            'listas'       => \common\models\Lista::find()->count(),
+            'locais'       => \common\models\Local::find()->count(),
+        ];
+
+        // Produtos em stock a terminar em breve (ex: próximos 7 dias)
+        $produtosExpirar = \common\models\StockProduto::find()
+            ->with('produto')
+            ->orderBy(['validade' => SORT_ASC])
+            ->limit(5)
+            ->all();
+
+        // Listas recentes
+        $listasRecentes = \common\models\Lista::find()
+            ->orderBy(['dataCriacao' => SORT_DESC])
+            ->limit(5)
+            ->all();
+
+        return $this->render('index', [
+            'stats'           => $stats,
+            'produtosExpirar' => $produtosExpirar,
+            'listasRecentes'  => $listasRecentes,
+        ]);
     }
+
 
     /**
      * Login action.
