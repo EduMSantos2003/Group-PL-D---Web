@@ -1,18 +1,50 @@
-.img-produto {
-    width: 55px;
-    height: 55px;
-    object-fit: cover;
+.btn-create {
+    background: #28a745;
+    color: white !important;
+    padding: 10px 22px;
+    font-size: 16px;
     border-radius: 8px;
-    border: 1px solid #ddd;
-    background: #fff;
+    font-weight: 600;
+    transition: 0.2s;
+    display: inline-block;
 }
-.preview-wrapper {
-    margin: 10px 0 15px 0;
+.btn-create:hover {
+    background: #171616;
+    transform: scale(1.05);
 }
 
-.preview-imagem {
-    max-width: 120px;
-    border: 1px solid #ddd;
-    padding: 5px;
-    border-radius: 5px;
+.produto-card {
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+    transition: 0.3s ease;
+}
+.produto-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.produto-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.btn-ver {
+    background: #28a745;
+    color: white;
+}
+.btn-editar {
+    background: #ffc107;
+    color: black;
+}
+.btn-apagar {
+    background: #dc3545;
+    color: white;
+}
+.btn-ver, .btn-editar, .btn-apagar {
+    padding: 6px 15px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
 }

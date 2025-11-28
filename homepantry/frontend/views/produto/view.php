@@ -6,28 +6,42 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var common\models\Produto $model */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Produtos', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+$this->title = $model->nome;
+
+$this->registerCssFile('@web/css/produto_view.css');
 ?>
-<div class="produto-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="container mt-4">
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold"><?= Html::encode($this->title) ?></h1>
+
+        <!-- BOTÃO VOLTAR -->
+        <?= Html::a('← Voltar', Yii::$app->request->referrer, ['class' => 'btn btn-back']) ?>
+    </div>
+
+    <!-- BOTÕES UPDATE / DELETE -->
+    <div class="d-flex gap-3 mb-4">
+        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-update']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
+            'class' => 'btn btn-delete',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Tem certeza que deseja apagar este produto?',
                 'method' => 'post',
             ],
         ]) ?>
-        <?= Html::img('@web/' . $model->imagem, ['width' => '150']) ?>
+    </div>
 
-    </p>
+    <!-- IMAGEM -->
+    <div class="produto-img-container mb-4">
+        <?php if ($model->imagem): ?>
+            <img src="<?= Yii::getAlias('@web/' . $model->imagem) ?>" class="produto-img">
+        <?php else: ?>
+            <img src="https://via.placeholder.com/500x300?text=Sem+Imagem" class="produto-img">
+        <?php endif; ?>
+    </div>
 
+    <!-- DETALHES -->
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -38,7 +52,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'unidade',
             'preco',
             'validade',
-            'imagem',
+            [
+                'attribute' => 'imagem',
+                'format' => 'raw',
+                'value' => function($model) {
+                    return Html::img('@web/' . $model->imagem, [
+                        'class' => 'produto-thumbnail'
+                    ]);
+                }
+            ]
         ],
     ]) ?>
 

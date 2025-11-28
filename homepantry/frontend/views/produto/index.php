@@ -6,55 +6,58 @@ use yii\helpers\Html;
 /** @var common\models\Produto[] $produtos */
 
 $this->title = 'Produtos';
+
+$this->registerCssFile('@web/css/produtos.css');
+$this->registerJsFile('@web/js/produtos.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 ?>
 
 <div class="container mt-4">
 
-    <h1 class="mb-4"><?= Html::encode($this->title) ?></h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold"><?= Html::encode($this->title) ?></h1>
+
+        <?= Html::a('Criar Produto', ['create'], ['class' => 'btn-create']) ?>
+    </div>
 
     <div class="row">
 
         <?php foreach ($produtos as $produto): ?>
             <div class="col-md-4 mb-4">
+                <div class="produto-card shadow-sm" style="opacity:0; transform:translateY(20px);">
 
-                <div class="card shadow-sm">
-
-                    <!-- Imagem -->
                     <?php if ($produto->imagem): ?>
-                        <img src="<?= Yii::getAlias('@web/' . $produto->imagem) ?>"
-                             class="card-img-top"
-                             style="height: 200px; object-fit: cover;">
+                        <img src="<?= Yii::getAlias('@web/' . $produto->imagem) ?>" class="produto-img">
                     <?php else: ?>
-                        <img src="https://via.placeholder.com/400x200?text=Sem+Imagem"
-                             class="card-img-top">
+                        <img src="https://via.placeholder.com/300x220?text=Sem+Imagem" class="produto-img">
                     <?php endif; ?>
 
-                    <div class="card-body">
+                    <div class="p-3">
 
-                        <h5 class="card-title"><?= Html::encode($produto->nome) ?></h5>
+                        <h4 class="fw-bold mb-2"><?= Html::encode($produto->nome) ?></h4>
 
-                        <p class="card-text">
+                        <p class="text-muted mb-3">
                             <strong>Preço:</strong> <?= $produto->preco ?> € <br>
                             <strong>Unidade:</strong> <?= $produto->unidade ?> <br>
                             <strong>Validade:</strong> <?= $produto->validade ?> <br>
                         </p>
 
                         <div class="d-flex justify-content-between">
-                            <?= Html::a('Ver', ['view', 'id' => $produto->id], ['class' => 'btn btn-primary btn-sm']) ?>
-                            <?= Html::a('Editar', ['update', 'id' => $produto->id], ['class' => 'btn btn-warning btn-sm']) ?>
+
+                            <?= Html::a('Ver', ['view', 'id' => $produto->id], ['class'=>'btn-ver']) ?>
+                            <?= Html::a('Editar', ['update', 'id' => $produto->id], ['class'=>'btn-editar']) ?>
                             <?= Html::a('Apagar', ['delete', 'id' => $produto->id], [
-                                'class' => 'btn btn-danger btn-sm',
+                                'class' => 'btn-apagar',
                                 'data' => [
-                                    'confirm' => 'Tem a certeza que deseja eliminar este produto?',
+                                    'confirm' => 'Tem certeza que deseja apagar este produto?',
                                     'method' => 'post',
                                 ],
                             ]) ?>
+
                         </div>
 
                     </div>
 
                 </div>
-
             </div>
         <?php endforeach; ?>
 
