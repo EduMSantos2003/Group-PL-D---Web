@@ -48,7 +48,7 @@ $this->title = 'Listas';
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            //'id',
             'utilizador_id',
             'nome',
             'tipo',

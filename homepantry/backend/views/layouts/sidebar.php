@@ -1,5 +1,6 @@
 <?php
 use hail812\adminlte\widgets\Menu;
+use yii\helpers\Url;
 ?>
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -16,7 +17,19 @@ use hail812\adminlte\widgets\Menu;
         <!-- User Info (opcional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="info">
-                <a href="#" class="d-block">User</a>
+                <?php if (Yii::$app->user->isGuest): ?>
+                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="<?= Url::to(['/site/login']) ?>">
+                        <small class="fa fa-user text-body"></small>
+                    </a>
+                <?php else: ?>
+                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="#">
+                        <small class="fa fa-user text-body"></small>
+                    </a>
+                    <span class="ms-2 text-white">
+        <?= Yii::$app->user->identity->username ?>
+    </span>
+                <?php endif; ?>
+
             </div>
         </div>
 
@@ -33,6 +46,11 @@ use hail812\adminlte\widgets\Menu;
                         'label' => 'User',
                         'icon' => 'users',
                         'url' => ['/user/index'],
+                    ],
+                    [
+                        'label' => 'Casas',
+                        'icon' => 'box',
+                        'url' => ['/casa/index'],
                     ],
                     [
                         'label' => 'Produtos',

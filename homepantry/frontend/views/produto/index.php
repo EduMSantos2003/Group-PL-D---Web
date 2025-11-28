@@ -19,6 +19,10 @@ $this->registerJsFile('@web/js/produtos.js', ['depends' => [\yii\web\JqueryAsset
         <?= Html::a('Criar Produto', ['create'], ['class' => 'btn-create']) ?>
     </div>
 
+    <p>
+        <?= Html::a('Create Produto', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+
     <div class="row">
 
         <?php foreach ($produtos as $produto): ?>

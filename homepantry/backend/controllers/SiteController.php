@@ -22,7 +22,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['login', 'logout', 'index'],
+                'only' => ['login', 'logout', 'index', 'error'],
                 'rules' => [
                     [
                         'actions' => ['login', 'error'],
@@ -30,7 +30,7 @@ class SiteController extends Controller
                     ],
                     [
                         // qualquer user autenticado pode fazer logout
-                        'actions' => ['logout'],
+                        'actions' => ['index', 'logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
