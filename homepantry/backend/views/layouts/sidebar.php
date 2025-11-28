@@ -1,14 +1,18 @@
 <?php
 use hail812\adminlte\widgets\Menu;
 use yii\helpers\Url;
+use yii\helpers\Html;
+
 ?>
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
     <!-- Logo -->
-    <a href="#" class="brand-link">
-        <span class="brand-text font-weight-light">Home Pantry</span>
+    <a class="brand-link d-flex justify-content-center">
+        <span class="brand-text font-weight-light">Home Pantry - Backend</span>
     </a>
+
+
 
 
     <!-- Sidebar -->
@@ -16,22 +20,29 @@ use yii\helpers\Url;
 
         <!-- User Info (opcional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            <div class="info">
-                <?php if (Yii::$app->user->isGuest): ?>
-                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="<?= Url::to(['/site/login']) ?>">
-                        <small class="fa fa-user text-body"></small>
+            <?php if (Yii::$app->user->isGuest): ?>
+                <div class="image d-flex align-items-center">
+                    <a href="<?= Url::to(['/site/login']) ?>">
+                        <i class="fas fa-user-circle text-white" style="font-size: 2rem;"></i>
                     </a>
-                <?php else: ?>
-                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="#">
-                        <small class="fa fa-user text-body"></small>
+                </div>
+                <div class="info d-flex align-items-center">
+                    <a href="<?= Url::to(['/site/login']) ?>" class="d-block text-white ms-2">
+                        Login
                     </a>
-                    <span class="ms-2 text-white">
-        <?= Yii::$app->user->identity->username ?>
-    </span>
-                <?php endif; ?>
-
-            </div>
+                </div>
+            <?php else: ?>
+                <div class="image d-flex align-items-center">
+                    <i class="fas fa-user-circle text-white" style="font-size: 2rem;"></i>
+                </div>
+                <div class="info d-flex align-items-center">
+            <span class="d-block text-white ms-2">
+                <?= Html::encode(Yii::$app->user->identity->username) ?>
+            </span>
+                </div>
+            <?php endif; ?>
         </div>
+
 
         <!-- Menu -->
         <nav class="mt-2">
@@ -43,7 +54,7 @@ use yii\helpers\Url;
                         'url' => ['/site/index'],
                     ],
                     [
-                        'label' => 'User',
+                        'label' => 'Utilizadores',
                         'icon' => 'users',
                         'url' => ['/user/index'],
                     ],
@@ -72,13 +83,6 @@ use yii\helpers\Url;
                         'label' => 'Locais',
                         'icon' => 'map-marker-alt',
                         'url' => ['/local/index'],
-                    ],
-                    [
-                        'label' => 'Logout',
-                        'icon' => 'sign-out-alt',
-                        'url' => ['/site/logout'],
-                        'template' => '<a href="{url}" data-method="post">{icon} {label}</a>',
-                        'visible' => !Yii::$app->user->isGuest,
                     ],
                 ],
             ]) ?>

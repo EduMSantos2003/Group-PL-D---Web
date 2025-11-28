@@ -79,8 +79,35 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        // Ajusta os namespaces/model names se for preciso
+        $stats = [
+            'utilizadores' => \common\models\User::find()->count(),
+            'casas'        => \common\models\Casa::find()->count(),
+            'produtos'     => \common\models\Produto::find()->count(),
+            'listas'       => \common\models\Lista::find()->count(),
+            'locais'       => \common\models\Local::find()->count(),
+        ];
+
+        // Produtos em stock a terminar em breve (ex: próximos 7 dias)
+        $produtosExpirar = \common\models\StockProduto::find()
+            ->with('produto')
+            ->orderBy(['validade' => SORT_ASC])
+            ->limit(5)
+            ->all();
+
+        // Listas recentes
+        $listasRecentes = \common\models\Lista::find()
+            ->orderBy(['dataCriacao' => SORT_DESC])
+            ->limit(5)
+            ->all();
+
+        return $this->render('index', [
+            'stats'           => $stats,
+            'produtosExpirar' => $produtosExpirar,
+            'listasRecentes'  => $listasRecentes,
+        ]);
     }
+
 
     /**
      * Login action.
