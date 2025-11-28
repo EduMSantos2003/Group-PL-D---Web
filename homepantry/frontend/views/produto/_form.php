@@ -30,13 +30,13 @@ use common\models\Categoria;
     <?= $form->field($model, 'preco')->textInput() ?>
 
     <?= $form->field($model, 'validade')->textInput() ?>
-
+    <br>
     <!-- Campo de upload da imagem -->
     <?= $form->field($model, 'imageFile')->fileInput() ?>
 
     <!-- Não precisas deste input de texto -->
     <!-- <?= $form->field($model, 'imagem')->textInput(['maxlength' => true]) ?> -->
-
+    <br>
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>

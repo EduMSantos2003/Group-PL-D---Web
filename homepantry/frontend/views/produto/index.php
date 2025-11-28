@@ -1,11 +1,16 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\Breadcrumbs;
 
 /** @var yii\web\View $this */
 /** @var common\models\Produto[] $produtos */
 
 $this->title = 'Produtos';
+
+// breadcrumbs iguais ao resto do site
+//$this->params['breadcrumbs'][] = ['label' => 'Home', 'url' => ['site/index']];
+$this->params['breadcrumbs'][] = $this->title;
 
 $this->registerCssFile('@web/css/produtos.css');
 $this->registerJsFile('@web/js/produtos.js', ['depends' => [\yii\web\JqueryAsset::class]]);
@@ -13,15 +18,33 @@ $this->registerJsFile('@web/js/produtos.js', ['depends' => [\yii\web\JqueryAsset
 
 <div class="container mt-4">
 
+    <?php $this->beginBlock('hero'); ?>
+
+    <!-- Page Header Start -->
+    <div class="container-fluid page-header mb-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container">
+            <h1 class="display-3 mb-3 animated slideInDown">
+                <?= Html::encode($this->title) ?>
+            </h1>
+
+            <nav aria-label="breadcrumb" class="animated slideInDown">
+                <?= Breadcrumbs::widget([
+                    'options' => ['class' => 'breadcrumb mb-0'],
+                    'links'   => $this->params['breadcrumbs'],
+                ]) ?>
+            </nav>
+
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+    <?php $this->endBlock(); ?>
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="fw-bold"><?= Html::encode($this->title) ?></h1>
 
         <?= Html::a('Criar Produto', ['create'], ['class' => 'btn-create']) ?>
     </div>
-
-    <p>
-        <?= Html::a('Create Produto', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <div class="row">
 
@@ -56,11 +79,8 @@ $this->registerJsFile('@web/js/produtos.js', ['depends' => [\yii\web\JqueryAsset
                                     'method' => 'post',
                                 ],
                             ]) ?>
-
                         </div>
-
                     </div>
-
                 </div>
             </div>
         <?php endforeach; ?>

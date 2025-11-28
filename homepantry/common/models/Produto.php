@@ -117,24 +117,28 @@ class Produto extends \yii\db\ActiveRecord
             return false;
         }
 
-        if ($insert) {
-            // Se houver utilizador autenticado, usar esse
-            if (!Yii::$app->user->isGuest && Yii::$app->user->id !== null) {
-                $this->utilizador_id = Yii::$app->user->id;
-            } else {
-                // Se não houver login, usar um utilizador "default"
-                // ⚠️ GARANTE que existe um user com este ID na tabela `user`
-                $this->utilizador_id = 1;
-            }
+        // Aqui só mexemos em campos que existem mesmo na tabela "produtos"
 
-            // Preencher dataCriacao se vier vazia
-            if (empty($this->dataCriacao)) {
-                $this->dataCriacao = date('Y-m-d H:i:s');
+        // 1) Garantir que o preço nunca é negativo
+        if ($this->preco < 0) {
+            $this->preco = 0;
+        }
+
+        // 2) Normalizar a data de validade (opcional, se usares um datepicker já vem no formato certo)
+        if (!empty($this->validade)) {
+            // tenta converter qualquer formato legível para Y-m-d
+            $time = strtotime($this->validade);
+            if ($time !== false) {
+                $this->validade = date('Y-m-d', $time);
             }
         }
 
+        // Se um dia quiseres fazer mais alguma lógica antes de gravar,
+        // podes acrescentar aqui, mas SEM usar campos que não existam na BD.
+
         return true;
     }
+
 
     public function upload()
     {
@@ -153,6 +157,5 @@ class Produto extends \yii\db\ActiveRecord
             return false;
         }
     }
-
 
 }

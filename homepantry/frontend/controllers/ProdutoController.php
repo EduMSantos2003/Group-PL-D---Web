@@ -106,18 +106,42 @@ class ProdutoController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        // guarda o caminho da imagem antiga, caso não seja escolhida nova
+        $oldImage = $model->imagem;
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            // obter o ficheiro enviado no form
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+
+            if ($model->imageFile) {
+                // se foi escolhida uma nova imagem
+                $filePath = 'uploads/produtos/' . $model->id . '_' . $model->imageFile->baseName . '.' . $model->imageFile->extension;
+
+                if ($model->imageFile->saveAs($filePath)) {
+                    $model->imagem = $filePath;
+                }
+            } else {
+                // se não foi escolhida nova imagem, mantém a antiga
+                $model->imagem = $oldImage;
+            }
+
+            // guarda as alterações (já com o caminho da imagem atualizado ou mantido)
+            if ($model->save(false)) { // false para não voltar a validar tudo
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('update', [
             'model' => $model,
         ]);
     }
+
 
     /**
      * Deletes an existing Produto model.
