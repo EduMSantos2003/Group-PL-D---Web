@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\base\Model;
+use common\models\User;
 
 /**
  * Login form
@@ -56,11 +57,32 @@ class LoginForm extends Model
      */
     public function login()
     {
-        if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+        if (!$this->validate()) {
+            return false;
         }
-        
-        return false;
+
+        $user = $this->getUser();
+        if (!$user) {
+            return false;
+        }
+
+        // 👇 FILTRO ESPECÍFICO PARA O BACKEND
+        if (Yii::$app->id === 'app-backend') {
+            $auth = Yii::$app->authManager;
+            $roles = $auth->getRolesByUser($user->id);
+
+            // só deixam passar admin ou gestorCasa
+            if (!isset($roles['admin']) && !isset($roles['gestorCasa'])) {
+                $this->addError('username', 'Não tens acesso ao backoffice.');
+                return false;
+            }
+        }
+
+        // se passou nas validações todas, faz login normal
+        return Yii::$app->user->login(
+            $user,
+            $this->rememberMe ? 3600 * 24 * 30 : 0
+        );
     }
 
     /**

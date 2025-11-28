@@ -23,6 +23,15 @@ class SiteController extends Controller
             'access' => [
                 'class' => AccessControl::class,
                 'only' => ['login', 'logout', 'index', 'error'],
+                'denyCallback' => function ($rule, $action) {
+                    if (Yii::$app->user->isGuest) {
+                        // guest → manda para login
+                        return Yii::$app->response->redirect(['/site/login']);
+                    }
+
+                    // autenticado mas sem permissão
+                    throw new \yii\web\ForbiddenHttpException('Não tens permissões para aceder ao backend.');
+                },
                 'rules' => [
                     [
                         'actions' => ['login', 'error'],
@@ -30,12 +39,12 @@ class SiteController extends Controller
                     ],
                     [
                         // qualquer user autenticado pode fazer logout
-                        'actions' => ['index', 'logout'],
+                        'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                     [
-                        // só admin pode ver o dashboard
+                        // só admin e gestorCasa podem ver o dashboard
                         'actions' => ['index'],
                         'allow' => true,
                         'roles' => ['admin', 'gestorCasa'],
