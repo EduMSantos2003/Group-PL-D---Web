@@ -8,6 +8,9 @@ use common\models\Categoria;
 /** @var yii\web\View $this */
 /** @var common\models\Produto $model */
 /** @var yii\widgets\ActiveForm $form */
+
+$this->registerCssFile('@web/css/produtos.css');
+
 ?>
 
 <div class="produto-form">
@@ -38,7 +41,7 @@ use common\models\Categoria;
     <!-- <?= $form->field($model, 'imagem')->textInput(['maxlength' => true]) ?> -->
     <br>
     <div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn-create']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

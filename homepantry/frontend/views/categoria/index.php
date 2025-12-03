@@ -12,6 +12,8 @@ use yii\grid\GridView;
 
 $this->title = 'Categorias';
 //$this->params['breadcrumbs'][] = $this->title;
+$this->registerCssFile('@web/css/produtos.css');
+
 ?>
 <div class="categoria-index">
 
@@ -36,7 +38,7 @@ $this->title = 'Categorias';
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Categoria', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Categoria', ['create'], ['class' => 'btn-create']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
