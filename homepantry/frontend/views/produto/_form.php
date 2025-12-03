@@ -9,7 +9,7 @@ use common\models\Categoria;
 /** @var common\models\Produto $model */
 /** @var yii\widgets\ActiveForm $form */
 
-$this->registerCssFile('@web/css/produtos.css');
+$this->registerCssFile('@web/css/butoes.css');
 
 ?>
 

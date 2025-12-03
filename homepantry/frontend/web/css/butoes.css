@@ -24,24 +24,45 @@
     box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
 
-.produto-img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-}
 
 .btn-ver {
-    background: #28a745;
-    color: white;
+    background: #171616;
+    color: white !important;
+    padding: 10px 22px;
+    font-size: 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: 0.2s;
+    display: inline-block;
 }
+
+.btn-ver:hover {
+    background: #28a745;
+    transform: scale(1.05);
+    color: black !important;
+}
+
 .btn-editar {
     background: #ffc107;
     color: black;
 }
 .btn-apagar {
-    background: #dc3545;
-    color: white;
+    background: #171616;
+    color: white !important;
+    padding: 10px 22px;
+    font-size: 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: 0.2s;
+    display: inline-block;
 }
+
+.btn-apagar:hover {
+    background: #28a745;
+    transform: scale(1.05);
+    color: black !important;
+}
+
 .btn-ver, .btn-editar, .btn-apagar {
     padding: 6px 15px;
     border-radius: 6px;
@@ -50,4 +71,9 @@
 }
 .btn-success {
     border-radius: 6px;
+}
+
+.produto-thumbnail {
+    width: 150px;
+    border-radius: 8px;
 }

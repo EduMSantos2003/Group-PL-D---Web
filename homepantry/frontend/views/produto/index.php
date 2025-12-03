@@ -13,6 +13,7 @@ $this->title = 'Produtos';
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerCssFile('@web/css/produtos.css');
+
 $this->registerJsFile('@web/js/produtos.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 ?>
 

@@ -8,10 +8,8 @@
     height: auto;
     object-fit: cover;
     border-radius: 12px;
-    display: block;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
+
+
 }
 
 /* Container da imagem */
@@ -21,41 +19,6 @@
     overflow: hidden;
 }
 
-
-/* ============================================
-   MINIATURA NA TABELA
-   ============================================ */
-.produto-thumbnail {
-    width: 150px;
-    border-radius: 8px;
-}
-
-
-/* ============================================
-   FIX DOS BOTÕES E TITULO (OVERLAP COM IMAGEM)
-   ============================================ */
-
-/* Impedir que os flex acima colapsem verticalmente */
-.d-flex.gap-3.mb-4,
-.d-flex.justify-content-between.align-items-center.mb-4 {
-    width: 100%;
-    display: block !important; /* ← FIX FINAL */
-}
-
-/* Garantir que nada empurra para cima */
-.d-flex.justify-content-between.align-items-center.mb-4 {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-}
-
-.container.mt-4 {
-    padding-top: 0 !important;
-}
-
-
-/* ============================================
-   BOTÕES UPDATE / DELETE
-   ============================================ */
 .btn-update {
     background: #28a745;
     color: #171616 !important;

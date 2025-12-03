@@ -8,7 +8,8 @@ use yii\widgets\DetailView;
 
 $this->title = $model->nome;
 
-$this->registerCssFile('@web/css/produto_view.css');
+$this->registerCssFile('@web/css/butoes.css');
+$this->registerCssFile('@web/css/imagens.css');
 ?>
 
 <div class="container mt-4">
@@ -16,20 +17,6 @@ $this->registerCssFile('@web/css/produto_view.css');
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="fw-bold"><?= Html::encode($this->title) ?></h1>
 
-        <!-- BOTÃO VOLTAR -->
-        <?= Html::a('← Voltar', Yii::$app->request->referrer, ['class' => 'btn btn-back']) ?>
-    </div>
-
-    <!-- BOTÕES UPDATE / DELETE -->
-    <div class="d-flex gap-3 mb-4">
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-update']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-delete',
-            'data' => [
-                'confirm' => 'Tem certeza que deseja apagar este produto?',
-                'method' => 'post',
-            ],
-        ]) ?>
     </div>
 
     <!-- IMAGEM -->
@@ -63,5 +50,16 @@ $this->registerCssFile('@web/css/produto_view.css');
             ]
         ],
     ]) ?>
+
+    <!-- BOTÕES UPDATE -->
+    <div class="d-flex gap-3 mb-4">
+        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn-ver']) ?>
+        <?= Html::a('Delete', ['delete', 'id' => $model->id], ['class' => 'btn-apagar',
+            'data' => [
+                'confirm' => 'Tem certeza que deseja apagar este produto?',
+                'method' => 'post',
+            ],
+        ]) ?>
+    </div>
 
 </div>
