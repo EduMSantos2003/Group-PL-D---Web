@@ -7,6 +7,9 @@ use common\models\ListaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use yii\web\ForbiddenHttpException;
+
 
 /**
  * ListaController implements the CRUD actions for Lista model.
@@ -21,6 +24,23 @@ class ListaController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'only' => ['index', 'view', 'create', 'update', 'delete'],
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            // membros da casa + gestorCasa + admin (porque todos têm manageListas)
+                            'roles' => ['manageListas'],
+                        ],
+                    ],
+                    'denyCallback' => function ($rule, $action) {
+                        if (\Yii::$app->user->isGuest) {
+                            return \Yii::$app->response->redirect(['/site/login']);
+                        }
+                        throw new ForbiddenHttpException('Não tem permissão para aceder a esta página.');
+                    },
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -30,6 +50,7 @@ class ListaController extends Controller
             ]
         );
     }
+
 
     /**
      * Lists all Lista models.

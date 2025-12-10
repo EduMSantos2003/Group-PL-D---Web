@@ -1,4 +1,8 @@
 <?php
+
+use yii\filters\AccessControl;
+use yii\web\ForbiddenHttpException;
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -9,8 +13,42 @@ $params = array_merge(
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'bootstrap' => ['log'],
+
+    // COMPORTAMENTO GLOBAL DE ACESSO (FRONTEND)
+    'as access' => [
+        'class' => AccessControl::class,
+        'denyCallback' => function ($rule, $action) {
+            if (Yii::$app->user->isGuest) {
+                return Yii::$app->response->redirect(['site/login']);
+            }
+            throw new ForbiddenHttpException('Não tens permissão para aceder a esta página.');
+        },
+        'rules' => [
+            // --- ROTAS PÚBLICAS (SEM LOGIN) ---
+            [
+                'allow' => true,
+                'controllers' => ['site'],
+                'actions' => [
+                    'index',
+                    'login',
+                    'logout',
+                    'signup',
+                    'error',
+                    'request-password-reset',
+                    'reset-password',
+                ],
+            ],
+
+            // --- RESTO DO FRONTEND: APENAS LOGIN OBRIGATÓRIO ---
+            [
+                'allow' => true,
+                'roles' => ['@'], // qualquer utilizador autenticado
+            ],
+        ],
+    ],
+
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
@@ -20,10 +58,10 @@ return [
             'enableAutoLogin' => true,
             'identityCookie' => [
                 'name' => '_identity-frontend',
-                'httpOnly' => true],
+                'httpOnly' => true,
+            ],
         ],
         'session' => [
-            // this is the name of the session cookie used for login on the frontend
             'name' => 'advanced-frontend',
         ],
         'log' => [
@@ -38,14 +76,6 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-            ],
-        ],
-        */
     ],
     'params' => $params,
 ];
