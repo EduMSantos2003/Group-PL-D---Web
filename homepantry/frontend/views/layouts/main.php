@@ -105,7 +105,6 @@ AppAsset::register($this);
                     'links' => $this->params['breadcrumbs'] ?? [],
                 ]); ?>
             </nav>
-
         </div>
     </div>
     <!-- Page Header End -->
