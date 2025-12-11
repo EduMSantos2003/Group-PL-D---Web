@@ -7,6 +7,8 @@ use common\models\ListaProdutoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use yii\web\ForbiddenHttpException;
 
 /**
  * ListaProdutoController implements the CRUD actions for ListaProduto model.
@@ -21,6 +23,23 @@ class ListaProdutoController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'only' => ['index', 'view', 'create', 'update', 'delete'],
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            // membros da casa + gestorCasa + admin (todos com manageListas)
+                            'roles' => ['manageListas'],
+                        ],
+                    ],
+                    'denyCallback' => function ($rule, $action) {
+                        if (\Yii::$app->user->isGuest) {
+                            return \Yii::$app->response->redirect(['/site/login']);
+                        }
+                        throw new ForbiddenHttpException('Não tens permissão para aceder a esta página.');
+                    },
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -30,6 +49,7 @@ class ListaProdutoController extends Controller
             ]
         );
     }
+
 
     /**
      * Lists all ListaProduto models.

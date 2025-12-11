@@ -7,6 +7,8 @@ use common\models\CategoriaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use yii\web\ForbiddenHttpException;
 
 /**
  * CategoriaController implements the CRUD actions for Categoria model.
@@ -21,6 +23,23 @@ class CategoriaController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'only' => ['index', 'view', 'create', 'update', 'delete'],
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            // só quem pode gerir stock (gestorCasa, admin)
+                            'roles' => ['manageStock'],
+                        ],
+                    ],
+                    'denyCallback' => function ($rule, $action) {
+                        if (\Yii::$app->user->isGuest) {
+                            return \Yii::$app->response->redirect(['/site/login']);
+                        }
+                        throw new ForbiddenHttpException('Não tens permissão para aceder a esta página.');
+                    },
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
@@ -30,6 +49,7 @@ class CategoriaController extends Controller
             ]
         );
     }
+
 
     /**
      * Lists all Categoria models.
