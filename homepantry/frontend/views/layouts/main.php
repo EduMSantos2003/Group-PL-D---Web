@@ -91,25 +91,31 @@ AppAsset::register($this);
         </div>
     </nav>
 
-    <?php $this->beginBlock('hero'); ?>
+    <?php
+    //Estamos a definir a página (site/index) como home, para depois definir o título + breadcrumbs em todas as páginas menos no site/index
+    // Se não estivermos na home (site/index), mostramos o Page Header com título + breadcrumbs
+    $isHome = Yii::$app->controller->id === 'site'
+        && Yii::$app->controller->action->id === 'index';
+    ?>
 
-    <!-- Page Header Start -->
-    <div class="container-fluid page-header mb-5 wow fadeIn" data-wow-delay="0.1s">
-        <div class="container">
-            <h1 class="display-3 mb-3 animated slideInDown">
-                <?= Html::encode($this->title) ?>
-            </h1>
+    <?php if (!$isHome): ?>
+        <!-- Page Header Start -->
+        <div class="container-fluid page-header mb-5 wow fadeIn" data-wow-delay="0.1s">
+            <div class="container">
+                <h1 class="display-3 mb-3 animated slideInDown">
+                    <?= Html::encode($this->title) ?>
+                </h1>
 
-            <nav aria-label="breadcrumb" class="animated slideInDown">
-                <?= Breadcrumbs::widget([
-                    'links' => $this->params['breadcrumbs'] ?? [],
-                ]); ?>
-            </nav>
+                <nav aria-label="breadcrumb" class="animated slideInDown">
+                    <?= Breadcrumbs::widget([
+                        'links' => $this->params['breadcrumbs'] ?? [],
+                    ]); ?>
+                </nav>
+            </div>
         </div>
-    </div>
-    <!-- Page Header End -->
+        <!-- Page Header End -->
+    <?php endif; ?>
 
-    <?php $this->endBlock(); ?>
 
 
 </header>
