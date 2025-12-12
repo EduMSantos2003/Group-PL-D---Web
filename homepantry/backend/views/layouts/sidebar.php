@@ -60,7 +60,7 @@ use yii\helpers\Html;
                     ],
                     [
                         'label' => 'Casas',
-                        'icon' => 'box',
+                        'icon' => 'home',
                         'url' => ['/casa/index'],
                     ],
                     [

@@ -1,46 +1,60 @@
 <?php
 
-use common\models\Casa;
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
+use common\models\User;
 
 /** @var yii\web\View $this */
-/** @var common\models\CasaSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
+/** @var common\models\CasaSearch $searchModel */
 
 $this->title = 'Casas';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="casa-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="casa-index">
 
     <p>
         <?= Html::a('Create Casa', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'nome',
-            'dataCriacao',
-            'utilizadorPrincipal_id',
             [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Casa $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                'attribute' => 'nome',
+                'label' => 'Nome da Casa',
+            ],
+
+            [
+                'attribute' => 'dataCriacao',
+                'label' => 'Criada em',
+                'format' => ['date', 'php:Y-m-d H:i'],
+                'contentOptions' => ['style' => 'width:180px;']
+            ],
+
+            [
+                'attribute' => 'utilizadorPrincipal_id',
+                'label' => 'Responsável',
+                'value' => function ($model) {
+                    return $model->utilizadorPrincipal->username ?? '(sem utilizador)';
+                },
+                'filter' => ArrayHelper::map(
+                    User::find()->all(),
+                    'id',
+                    'username'
+                ),
+                'contentOptions' => ['style' => 'width:180px;']
+            ],
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {delete}',
             ],
         ],
     ]); ?>
-
 
 </div>
