@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use common\models\Categoria;
+use yii\jui\DatePicker;
+
 
 /** @var yii\web\View $this */
 /** @var common\models\Produto $model */
@@ -32,7 +34,15 @@ $this->registerCssFile('@web/css/butoes.css');
 
     <?= $form->field($model, 'preco')->textInput() ?>
 
-    <?= $form->field($model, 'validade')->textInput() ?>
+    <?= $form->field($model, 'validade')->widget(DatePicker::class, [
+        'language' => 'pt',
+        'dateFormat' => 'dd/MM/yyyy',
+        'options' => [
+            'class' => 'form-control',
+            'placeholder' => 'Selecione a data de validade'
+        ],
+    ]) ?>
+
     <br>
     <!-- Campo de upload da imagem -->
     <?= $form->field($model, 'imageFile')->fileInput() ?>

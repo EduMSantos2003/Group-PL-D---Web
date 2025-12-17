@@ -20,28 +20,6 @@ $this->registerJsFile('@web/js/produtos.js', ['depends' => [\yii\web\JqueryAsset
 
 <div class="container mt-4">
 
-    <?php $this->beginBlock('hero'); ?>
-
-    <!-- Page Header Start -->
-    <div class="container-fluid page-header mb-5 wow fadeIn" data-wow-delay="0.1s">
-        <div class="container">
-            <h1 class="display-3 mb-3 animated slideInDown">
-                <?= Html::encode($this->title) ?>
-            </h1>
-
-            <nav aria-label="breadcrumb" class="animated slideInDown">
-                <?= Breadcrumbs::widget([
-                    'options' => ['class' => 'breadcrumb mb-0'],
-                    'links'   => $this->params['breadcrumbs'],
-                ]) ?>
-            </nav>
-
-        </div>
-    </div>
-    <!-- Page Header End -->
-
-    <?php $this->endBlock(); ?>
-
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="fw-bold"><?= Html::encode($this->title) ?></h1>
 
@@ -55,9 +33,9 @@ $this->registerJsFile('@web/js/produtos.js', ['depends' => [\yii\web\JqueryAsset
                 <div class="produto-card shadow-sm" style="opacity:0; transform:translateY(20px);">
 
                     <?php if ($produto->imagem): ?>
-                        <img src="<?= Yii::getAlias('@web/' . $produto->imagem) ?>" class="produto-img">
+                        <img src="<?= Yii::getAlias('@web/uploads/produtos/' . $produto->imagem) ?>" class="produto-img">
                     <?php else: ?>
-                        <img src="https://via.placeholder.com/300x220?text=Sem+Imagem" class="produto-img">
+                        <img src="https://via.placeholder.com/500x300?text=Sem+Imagem" class="produto-img">
                     <?php endif; ?>
 
                     <div class="p-3">

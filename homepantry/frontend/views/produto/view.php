@@ -22,7 +22,7 @@ $this->registerCssFile('@web/css/imagens.css');
     <!-- IMAGEM -->
     <div class="produto-img-container mb-4">
         <?php if ($model->imagem): ?>
-            <img src="<?= Yii::getAlias('@web/' . $model->imagem) ?>" class="produto-img">
+            <img src="<?= Yii::getAlias('@web/uploads/produtos/' . $model->imagem) ?>" class="produto-img">
         <?php else: ?>
             <img src="https://via.placeholder.com/500x300?text=Sem+Imagem" class="produto-img">
         <?php endif; ?>

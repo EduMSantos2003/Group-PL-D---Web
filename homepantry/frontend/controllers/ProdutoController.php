@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use yii\filters\AccessControl;
+
 
 
 /**
@@ -21,18 +23,31 @@ class ProdutoController extends Controller
      */
     public function behaviors()
     {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'view'],
+                        'roles' => ['convidado', 'membroCasa', 'gestorCasa', 'admin'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create', 'update', 'delete'],
+                        'roles' => ['gestorCasa', 'admin'],
                     ],
                 ],
-            ]
-        );
+            ],
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
     }
+
 
     /**
      * Lists all Produto models.
@@ -70,24 +85,13 @@ class ProdutoController extends Controller
     public function actionCreate()
     {
         $model = new Produto();
+        $model->scenario = 'create';
 
         if ($model->load(Yii::$app->request->post())) {
 
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
 
-            // Guarda primeiro os dados básicos
-            if ($model->save()) {
-
-                // Se foi enviada imagem, faz upload
-                if ($model->imageFile) {
-                    $filePath = 'uploads/produtos/' . $model->id . '_' . $model->imageFile->baseName . '.' . $model->imageFile->extension;
-
-                    if ($model->imageFile->saveAs($filePath)) {
-                        $model->imagem = $filePath;
-                        $model->save(false); // atualiza só a imagem
-                    }
-                }
-
+            if ($model->upload() && $model->save(false)) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
@@ -96,6 +100,7 @@ class ProdutoController extends Controller
             'model' => $model,
         ]);
     }
+
 
 
 
@@ -109,7 +114,9 @@ class ProdutoController extends Controller
 
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $model = Produto::findOne($id);
+        $model->scenario = 'update';
+
 
         // guarda o caminho da imagem antiga, caso não seja escolhida nova
         $oldImage = $model->imagem;
