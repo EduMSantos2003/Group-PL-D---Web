@@ -12,6 +12,11 @@ return [
         'authManager' => [
             'class' => \yii\rbac\DbManager::class,
         ],
+        'formatter' => [
+            'class' => yii\i18n\Formatter::class,
+            'currencyCode' => 'EUR',
+            'locale' => 'pt-PT',
+        ],
 
     ],
 ];

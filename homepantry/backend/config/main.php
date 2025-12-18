@@ -48,7 +48,7 @@ return [
     'components' => [
 
         'urlManager'=>[
-            'enablePrettyUrl' => true,
+            'enablePrettyUrl' => false,
             'showScriptName'=>false,
             'rules'=>[
                 ['class'=>'yii\rest\UrlRule','controller'=>'api/casa'],

@@ -14,7 +14,6 @@ $this->registerCssFile('@web/css/login.css');   // importa o CSS externo
 
     <!-- Campo Username -->
     <div style="position: relative;">
-        <span class="fas fa-envelope input-icon"></span>
         <?= $form->field($model, 'username')
             ->textInput([
                 'placeholder' => 'Email',
@@ -25,7 +24,6 @@ $this->registerCssFile('@web/css/login.css');   // importa o CSS externo
 
     <!-- Campo Password -->
     <div style="position: relative; margin-top: 20px;">
-        <span class="fas fa-lock input-icon"></span>
         <?= $form->field($model, 'password')
             ->passwordInput([
                 'placeholder' => 'Password',
