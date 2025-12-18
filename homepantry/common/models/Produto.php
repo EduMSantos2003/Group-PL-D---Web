@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\web\UploadedFile;
+
 
 
 
@@ -25,6 +27,33 @@ use Yii;
  */
 class Produto extends \yii\db\ActiveRecord
 {
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+
+        $scenarios['create'] = [
+            'categoria_id',
+            'nome',
+            'descricao',
+            'unidade',
+            'preco',
+            'validade',
+            'imageFile',
+        ];
+
+        $scenarios['update'] = [
+            'categoria_id',
+            'nome',
+            'descricao',
+            'unidade',
+            'preco',
+            'validade',
+            'imageFile',
+        ];
+
+        return $scenarios;
+    }
 
 
     public $imageFile;
@@ -49,8 +78,22 @@ class Produto extends \yii\db\ActiveRecord
             [['validade'], 'safe'],
             [['nome', 'descricao', 'imagem'], 'string', 'max' => 255],
             [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::class, 'targetAttribute' => ['categoria_id' => 'id']],
-            //img file
-            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
+
+            // imagem obrigatória APENAS no create
+            [['imageFile'], 'file',
+                'extensions' => 'png, jpg, jpeg',
+                'skipOnEmpty' => false,
+                'on' => 'create'
+            ],
+
+            // imagem opcional no update
+            [['imageFile'], 'file',
+                'extensions' => 'png, jpg, jpeg',
+                'skipOnEmpty' => true,
+                'on' => 'update'
+            ],
+
+
         ];
     }
 
@@ -117,22 +160,27 @@ class Produto extends \yii\db\ActiveRecord
             return false;
         }
 
-        // Aqui só mexemos em campos que existem mesmo na tabela "produtos"
-
         // 1) Garantir que o preço nunca é negativo
         if ($this->preco < 0) {
             $this->preco = 0;
         }
 
-        // 2) Normalizar a data de validade (opcional, se usares um datepicker já vem no formato certo)
+        // 2) Normalizar a data de validade (dd/MM/yyyy → Y-m-d)
         if (!empty($this->validade)) {
-            // tenta converter qualquer formato legível para Y-m-d
-            $time = strtotime($this->validade);
-            if ($time !== false) {
-                $this->validade = date('Y-m-d', $time);
+
+            // tenta formato do DatePicker (PT)
+            $date = \DateTime::createFromFormat('d/m/Y', $this->validade);
+
+            if ($date !== false) {
+                $this->validade = $date->format('Y-m-d');
+            } else {
+                // fallback: se já vier em Y-m-d (ex: update)
+                $date = \DateTime::createFromFormat('Y-m-d', $this->validade);
+                if ($date !== false) {
+                    $this->validade = $date->format('Y-m-d');
+                }
             }
         }
-
         // Se um dia quiseres fazer mais alguma lógica antes de gravar,
         // podes acrescentar aqui, mas SEM usar campos que não existam na BD.
 
@@ -142,20 +190,30 @@ class Produto extends \yii\db\ActiveRecord
 
     public function upload()
     {
-        if ($this->validate()) {
-            // caminho onde a imagem será salva
-            $filePath = 'uploads/produtos/' . $this->imageFile->baseName . '.' . $this->imageFile->extension;
-
-            // guarda a imagem
-            $this->imageFile->saveAs($filePath);
-
-            // se quiseres guardar o nome no BD
-            $this->imagem = $filePath;
-
-            return true;
-        } else {
-            return false;
+        if (!$this->imageFile) {
+            return true; // IMPORTANTE no update sem imagem
         }
+
+        if ($this->validate(['imageFile'])) {
+
+            $uploadPath = Yii::getAlias('@frontend/web/uploads/produtos/');
+
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+
+            $fileName = uniqid('prod_') . '.' . $this->imageFile->extension;
+
+            if ($this->imageFile->saveAs($uploadPath . $fileName)) {
+                $this->imagem = $fileName;
+                return true;
+            }
+        }
+
+        return false;
     }
+
+
+
 
 }
