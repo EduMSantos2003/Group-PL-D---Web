@@ -12,33 +12,17 @@ use yii\grid\GridView;
 
 $this->title = 'Listas';
 $this->params['breadcrumbs'][] = $this->title;
+$this->registerCssFile('@web/css/imagens.css');
+$this->registerCssFile('@web/css/butoes.css');
+$this->registerJsFile('@web/js/produtos.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 ?>
 <div class="lista-index">
 
-    <?php $this->beginBlock('hero');?>
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-    <!-- Page Header Start -->
-    <div class="container-fluid page-header mb-5 wow fadeIn" data-wow-delay="0.1s">
-        <div class="container">
-            <!--<h1 class="display-3 mb-3 animated slideInDown">Listas</h1>-->
-            <h1 class="display-3 mb-3 animated slideInDown"><?= Html::encode($this->title) ?></h1>
-            <nav aria-label="breadcrumb animated slideInDown">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a class="text-body" href="<?= Url::to(['site/index']) ?>">Home</a></li>
-                    <li class="breadcrumb-item"><a class="text-body" href="<?= Url::to(['']) ?>">Pages</a></li>
-                    <li class="breadcrumb-item"><a class="text-body" href="<?= Url::to(['']) ?>">Listas</a></li>
-                </ol>
-            </nav>
-        </div>
+        <?= Html::a('Criar Nova Lista', ['create'], ['class' => 'btn-create']) ?>
+
     </div>
-    <!-- Page Header End -->
-    <?php $this -> endBlock() ?>
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Lista', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -49,16 +33,28 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-            'utilizador_id',
             'nome',
             'tipo',
-            'totalEstimado',
-            //'dataCriacao',
+            'totalEstimado:currency',
+            'dataCriacao',
             [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Lista $model, $key, $index, $column) {
+                'class' => ActionColumn::class,
+                'template' => '{produtos} {view} {update} {delete}',
+                'buttons' => [
+                    'produtos' => function ($url, Lista $model) {
+                        return Html::a(
+                            'Ir para Lista',
+                            ['lista-produto/index', 'lista_id' => $model->id],
+                            [
+                                'title' => 'Ver produtos da lista',
+                                'class' => 'btn btn-sm btn-outline-primary me-1'
+                            ]
+                        );
+                    },
+                ],
+                'urlCreator' => function ($action, Lista $model) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                },
             ],
         ],
     ]); ?>

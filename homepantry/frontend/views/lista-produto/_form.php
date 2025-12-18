@@ -2,28 +2,42 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use common\models\Produto;
 
-/** @var yii\web\View $this */
-/** @var common\models\ListaProduto $model */
-/** @var yii\widgets\ActiveForm $form */
+/** @var $model common\models\ListaProduto */
+/** @var $lista common\models\Lista */
+
+$produtos = ArrayHelper::map(
+    Produto::find()->all(),
+    'id',
+    'nome'
+);
 ?>
 
 <div class="lista-produto-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'lista_id')->textInput() ?>
+    <?= $form->field($model, 'produto_id')->dropDownList(
+        $produtos,
+        ['prompt' => 'Seleciona um produto']
+    ) ?>
 
-    <?= $form->field($model, 'produto_id')->textInput() ?>
+    <?= $form->field($model, 'quantidade')->input('number', [
+        'step' => '0.01',
+        'min' => 0.01
+    ]) ?>
 
-    <?= $form->field($model, 'quantidade')->textInput(['maxlength' => true]) ?>
+    <?= Html::activeHiddenInput($model, 'lista_id') ?>
 
-    <?= $form->field($model, 'precoUnitario')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'subTotal')->textInput(['maxlength' => true]) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+    <div class="form-group mt-3">
+        <?= Html::submitButton('Adicionar', ['class' => 'btn btn-success']) ?>
+        <?= Html::a(
+            'Cancelar',
+            ['lista-produto/index', 'lista_id' => $lista->id],
+            ['class' => 'btn btn-secondary ms-2']
+        ) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

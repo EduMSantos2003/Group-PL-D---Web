@@ -1,8 +1,10 @@
 <?php
 
+
 namespace common\models;
 
 use Yii;
+use common\models\Produto;
 
 /**
  * This is the model class for table "lista_produtos".
@@ -14,68 +16,109 @@ use Yii;
  * @property float $precoUnitario
  * @property float $subTotal
  *
- * @property Listas $lista
- * @property Produtos $produto
+ * @property Lista $lista
+ * @property Produto $produto
  */
 class ListaProduto extends \yii\db\ActiveRecord
 {
-
-
-    /**
-     * {@inheritdoc}
-     */
     public static function tableName()
     {
         return 'lista_produtos';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
-            [['lista_id', 'produto_id', 'quantidade', 'precoUnitario', 'subTotal'], 'required'],
+            [['lista_id', 'produto_id', 'quantidade'], 'required'],
             [['lista_id', 'produto_id'], 'integer'],
             [['quantidade', 'precoUnitario', 'subTotal'], 'number'],
-            [['lista_id'], 'exist', 'skipOnError' => true, 'targetClass' => Listas::class, 'targetAttribute' => ['lista_id' => 'id']],
-            [['produto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Produtos::class, 'targetAttribute' => ['produto_id' => 'id']],
+
+            [['lista_id'], 'exist',
+                'skipOnError' => true,
+                'targetClass' => Lista::class,
+                'targetAttribute' => ['lista_id' => 'id']
+            ],
+            [['produto_id'], 'exist',
+                'skipOnError' => true,
+                'targetClass' => Produto::class,
+                'targetAttribute' => ['produto_id' => 'id']
+            ],
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+
     public function attributeLabels()
     {
         return [
             'id' => 'ID',
-            'lista_id' => 'Lista ID',
-            'produto_id' => 'Produto ID',
+            'lista_id' => 'Lista',
+            'produto_id' => 'Produto',
             'quantidade' => 'Quantidade',
-            'precoUnitario' => 'Preco Unitario',
-            'subTotal' => 'Sub Total',
+            'precoUnitario' => 'Preço Unitário',
+            'subTotal' => 'Subtotal',
         ];
     }
 
-    /**
-     * Gets query for [[Lista]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
+    /* =======================
+     * RELAÇÕES
+     * ======================= */
+
     public function getLista()
     {
-        return $this->hasOne(Listas::class, ['id' => 'lista_id']);
+        return $this->hasOne(Lista::class, ['id' => 'lista_id']);
     }
 
-    /**
-     * Gets query for [[Produto]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
     public function getProduto()
     {
-        return $this->hasOne(Produtos::class, ['id' => 'produto_id']);
+        return $this->hasOne(Produto::class, ['id' => 'produto_id']);
     }
 
+    /* =======================
+     * LÓGICA DE NEGÓCIO
+     * ======================= */
+
+    protected function calcularSubTotal()
+    {
+        return $this->quantidade * $this->precoUnitario;
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($this->produto_id) {
+            $produto = Produto::findOne($this->produto_id);
+            if ($produto) {
+                $this->precoUnitario = $produto->preco;
+            }
+        }
+
+        $this->subTotal = $this->quantidade * $this->precoUnitario;
+
+        return parent::beforeSave($insert);
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if ($this->lista) {
+            $total = $this->lista->calcularTotal();
+            Lista::updateAll(
+                ['totalEstimado' => $total],
+                ['id' => $this->lista_id]
+            );
+        }
+    }
+
+    public function afterDelete()
+    {
+        parent::afterDelete();
+
+        if ($this->lista) {
+            $total = $this->lista->calcularTotal();
+            Lista::updateAll(
+                ['totalEstimado' => $total],
+                ['id' => $this->lista_id]
+            );
+        }
+    }
 }
