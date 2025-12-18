@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\models\CasaUtilizador;
 use common\models\CasaUtilizadorSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -22,7 +23,7 @@ class CasaUtilizadorController extends Controller
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => AccessControl::class(),
                     'actions' => [
                         'delete' => ['POST'],
                     ],
