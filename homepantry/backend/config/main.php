@@ -9,17 +9,26 @@ $params = array_merge(
 return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
+
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'as access' => [
         'class' => \yii\filters\AccessControl::class,
-        'except' => ['site/login', 'site/error', 'site/logout'],
+        'except' => [
+            'site/login',
+            'site/error',
+            'site/logout',
+            'api/*'
+        ],
         'rules' => [
             [
                 'allow' => true,
                 'roles' => ['admin', 'gestorCasa'],
             ],
         ],
+
+
+
         'denyCallback' => function ($rule, $action) {
             if (\Yii::$app->user->isGuest) {
                 // não autenticado → vai para login
@@ -31,8 +40,21 @@ return [
             );
         },
     ],
-    'modules' => [],
+    'modules' => [
+        'api' => [
+            'class' => 'backend\modules\api\Module',
+        ],
+    ],
     'components' => [
+
+        'urlManager'=>[
+            'enablePrettyUrl' => true,
+            'showScriptName'=>false,
+            'rules'=>[
+                ['class'=>'yii\rest\UrlRule','controller'=>'api/casa'],
+            ],
+        ],
+
         'request' => [
             'csrfParam' => '_csrf-backend',
         ],
