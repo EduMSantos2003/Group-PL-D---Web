@@ -44,13 +44,14 @@ AppAsset::register($this);
         <!-- MENU -->
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <?= Html::a('Listas', ['/lista/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
-                <?= Html::a('Produtos', ['/produto/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
-                <?= Html::a('Categorias', ['/categoria/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
-                <?= Html::a('Local', ['/local/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
 
                 <?php if (!Yii::$app->user->isGuest): ?>
-                    <!-- Dropdown com username APENAS quando está autenticado -->
+
+                    <?= Html::a('Listas', ['/lista/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
+                    <?= Html::a('Produtos', ['/produto/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
+                    <?= Html::a('Categorias', ['/categoria/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
+                    <?= Html::a('Local', ['/local/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
+
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle fw-bold" data-bs-toggle="dropdown">
                             <?= Html::encode(Yii::$app->user->identity->username) ?>
@@ -62,8 +63,10 @@ AppAsset::register($this);
                             . Html::endForm(); ?>
                         </div>
                     </div>
-                <?php endif; ?>
+
+
             </div>
+
 
             <!-- ICONES LADO DIREITO -->
             <div class="d-none d-lg-flex ms-2">
@@ -71,6 +74,8 @@ AppAsset::register($this);
                 <a class="btn-sm-square bg-white rounded-circle ms-3" href="#">
                     <small class="fa fa-search text-body"></small>
                 </a>
+
+                <?php endif; ?>
 
                 <!-- User icon = LOGIN quando guest / PERFIL (ou outra rota) quando autenticado -->
                 <?php if (Yii::$app->user->isGuest): ?>
@@ -83,10 +88,14 @@ AppAsset::register($this);
                     </a>
                 <?php endif; ?>
 
+                <?php if (!Yii::$app->user->isGuest): ?>
+
                 <!-- Carrinho / saco -->
                 <a class="btn-sm-square bg-white rounded-circle ms-3" href="#">
                     <small class="fa fa-shopping-bag text-body"></small>
                 </a>
+
+                <?php endif; ?>
             </div>
         </div>
     </nav>

@@ -2,153 +2,98 @@
 
 namespace frontend\controllers;
 
+use Yii;
+use common\models\Lista;
 use common\models\ListaProduto;
-use common\models\ListaProdutoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use yii\web\ForbiddenHttpException;
+use yii\data\ActiveDataProvider;
 
-/**
- * ListaProdutoController implements the CRUD actions for ListaProduto model.
- */
 class ListaProdutoController extends Controller
 {
-    /**
-     * @inheritDoc
-     */
-    public function behaviors()
+    public function actionIndex($lista_id)
     {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'access' => [
-                    'class' => AccessControl::class,
-                    'only' => ['index', 'view', 'create', 'update', 'delete'],
-                    'rules' => [
-                        [
-                            'allow' => true,
-                            // membros da casa + gestorCasa + admin (todos com manageListas)
-                            'roles' => ['manageListas'],
-                        ],
-                    ],
-                    'denyCallback' => function ($rule, $action) {
-                        if (\Yii::$app->user->isGuest) {
-                            return \Yii::$app->response->redirect(['/site/login']);
-                        }
-                        throw new ForbiddenHttpException('Não tens permissão para aceder a esta página.');
-                    },
-                ],
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
-                ],
-            ]
-        );
-    }
+        $lista = Lista::findOne($lista_id);
 
+        if (!$lista) {
+            throw new NotFoundHttpException('Lista não encontrada.');
+        }
 
-    /**
-     * Lists all ListaProduto models.
-     *
-     * @return string
-     */
-    public function actionIndex()
-    {
-        $searchModel = new ListaProdutoSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => ListaProduto::find()->where(['lista_id' => $lista_id]),
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
+            'lista' => $lista,
             'dataProvider' => $dataProvider,
         ]);
     }
 
-    /**
-     * Displays a single ListaProduto model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
+    public function actionCreate($lista_id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
+        $lista = Lista::findOne($lista_id);
 
-    /**
-     * Creates a new ListaProduto model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
-    public function actionCreate()
-    {
+        if (!$lista) {
+            throw new NotFoundHttpException('Lista não encontrada.');
+        }
+
         $model = new ListaProduto();
+        $model->lista_id = $lista_id;
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect([
+                'index',
+                'lista_id' => $lista_id
+            ]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'lista' => $lista,
         ]);
     }
 
-    /**
-     * Updates an existing ListaProduto model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
+    public function actionDelete($id, $lista_id)
     {
-        $model = $this->findModel($id);
+        $model = ListaProduto::findOne($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if (!$model) {
+            throw new NotFoundHttpException('Produto da lista não encontrado.');
+        }
+
+        $model->delete();
+
+        return $this->redirect([
+            'index',
+            'lista_id' => $lista_id
+        ]);
+    }
+
+    public function actionUpdate($id, $lista_id)
+    {
+        $model = ListaProduto::findOne($id);
+
+        if (!$model) {
+            throw new NotFoundHttpException('Produto da lista não encontrado.');
+        }
+
+        // segurança extra: garantir que pertence à lista certa
+        if ($model->lista_id != $lista_id) {
+            throw new NotFoundHttpException('Produto não pertence a esta lista.');
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect([
+                'index',
+                'lista_id' => $lista_id
+            ]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'lista' => Lista::findOne($lista_id),
         ]);
     }
 
-    /**
-     * Deletes an existing ListaProduto model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the ListaProduto model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return ListaProduto the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = ListaProduto::findOne(['id' => $id])) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('The requested page does not exist.');
-    }
 }

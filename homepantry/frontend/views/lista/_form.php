@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\jui\DatePicker;
 
 /** @var yii\web\View $this */
 /** @var common\models\Lista $model */
@@ -17,10 +18,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'tipo')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'totalEstimado')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'dataCriacao')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
