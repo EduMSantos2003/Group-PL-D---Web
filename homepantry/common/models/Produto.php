@@ -77,25 +77,21 @@ class Produto extends \yii\db\ActiveRecord
             [['preco'], 'number'],
             [['validade'], 'safe'],
             [['nome', 'descricao', 'imagem'], 'string', 'max' => 255],
-            [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::class, 'targetAttribute' => ['categoria_id' => 'id']],
 
-            // imagem obrigatória APENAS no create
-            [['imageFile'], 'file',
-                'extensions' => 'png, jpg, jpeg',
-                'skipOnEmpty' => false,
-                'on' => 'create'
+            [['categoria_id'], 'exist',
+                'skipOnError' => true,
+                'targetClass' => Categoria::class,
+                'targetAttribute' => ['categoria_id' => 'id']
             ],
 
-            // imagem opcional no update
+            // imagem SEMPRE opcional na API
             [['imageFile'], 'file',
                 'extensions' => 'png, jpg, jpeg',
-                'skipOnEmpty' => true,
-                'on' => 'update'
+                'skipOnEmpty' => true
             ],
-
-
         ];
     }
+
 
     /**
      * {@inheritdoc}
@@ -112,6 +108,12 @@ class Produto extends \yii\db\ActiveRecord
             'validade' => 'Validade',
             'imagem' => 'Imagem',
         ];
+    }
+
+    // API REST → JSON direto
+    public function formName()
+    {
+        return '';
     }
 
     /**
@@ -212,8 +214,4 @@ class Produto extends \yii\db\ActiveRecord
 
         return false;
     }
-
-
-
-
 }

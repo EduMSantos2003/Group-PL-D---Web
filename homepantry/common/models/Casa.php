@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\models\Local;
 
 class Casa extends \yii\db\ActiveRecord
 {
@@ -43,7 +44,7 @@ class Casa extends \yii\db\ActiveRecord
 
     public function getLocais()
     {
-        return $this->hasMany(Locais::class, ['casa_id' => 'id']);
+        return $this->hasMany(Local::class, ['casa_id' => 'id']);
     }
 
     public function getUtilizadorPrincipal()

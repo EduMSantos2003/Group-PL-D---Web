@@ -70,6 +70,20 @@ return [
                     'controller' => ['api/local'],
                     'pluralize' => false,
                 ],
+
+                // PRODUTO (3.º CRUD)
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/produto'],
+                    'pluralize' => false,
+                ],
+                //CATEGORIA
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/categoria'],
+                    'pluralize' => false,
+                ],
+
             ],
         ],
 

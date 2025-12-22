@@ -15,10 +15,12 @@ use Yii;
 class Categoria extends \yii\db\ActiveRecord
 {
 
+    // API REST → JSON direto
+    public function formName()
+    {
+        return '';
+    }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function tableName()
     {
         return 'categorias';
@@ -51,6 +53,8 @@ class Categoria extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
+
+    // uma categoria tem varios produtoss
     public function getProdutos()
     {
         return $this->hasMany(Produto::class, ['categoria_id' => 'id']);
