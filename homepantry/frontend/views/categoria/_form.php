@@ -6,9 +6,13 @@ use yii\widgets\ActiveForm;
 /** @var yii\web\View $this */
 /** @var common\models\Categoria $model */
 /** @var yii\widgets\ActiveForm $form */
+
 ?>
 
+
 <div class="categoria-form">
+
+
 
     <?php $form = ActiveForm::begin(); ?>
 
