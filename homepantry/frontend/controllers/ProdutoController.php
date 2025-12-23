@@ -11,6 +11,9 @@ use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use yii\filters\AccessControl;
 
+/** @var common\models\Produto[] $produtos */
+/** @var common\models\ProdutoSearch $searchModel */
+
 
 
 /**
@@ -54,14 +57,26 @@ class ProdutoController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    /*public function actionIndex()
     {
         $produtos = Produto::find()->all();
 
         return $this->render('index', [
             'produtos' => $produtos,
         ]);
+    }*/
+    public function actionIndex()
+    {
+        $searchModel = new \common\models\ProdutoSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'produtos' => $dataProvider->getModels(),
+        ]);
     }
+
 
 
     /**

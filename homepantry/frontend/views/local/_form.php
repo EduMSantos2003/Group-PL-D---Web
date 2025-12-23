@@ -21,7 +21,7 @@ use yii\helpers\ArrayHelper;
 
 
     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
-
+    <br>
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

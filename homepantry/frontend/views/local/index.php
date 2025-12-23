@@ -6,53 +6,57 @@ use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Breadcrumbs;
+use yii\widgets\ActiveForm;
+
 
 
 /** @var yii\web\View $this */
 /** @var common\models\LocalSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Locals';
+$this->title = 'Locais';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="local-index">
 
-    <?php $this->beginBlock('hero');?>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold"><?= Html::encode($this->title) ?></h1>
 
-    <!-- Page Header Start -->
-    <div class="container-fluid page-header mb-5 wow fadeIn" data-wow-delay="0.1s">
-        <div class="container">
-
-            <h1 class="display-3 mb-3 animated slideInDown"><?= Html::encode($this->title) ?></h1>
-
-            <nav aria-label="breadcrumb" class="animated slideInDown">
-                   <?= Breadcrumbs::widget([
-                       'options' => ['class' => 'breadcrumb mb-0'],
-                       'links' => $this->params['breadcrumbs'],
-                   ]) ?>
-            </nav>
-
-        </div>
+        <?= Html::a('Criar um novo Local', ['create'], ['class' => 'btn btn-success']) ?>
     </div>
-    <!-- Page Header End -->
-    <?php $this -> endBlock() ?>
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <?php $form = ActiveForm::begin([
+        'method' => 'get',
+        'action' => ['index'],
+        'options' => ['class' => 'mb-3'],
+    ]); ?>
 
-    <p>
-        <?= Html::a('Create Local', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <div class="input-group" style="max-width: 420px;">
+        <span class="input-group-text">🔍</span>
+        <?= Html::activeTextInput($searchModel, 'nome', [
+            'class' => 'form-control',
+            'placeholder' => 'Pesquisar Local',
+        ]) ?>
+        <?= Html::submitButton('Pesquisar', ['class' => 'btn btn-outline-secondary']) ?>
+        <?= Html::a('Limpar', ['index'], ['class' => 'btn btn-outline-danger']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'casa_id',
+            [
+                'label' => 'Casa',
+                'value' => 'casa.nome',
+            ],
+            //'casa_id',
             'nome',
             [
                 'class' => ActionColumn::className(),
@@ -61,7 +65,8 @@ $this->params['breadcrumbs'][] = $this->title;
                  }
             ],
         ],
-    ]); ?>
+    ]);
+    ?>
 
 
 </div>

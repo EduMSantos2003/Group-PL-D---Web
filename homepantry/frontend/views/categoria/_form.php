@@ -6,6 +6,9 @@ use yii\widgets\ActiveForm;
 /** @var yii\web\View $this */
 /** @var common\models\Categoria $model */
 /** @var yii\widgets\ActiveForm $form */
+
+$this->registerCssFile('@web/css/butoes.css');
+
 ?>
 
 <div class="categoria-form">
@@ -13,7 +16,7 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
-
+    <br>
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

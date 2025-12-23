@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\models\Casa;
 
 class Local extends \yii\db\ActiveRecord
 {
