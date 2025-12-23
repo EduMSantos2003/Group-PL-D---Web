@@ -6,9 +6,15 @@ use yii\widgets\ActiveForm;
 /** @var yii\web\View $this */
 /** @var common\models\CategoriaSearch $model */
 /** @var yii\widgets\ActiveForm $form */
+
+$this->registerCssFile('@web/css/butoes.css');
 ?>
 
+
+
 <div class="categoria-search">
+
+
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],

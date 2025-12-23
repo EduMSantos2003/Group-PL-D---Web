@@ -43,7 +43,7 @@ class Lista extends \yii\db\ActiveRecord
      * RELAÇÕES
      * ======================= */
 
-    public function getListaProduto()
+    public function getListaProdutos()
     {
         return $this->hasMany(ListaProduto::class, ['lista_id' => 'id']);
     }
@@ -59,7 +59,7 @@ class Lista extends \yii\db\ActiveRecord
 
     public function calcularTotal()
     {
-        return $this->getListaProduto()->sum('subTotal') ?? 0;
+        return $this->getListaProdutos()->sum('subTotal') ?? 0;
     }
 
     public function beforeSave($insert)

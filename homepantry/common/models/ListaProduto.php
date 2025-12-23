@@ -47,6 +47,7 @@ class ListaProduto extends \yii\db\ActiveRecord
     }
 
 
+
     public function attributeLabels()
     {
         return [

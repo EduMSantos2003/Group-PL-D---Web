@@ -84,6 +84,25 @@ return [
                     'pluralize' => false,
                 ],
 
+                // 🔹 LISTA
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/lista'],
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET {id}/produtos' => 'produtos',
+                        'POST {id}/produtos' => 'adicionar-produto',
+                    ],
+
+                ],
+
+                // 🔹 LISTA PRODUTO
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/lista-produto'],
+                    'pluralize' => false,
+                ],
+
             ],
         ],
 

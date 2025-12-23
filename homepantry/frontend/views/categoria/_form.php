@@ -8,10 +8,12 @@ use yii\widgets\ActiveForm;
 /** @var yii\widgets\ActiveForm $form */
 
 $this->registerCssFile('@web/css/butoes.css');
-
 ?>
 
+
 <div class="categoria-form">
+
+
 
     <?php $form = ActiveForm::begin(); ?>
 
