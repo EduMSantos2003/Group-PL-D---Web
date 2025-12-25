@@ -37,9 +37,10 @@ class Casa extends \yii\db\ActiveRecord
         return parent::beforeSave($insert);
     }
 
+
     public function getCasasUtilizadores()
     {
-        return $this->hasMany(CasasUtilizadores::class, ['casa_id' => 'id']);
+        return $this->hasMany(CasaUtilizador::class, ['casa_id' => 'id']);
     }
 
     public function getLocais()

@@ -61,8 +61,16 @@ return [
                     'extraPatterns' => [
                         // MASTER → DETAIL
                         'GET {id}/locais' => 'locais',
+                        'GET {id}/stock'  => 'stock', //StockProdutos
                     ],
                 ],
+
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/stock-produto'],  //StockProdutos
+                    'pluralize' => false,
+                ],
+
 
                 // 🔹 LOCAL (DETAIL CRUD)
                 [
@@ -102,6 +110,14 @@ return [
                     'controller' => ['api/lista-produto'],
                     'pluralize' => false,
                 ],
+
+                // HISTORICO PRECO
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/historico-preco'],
+                    'pluralize' => false,
+                ],
+
 
             ],
         ],

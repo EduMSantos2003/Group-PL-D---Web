@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use common\models\ListaProduto;
+use yii\helpers\ArrayHelper;
 
 class Lista extends \yii\db\ActiveRecord
 {
@@ -69,5 +70,20 @@ class Lista extends \yii\db\ActiveRecord
         }
 
         return parent::beforeSave($insert);
+    }
+
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        // expor relações
+        $fields['listaProdutos'] = 'listaProdutos';
+
+        return $fields;
+    }
+
+    public function extraFields()
+    {
+        return ['listaProdutos'];
     }
 }

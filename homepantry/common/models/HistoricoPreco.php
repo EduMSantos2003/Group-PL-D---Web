@@ -12,7 +12,7 @@ use Yii;
  * @property float $preco
  * @property string $dataRegisto
  *
- * @property Produtos $produto
+ * @property Produto $produto
  */
 class HistoricoPreco extends \yii\db\ActiveRecord
 {
@@ -36,7 +36,7 @@ class HistoricoPreco extends \yii\db\ActiveRecord
             [['produto_id'], 'integer'],
             [['preco'], 'number'],
             [['dataRegisto'], 'safe'],
-            [['produto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Produtos::class, 'targetAttribute' => ['produto_id' => 'id']],
+            [['produto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Produto::class, 'targetAttribute' => ['produto_id' => 'id']],
         ];
     }
 
@@ -60,7 +60,13 @@ class HistoricoPreco extends \yii\db\ActiveRecord
      */
     public function getProduto()
     {
-        return $this->hasOne(Produtos::class, ['id' => 'produto_id']);
+        return $this->hasOne(Produto::class, ['id' => 'produto_id']);
+    }
+
+    // API REST
+    public function formName()
+    {
+        return '';
     }
 
 }

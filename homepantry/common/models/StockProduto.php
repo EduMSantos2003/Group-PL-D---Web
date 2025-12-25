@@ -16,8 +16,8 @@ use Yii;
  * @property float $preco
  * @property string $dataCriacao
  *
- * @property Locais $local
- * @property Produtos $produto
+ * @property Local $local
+ * @property Produto $produto
  * @property User $utilizador
  */
 class StockProduto extends \yii\db\ActiveRecord
@@ -43,8 +43,8 @@ class StockProduto extends \yii\db\ActiveRecord
             [['quantidade', 'preco'], 'number'],
             [['validade', 'dataCriacao'], 'safe'],
             [['utilizador_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['utilizador_id' => 'id']],
-            [['produto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Produtos::class, 'targetAttribute' => ['produto_id' => 'id']],
-            [['local_id'], 'exist', 'skipOnError' => true, 'targetClass' => Locais::class, 'targetAttribute' => ['local_id' => 'id']],
+            [['produto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Produto::class, 'targetAttribute' => ['produto_id' => 'id']],
+            [['local_id'], 'exist', 'skipOnError' => true, 'targetClass' => Local::class, 'targetAttribute' => ['local_id' => 'id']],
         ];
     }
 
@@ -72,8 +72,46 @@ class StockProduto extends \yii\db\ActiveRecord
      */
     public function getLocal()
     {
-        return $this->hasOne(Locais::class, ['id' => 'local_id']);
+        return $this->hasOne(Local::class, ['id' => 'local_id']);
     }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if (!array_key_exists('quantidade', $changedAttributes)) {
+            return;
+        }
+
+        // carregar local com casa
+        $local = Local::find()
+            ->with('casa')
+            ->where(['id' => $this->local_id])
+            ->one();
+
+        if (!$local || !$local->casa) {
+            return;
+        }
+
+        $casaId = $local->casa->id;
+
+        $mensagem = json_encode([
+            'produto_id' => $this->produto_id,
+            'quantidade' => $this->quantidade,
+            'local_id'   => $this->local_id,
+            'casa_id'    => $casaId,
+            'timestamp'  => date('Y-m-d H:i:s'),
+        ]);
+
+        $cmd = '"C:\Program Files\mosquitto\mosquitto_pub" '
+            . '-t casa/' . $casaId . '/stock '
+            . '-m ' . escapeshellarg($mensagem);
+
+        exec($cmd);
+    }
+
+
+
 
     /**
      * Gets query for [[Produto]].
@@ -82,7 +120,7 @@ class StockProduto extends \yii\db\ActiveRecord
      */
     public function getProduto()
     {
-        return $this->hasOne(Produtos::class, ['id' => 'produto_id']);
+        return $this->hasOne(Produto::class, ['id' => 'produto_id']);
     }
 
     /**
@@ -94,5 +132,7 @@ class StockProduto extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'utilizador_id']);
     }
+
+
 
 }

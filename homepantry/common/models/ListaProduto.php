@@ -101,6 +101,9 @@ class ListaProduto extends \yii\db\ActiveRecord
     {
         parent::afterSave($insert, $changedAttributes);
 
+        /* =======================
+         * 1️⃣ Atualizar total da lista
+         * ======================= */
         if ($this->lista) {
             $total = $this->lista->calcularTotal();
             Lista::updateAll(
@@ -108,12 +111,35 @@ class ListaProduto extends \yii\db\ActiveRecord
                 ['id' => $this->lista_id]
             );
         }
+
+        /* =======================
+         * 2️⃣ MQTT – notificar alteração da lista
+         * ======================= */
+        if ($this->lista && $this->lista->casa_id) {
+
+            $casaId = $this->lista->casa_id;
+
+            $mensagem = json_encode([
+                'acao'       => $insert ? 'create' : 'update',
+                'lista_id'   => $this->lista_id,
+                'produto_id'=> $this->produto_id,
+                'quantidade'=> $this->quantidade,
+                'timestamp' => date('Y-m-d H:i:s')
+            ]);
+
+            $cmd = 'mosquitto_pub -t casa/' . $casaId . '/lista -m ' . escapeshellarg($mensagem);
+            exec($cmd);
+        }
     }
+
 
     public function afterDelete()
     {
         parent::afterDelete();
 
+        /* =======================
+         * 1️⃣ Atualizar total da lista
+         * ======================= */
         if ($this->lista) {
             $total = $this->lista->calcularTotal();
             Lista::updateAll(
@@ -121,5 +147,24 @@ class ListaProduto extends \yii\db\ActiveRecord
                 ['id' => $this->lista_id]
             );
         }
+
+        /* =======================
+         * 2️⃣ MQTT – notificar remoção
+         * ======================= */
+        if ($this->lista && $this->lista->casa_id) {
+
+            $casaId = $this->lista->casa_id;
+
+            $mensagem = json_encode([
+                'acao'       => 'delete',
+                'lista_id'   => $this->lista_id,
+                'produto_id'=> $this->produto_id,
+                'timestamp' => date('Y-m-d H:i:s')
+            ]);
+
+            $cmd = 'mosquitto_pub -t casa/' . $casaId . '/lista -m ' . escapeshellarg($mensagem);
+            exec($cmd);
+        }
     }
+
 }
