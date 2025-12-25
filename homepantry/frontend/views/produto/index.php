@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
+use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var common\models\Produto[] $produtos */
@@ -16,6 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile('@web/css/imagens.css');
 $this->registerCssFile('@web/css/butoes.css');
 $this->registerJsFile('@web/js/produtos.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+
+/** @var common\models\ProdutoSearch $searchModel */
 ?>
 
 <div class="container mt-4">
@@ -25,6 +28,24 @@ $this->registerJsFile('@web/js/produtos.js', ['depends' => [\yii\web\JqueryAsset
 
         <?= Html::a('Criar Produto', ['create'], ['class' => 'btn-create']) ?>
     </div>
+
+    <?php $form = ActiveForm::begin([
+        'method' => 'get',
+        'action' => ['index'],
+        'options' => ['class' => 'mb-3'],
+    ]); ?>
+
+    <div class="input-group" style="max-width: 420px;">
+        <span class="input-group-text">🔍</span>
+        <?= Html::activeTextInput($searchModel, 'nome', [
+            'class' => 'form-control',
+            'placeholder' => 'Pesquisar Produto',
+        ]) ?>
+        <?= Html::submitButton('Pesquisar', ['class' => 'btn btn-outline-secondary']) ?>
+        <?= Html::a('Limpar', ['index'], ['class' => 'btn btn-outline-danger']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
 
     <div class="row">
 
