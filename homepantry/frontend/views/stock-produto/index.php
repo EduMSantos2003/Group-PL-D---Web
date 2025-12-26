@@ -5,6 +5,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\widgets\ActiveForm;
+use yii\widgets\Breadcrumbs;
+
 
 /** @var yii\web\View $this */
 /** @var common\models\StockProdutoSearch $searchModel */
@@ -17,11 +20,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Stock Produto', ['create'], ['class' => 'btn btn-success']) ?>
+<!--    <p>
+        // Html::a('Create Stock Produto', ['create'], ['class' => 'btn btn-success']);
     </p>
-
+-->
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    <div class="input-group" style="max-width: 420px;">
+        <span class="input-group-text">🔍</span>
+        <?= Html::activeTextInput($searchModel, 'produto_id', [
+                'class' => 'form-control',
+                'placeholder' => 'Pesquisar Produto',
+        ]) ?>
+        <?= Html::submitButton('Pesquisar', ['class' => 'btn btn-outline-secondary']) ?>
+        <?= Html::a('Limpar', ['index'], ['class' => 'btn btn-outline-danger']) ?>
+    </div>
+
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -45,6 +59,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+
+
 
 
 </div>

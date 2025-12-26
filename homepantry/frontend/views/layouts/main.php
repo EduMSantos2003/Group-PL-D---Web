@@ -47,6 +47,7 @@ AppAsset::register($this);
 
                 <?php if (!Yii::$app->user->isGuest): ?>
 
+                    <?= Html::a('Stock', ['/stock-produto/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
                     <?= Html::a('Listas', ['/lista/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
                     <?= Html::a('Produtos', ['/produto/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
                     <?= Html::a('Categorias', ['/categoria/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
