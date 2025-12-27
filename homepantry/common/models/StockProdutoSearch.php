@@ -42,7 +42,12 @@ class StockProdutoSearch extends StockProduto
      */
     public function search($params, $formName = null)
     {
-        $query = StockProduto::find();
+//        $query = StockProduto::find();
+        $query = StockProduto::find()->with(['produto', 'utilizador', 'local']);
+
+
+        // (Opcional) Mostrar os registos mais recentes primeiro
+        $query->orderBy(['dataCriacao' => SORT_DESC]);
 
         // add conditions that should always apply here
 

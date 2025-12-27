@@ -41,12 +41,26 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'produto_id',
-            'utilizador_id',
-            'local_id',
+//            ['class' => 'yii\grid\SerialColumn'],
+//            'id',
+//            'produto_id',
+//            'utilizador_id',
+//            'local_id',
+            [
+                'attribute' => 'produto_id',
+                'label' => 'Produto',
+                'value' => 'produto.nome',   // ou produto.designacao (consoante o teu Produto)
+            ],
+            [
+                'attribute' => 'utilizador_id',
+                'label' => 'Utilizador',
+                'value' => 'utilizador.username', // ou utilizador.email / utilizador.nome, conforme o teu User
+            ],
+            [
+                'attribute' => 'local_id',
+                'label' => 'Local',
+                'value' => 'local.nome',
+            ],
             'quantidade',
             //'validade',
             //'preco',

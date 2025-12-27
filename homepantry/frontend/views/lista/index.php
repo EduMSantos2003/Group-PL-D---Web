@@ -50,7 +50,7 @@ $this->registerCssFile('@web/css/butoes.css');
         'dataProvider' => $dataProvider,
 //        'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+//            ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
             'nome',

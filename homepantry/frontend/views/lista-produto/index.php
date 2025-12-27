@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $lista->nome;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+//            ['class' => 'yii\grid\SerialColumn'],
 
             [
                 'attribute' => 'produto.nome',

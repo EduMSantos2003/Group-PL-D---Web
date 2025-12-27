@@ -64,18 +64,35 @@ AppAsset::register($this);
                             . Html::endForm(); ?>
                         </div>
                     </div>
-
-
+                <?php endif; ?>
             </div>
 
 
             <!-- ICONES LADO DIREITO -->
-            <div class="d-none d-lg-flex ms-2">
-                <!-- Search -->
-                <a class="btn-sm-square bg-white rounded-circle ms-3" href="#">
-                    <small class="fa fa-search text-body"></small>
-                </a>
+            <div class="d-none d-lg-flex ms-2 align-items-center">
 
+                <?php if (!Yii::$app->user->isGuest): ?>
+                    <!-- LUPA (toggle) -->
+                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="#" id="searchToggle" aria-label="Abrir pesquisa">
+                        <small class="fa fa-search text-body"></small>
+                    </a>
+                <!-- FORM PESQUISA (escondido) -->
+                    <form
+                            id="searchForm"
+                            class="d-none align-items-center ms-2"
+                            action="<?= Url::to(['/search/index']) ?>"
+                            method="get"
+                    >
+                        <input
+                            type="search"
+                            name="q"
+                            class="form-control form-control-sm"
+                            placeholder="Pesquisar..."
+                            aria-label="Pesquisar"
+                            style="width: 180px;"
+                            value="<?= Html::encode(Yii::$app->request->get('q', '')) ?>"
+                        >
+                    </form>
                 <?php endif; ?>
 
                 <!-- User icon = LOGIN quando guest / PERFIL (ou outra rota) quando autenticado -->
@@ -90,12 +107,10 @@ AppAsset::register($this);
                 <?php endif; ?>
 
                 <?php if (!Yii::$app->user->isGuest): ?>
-
-                <!-- Carrinho / saco -->
-                <a class="btn-sm-square bg-white rounded-circle ms-3" href="#">
-                    <small class="fa fa-shopping-bag text-body"></small>
-                </a>
-
+                    <!-- Carrinho / saco -->
+                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="#">
+                        <small class="fa fa-shopping-bag text-body"></small>
+                    </a>
                 <?php endif; ?>
             </div>
         </div>
@@ -125,8 +140,6 @@ AppAsset::register($this);
         </div>
         <!-- Page Header End -->
     <?php endif; ?>
-
-
 
 </header>
 
@@ -241,6 +254,55 @@ AppAsset::register($this);
     </div>
 </div>
 <!-- FOOTER END -->
+
+<?php
+$this->registerJs(<<<JS
+(function () {
+  const toggle = document.getElementById('searchToggle');
+  const form = document.getElementById('searchForm');
+  if (!form) return;
+
+  const input = form.querySelector('input[name="q"]');
+
+  // Abrir/focar com a lupa
+  if (toggle) {
+    toggle.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      const isHidden = form.classList.contains('d-none');
+
+      if (isHidden) {
+        form.classList.remove('d-none');
+        if (input) { input.focus(); input.select(); }
+      } else {
+        // Se já está aberto, clicar na lupa faz pesquisa
+        if (input && input.value.trim() !== '') form.submit();
+        else if (input) input.focus();
+      }
+    });
+  }
+
+  // Garantir que Enter submete (em alguns templates isto pode ser bloqueado)
+  if (input) {
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (input.value.trim() !== '') form.submit();
+      }
+    });
+  }
+
+  // Bloquear submit vazio
+  form.addEventListener('submit', function (e) {
+    if (!input || input.value.trim() === '') {
+      e.preventDefault();
+      if (input) input.focus();
+    }
+  });
+})();
+JS);
+?>
+
 
 <?php $this->endBody() ?>
 </body>
