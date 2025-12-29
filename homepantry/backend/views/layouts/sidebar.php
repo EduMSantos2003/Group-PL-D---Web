@@ -8,11 +8,9 @@ use yii\helpers\Html;
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
     <!-- Logo -->
-    <a class="brand-link d-flex justify-content-center">
+    <a href="<?= Url::to(['/site/index']) ?>" class="brand-link d-flex justify-content-center">
         <span class="brand-text font-weight-light">Home Pantry - Backend</span>
     </a>
-
-
 
 
     <!-- Sidebar -->
@@ -42,7 +40,6 @@ use yii\helpers\Html;
                 </div>
             <?php endif; ?>
         </div>
-
 
         <!-- Menu -->
         <nav class="mt-2">

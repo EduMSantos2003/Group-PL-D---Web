@@ -1,6 +1,9 @@
 <?php
 
+use common\models\Categoria;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\jui\DatePicker;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
@@ -12,7 +15,10 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'categoria_id')->textInput() ?>
+    <?= $form->field($model, 'categoria_id')->dropDownList(
+        ArrayHelper::map(Categoria::find()->all(), 'id', 'nome'),
+        ['prompt' => 'Selecione uma categoria']
+    ) ?>
 
     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
 
@@ -22,12 +28,21 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'preco')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'validade')->textInput() ?>
+    <?= $form->field($model, 'validade')->widget(DatePicker::class, [
+        'language' => 'pt',
+        'dateFormat' => 'dd/MM/yyyy',
+        'options' => [
+            'class' => 'form-control',
+            'placeholder' => 'Selecione a data de validade'
+        ],
+    ]) ?>
 
-    <?= $form->field($model, 'imagem')->textInput(['maxlength' => true]) ?>
+    <br>
+    <!-- Campo de upload da imagem -->
+    <?= $form->field($model, 'imageFile')->fileInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn-create']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
