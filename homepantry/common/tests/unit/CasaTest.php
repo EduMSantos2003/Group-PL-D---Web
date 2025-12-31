@@ -58,7 +58,7 @@ class CasaTest extends \Codeception\Test\Unit
         $this->assertEquals('partyHouse', $casaReadFromDatabase->nome, 'The name of the house found in Database is different');
     }
 
-    public function testSaveInavlidName()
+    public function testSaveInvalidName()
     {
         $casa = $this->createValidCasa(false);
         $casa -> nome = -1;
