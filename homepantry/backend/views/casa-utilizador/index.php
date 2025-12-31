@@ -10,12 +10,10 @@ use yii\grid\GridView;
 /** @var common\models\CasaUtilizadorSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Casa Utilizadores';
+$this->title = 'Casa-Utilizadores';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="casa-utilizador-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Associar Utilizador a Casa', ['create'], ['class' => 'btn btn-success']) ?>
@@ -28,9 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-
             [
                 'attribute' => 'utilizador_id',
                 'label' => 'Utilizador',
@@ -50,6 +45,4 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
-
-
 </div>
