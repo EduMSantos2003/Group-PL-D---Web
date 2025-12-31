@@ -61,6 +61,11 @@ use yii\helpers\Html;
                         'url' => ['/casa/index'],
                     ],
                     [
+                        'label' => 'Casas-Utilizadores',
+                        'icon' => 'user-friends',
+                        'url' => ['/casa-utilizador/index'],
+                    ],
+                    [
                         'label' => 'Categorias',
                         'icon' => 'tags',
                         'url' => ['/categoria/index'],

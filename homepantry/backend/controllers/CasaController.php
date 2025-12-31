@@ -128,7 +128,7 @@ class CasaController extends Controller
     public function actionDelete($id)
     {
         CasaUtilizador::deleteAll(['casa_id' => $id]);
-        
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

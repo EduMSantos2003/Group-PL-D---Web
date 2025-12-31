@@ -2,6 +2,8 @@
 
 namespace common\models;
 
+use common\models\Casa;
+use common\models\User;
 use Yii;
 
 /**
@@ -11,7 +13,7 @@ use Yii;
  * @property int $utilizador_id
  * @property int $casa_id
  *
- * @property Casas $casa
+ * @property Casa $casa
  * @property User $utilizador
  */
 class CasaUtilizador extends \yii\db\ActiveRecord
@@ -34,7 +36,7 @@ class CasaUtilizador extends \yii\db\ActiveRecord
         return [
             [['utilizador_id', 'casa_id'], 'required'],
             [['utilizador_id', 'casa_id'], 'integer'],
-            [['casa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Casas::class, 'targetAttribute' => ['casa_id' => 'id']],
+            [['casa_id'], 'exist', 'skipOnError' => true, 'targetClass' => Casa::class, 'targetAttribute' => ['casa_id' => 'id']],
             [['utilizador_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['utilizador_id' => 'id']],
         ];
     }
@@ -58,7 +60,7 @@ class CasaUtilizador extends \yii\db\ActiveRecord
      */
     public function getCasa()
     {
-        return $this->hasOne(Casas::class, ['id' => 'casa_id']);
+        return $this->hasOne(Casa::class, ['id' => 'casa_id']);
     }
 
     /**
