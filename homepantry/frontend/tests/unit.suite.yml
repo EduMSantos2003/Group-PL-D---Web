@@ -1,7 +1,19 @@
+#suite_namespace: frontend\tests\unit
+#actor: UnitTester
+#modules:
+#    enabled:
+#        - Yii2:
+#            part: [orm, email, fixtures]
+#        - Asserts
+
 suite_namespace: frontend\tests\unit
 actor: UnitTester
 modules:
-    enabled:
-        - Yii2:
-            part: [orm, email, fixtures]
-        - Asserts
+  enabled:
+    - Db:
+        dsn: 'mysql:host=localhost;dbname=mytestDatabase'
+        user: 'root'
+        password: ''
+    - Yii2:
+        part: [orm, email, fixtures]
+    - Asserts
