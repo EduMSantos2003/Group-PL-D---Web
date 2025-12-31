@@ -61,20 +61,9 @@ use yii\helpers\Html;
                         'url' => ['/casa/index'],
                     ],
                     [
-                        'label' => 'Produtos',
-                        'icon' => 'box',
-                        'url' => ['/produto/index'],
-                    ],
-                    [
                         'label' => 'Categorias',
                         'icon' => 'tags',
                         'url' => ['/categoria/index'],
-                    ],
-                    [
-                        'label' => 'Listas',
-                        'icon' => 'list',
-                        'url' => ['/lista/index'],
-                        'visible' => true, // podes ativar mais tarde
                     ],
                     [
                         'label' => 'Locais',
