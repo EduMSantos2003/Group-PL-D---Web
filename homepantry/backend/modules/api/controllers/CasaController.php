@@ -6,6 +6,7 @@ use yii\rest\ActiveController;
 use yii\web\NotFoundHttpException;
 use common\models\StockProduto;
 use common\models\Casa;
+use yii\web\Response;
 
 class CasaController extends ActiveController
 {
@@ -20,6 +21,25 @@ class CasaController extends ActiveController
 
         return $actions;
     }
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+
+        // remove AccessControl
+        unset($behaviors['access']);
+
+        // FORÇAR JSON
+        $behaviors['contentNegotiator'] = [
+            'class' => \yii\filters\ContentNegotiator::class,
+            'formats' => [
+                'application/json' => Response::FORMAT_JSON,
+            ],
+        ];
+
+        return $behaviors;
+    }
+
 
 
 
@@ -62,12 +82,13 @@ class CasaController extends ActiveController
      */
     public function actionLocais($id)
     {
-        $casa = Casa::findOne($id);
-
-        if ($casa === null) {
-            throw new NotFoundHttpException('Casa não encontrada');
-        }
-
-        return $casa->locais;
+        return \common\models\Local::find()
+            ->select(['id', 'casa_id', 'nome'])
+            ->where(['casa_id' => $id])
+            ->asArray()
+            ->all();
     }
+
+
+
 }

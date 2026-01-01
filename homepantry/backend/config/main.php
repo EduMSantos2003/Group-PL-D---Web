@@ -48,7 +48,7 @@ return [
     'components' => [
 
         'urlManager' => [
-            'enablePrettyUrl' => false,
+            'enablePrettyUrl' => true,
             'showScriptName' => false,
 
             'rules' => [
@@ -65,6 +65,16 @@ return [
                     ],
                 ],
 
+                //Local
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/local'],
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET casa/{id}' => 'locais-casa',
+                    ],
+                ],
+
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['api/stock-produto'],  //StockProdutos
@@ -73,11 +83,8 @@ return [
 
 
                 // 🔹 LOCAL (DETAIL CRUD)
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => ['api/local'],
-                    'pluralize' => false,
-                ],
+                // 🔥 API REST
+
 
                 // PRODUTO (3.º CRUD)
                 [

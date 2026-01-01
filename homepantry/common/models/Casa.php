@@ -58,4 +58,5 @@ class Casa extends \yii\db\ActiveRecord
     {
         return '';
     }
+
 }
