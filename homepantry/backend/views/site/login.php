@@ -32,10 +32,6 @@ $this->registerCssFile('@web/css/login.css');   // importa o CSS externo
             ->label(false) ?>
     </div>
 
-    <!-- Remember me -->
-    <div style="margin-top: 10px;">
-        <?= $form->field($model, 'rememberMe')->checkbox(['label' => 'Relembrar']) ?>
-    </div>
 
     <!-- Botão login -->
     <?= Html::submitButton('LOGIN', [
@@ -46,8 +42,7 @@ $this->registerCssFile('@web/css/login.css');   // importa o CSS externo
     <?php ActiveForm::end(); ?>
 
     <div class="small-links">
-        <a href="#">Forgot Password?</a><br>
-        <a href="#">Register new account</a>
+        <a href="http://localhost/Group-PL-D---Web/homepantry/frontend/web/index.php?r=site%2Fsignup">Register new account</a>
     </div>
 
 </div>

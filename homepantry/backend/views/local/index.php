@@ -10,15 +10,13 @@ use yii\grid\GridView;
 /** @var common\models\LocalSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Locals';
+$this->title = 'Locais';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="local-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Create Local', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Criar Novo Local', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -29,7 +27,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'casa_id',
+                [
+                        'attribute' => 'casa_id',
+                        'label' => 'Casa',
+                        'value' => fn($model) => $model->casa->nome,
+                ],
             'nome',
             [
                 'class' => ActionColumn::className(),

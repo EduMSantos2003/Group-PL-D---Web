@@ -1,6 +1,6 @@
 <?php
 /** @var array $stats */
-/** @var \common\models\StockProdutos[] $produtosExpirar */
+/** @var \common\models\Produtos[] $produtosExpirar */
 /** @var \common\models\Listas[] $listasRecentes */
 
 use yii\helpers\Html;

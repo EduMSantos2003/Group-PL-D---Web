@@ -8,11 +8,9 @@ use yii\helpers\Html;
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
     <!-- Logo -->
-    <a class="brand-link d-flex justify-content-center">
+    <a href="<?= Url::to(['/site/index']) ?>" class="brand-link d-flex justify-content-center">
         <span class="brand-text font-weight-light">Home Pantry - Backend</span>
     </a>
-
-
 
 
     <!-- Sidebar -->
@@ -43,7 +41,6 @@ use yii\helpers\Html;
             <?php endif; ?>
         </div>
 
-
         <!-- Menu -->
         <nav class="mt-2">
             <?= Menu::widget([
@@ -64,20 +61,14 @@ use yii\helpers\Html;
                         'url' => ['/casa/index'],
                     ],
                     [
-                        'label' => 'Produtos',
-                        'icon' => 'box',
-                        'url' => ['/produto/index'],
+                        'label' => 'Casas-Utilizadores',
+                        'icon' => 'user-friends',
+                        'url' => ['/casa-utilizador/index'],
                     ],
                     [
                         'label' => 'Categorias',
                         'icon' => 'tags',
                         'url' => ['/categoria/index'],
-                    ],
-                    [
-                        'label' => 'Listas',
-                        'icon' => 'list',
-                        'url' => ['/lista/index'],
-                        'visible' => true, // podes ativar mais tarde
                     ],
                     [
                         'label' => 'Locais',

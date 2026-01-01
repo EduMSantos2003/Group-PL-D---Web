@@ -7,6 +7,10 @@ use common\models\CasaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\CasaUtilizador;
+use Yii;
+
+
 
 /**
  * CasaController implements the CRUD actions for Casa model.
@@ -69,18 +73,30 @@ class CasaController extends Controller
     {
         $model = new Casa();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+
+            if ($model->save()) {
+
+                //  ASSOCIA A CASA AO UTILIZADOR
+                $casaUser = new CasaUtilizador();
+                $casaUser->casa_id = $model->id;
+                $casaUser->utilizador_id = Yii::$app->user->id;
+                $casaUser->save(false);
+
+                return $this->redirect(['index']);
             }
-        } else {
-            $model->loadDefaultValues();
+
+            // DEBUG (se falhar)
+            echo '<pre>';
+            print_r($model->errors);
+            exit;
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
     }
+
 
     /**
      * Updates an existing Casa model.
@@ -111,6 +127,8 @@ class CasaController extends Controller
      */
     public function actionDelete($id)
     {
+        CasaUtilizador::deleteAll(['casa_id' => $id]);
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
