@@ -4,52 +4,34 @@ namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\StockProduto;
 
-/**
- * StockProdutoSearch represents the model behind the search form of `common\models\StockProduto`.
- */
 class StockProdutoSearch extends StockProduto
 {
-    /**
-     * {@inheritdoc}
-     */
+    /**  Campo virtual para pesquisa global */
+    public $globalSearch;
+
     public function rules()
     {
         return [
             [['id', 'produto_id', 'utilizador_id', 'local_id'], 'integer'],
             [['quantidade', 'preco'], 'number'],
             [['validade', 'dataCriacao'], 'safe'],
+            [['globalSearch'], 'safe'], //  MUITO IMPORTANTE
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function scenarios()
     {
-        // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     * @param string|null $formName Form name to be used into `->load()` method.
-     *
-     * @return ActiveDataProvider
-     */
     public function search($params, $formName = null)
     {
-//        $query = StockProduto::find();
-        $query = StockProduto::find()->with(['produto', 'utilizador', 'local']);
+        $query = StockProduto::find()
+            ->joinWith(['produto', 'utilizador', 'local']);
 
-
-        // (Opcional) Mostrar os registos mais recentes primeiro
+        // Ordenar por data de criação (opcional)
         $query->orderBy(['dataCriacao' => SORT_DESC]);
-
-        // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -58,22 +40,27 @@ class StockProdutoSearch extends StockProduto
         $this->load($params, $formName);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'produto_id' => $this->produto_id,
-            'utilizador_id' => $this->utilizador_id,
-            'local_id' => $this->local_id,
-            'quantidade' => $this->quantidade,
-            'validade' => $this->validade,
-            'preco' => $this->preco,
-            'dataCriacao' => $this->dataCriacao,
-        ]);
+        /**  PESQUISA GLOBAL */
+        if (is_numeric($this->globalSearch)) {
+            $query->andFilterWhere([
+                'or',
+                ['quantidade' => $this->globalSearch],
+                ['like', 'produtos.nome', $this->globalSearch],
+                ['like', 'user.username', $this->globalSearch],
+                ['like', 'locais.nome', $this->globalSearch],
+            ]);
+        } else {
+            $query->andFilterWhere([
+                'or',
+                ['like', 'produtos.nome', $this->globalSearch],
+                ['like', 'user.username', $this->globalSearch],
+                ['like', 'locais.nome', $this->globalSearch],
+            ]);
+        }
+
 
         return $dataProvider;
     }

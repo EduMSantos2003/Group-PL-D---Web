@@ -92,7 +92,7 @@ class NotificationService
                 'label' => 'Produto a expirar: ' . $stock->produto->nome,
                 'icon'  => 'exclamation-triangle',
                 'url'   => ['/stock-produto/view', 'id' => $stock->id],
-                'date'  => $stock->dataValidade,
+                'date'  => $stock->validade,
                 'type'  => 'warning',
             ];
         }

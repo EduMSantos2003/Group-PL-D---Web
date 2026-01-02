@@ -24,57 +24,53 @@ $this->params['breadcrumbs'][] = $this->title;
         // Html::a('Create Stock Produto', ['create'], ['class' => 'btn btn-success']);
     </p>
 -->
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php $form = ActiveForm::begin([
+        'method' => 'get',
+        'action' => ['index'],
+    ]); ?>
 
-    <div class="input-group" style="max-width: 420px;">
-        <span class="input-group-text">🔍</span>
-        <?= Html::activeTextInput($searchModel, 'produto_id', [
+    <div class="d-flex justify-content-center my-3">
+        <div class="input-group" style="max-width: 420px;">
+            <span class="input-group-text">🔍</span>
+
+            <?= Html::activeTextInput($searchModel, 'globalSearch', [
                 'class' => 'form-control',
-                'placeholder' => 'Pesquisar Produto',
-        ]) ?>
-        <?= Html::submitButton('Pesquisar', ['class' => 'btn btn-outline-secondary']) ?>
-        <?= Html::a('Limpar', ['index'], ['class' => 'btn btn-outline-danger']) ?>
+                'placeholder' => 'Pesquisar produto, utilizador ou local',
+            ]) ?>
+
+
+
+            <?= Html::submitButton('Pesquisar', ['class' => 'btn btn-outline-secondary']) ?>
+            <?= Html::a('Limpar', ['index'], ['class' => 'btn btn-outline-danger']) ?>
+        </div>
     </div>
+
+    <?php ActiveForm::end(); ?>
+
 
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        'filterModel' => null, //  remove filtros por coluna
         'columns' => [
-//            ['class' => 'yii\grid\SerialColumn'],
-//            'id',
-//            'produto_id',
-//            'utilizador_id',
-//            'local_id',
             [
-                'attribute' => 'produto_id',
                 'label' => 'Produto',
-                'value' => 'produto.nome',   // ou produto.designacao (consoante o teu Produto)
+                'value' => 'produto.nome',
             ],
             [
-                'attribute' => 'utilizador_id',
                 'label' => 'Utilizador',
-                'value' => 'utilizador.username', // ou utilizador.email / utilizador.nome, conforme o teu User
+                'value' => 'utilizador.username',
             ],
             [
-                'attribute' => 'local_id',
                 'label' => 'Local',
                 'value' => 'local.nome',
             ],
             'quantidade',
-            //'validade',
-            //'preco',
-            //'dataCriacao',
             [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, StockProduto $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                'class' => ActionColumn::class,
             ],
         ],
     ]); ?>
-
-
 
 
 </div>
