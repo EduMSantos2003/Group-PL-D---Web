@@ -112,24 +112,19 @@ class ListaProduto extends \yii\db\ActiveRecord
             );
         }
 
-        /* =======================
-         * 2️⃣ MQTT – notificar alteração da lista
-         * ======================= */
-        if ($this->lista && $this->lista->casa_id) {
 
-            $casaId = $this->lista->casa_id;
+        // MQTT – notificar alteração da lista (por lista_id)
+        $mensagem = json_encode([
+            'acao'        => $insert ? 'create' : 'update',
+            'lista_id'    => $this->lista_id,
+            'produto_id'  => $this->produto_id,
+            'quantidade'  => $this->quantidade,
+            'timestamp'   => date('Y-m-d H:i:s')
+        ]);
 
-            $mensagem = json_encode([
-                'acao'       => $insert ? 'create' : 'update',
-                'lista_id'   => $this->lista_id,
-                'produto_id'=> $this->produto_id,
-                'quantidade'=> $this->quantidade,
-                'timestamp' => date('Y-m-d H:i:s')
-            ]);
+        $cmd = 'mosquitto_pub -t lista/' . $this->lista_id . ' -m ' . escapeshellarg($mensagem);
+        exec($cmd);
 
-            $cmd = 'mosquitto_pub -t casa/' . $casaId . '/lista -m ' . escapeshellarg($mensagem);
-            exec($cmd);
-        }
     }
 
 
@@ -148,23 +143,16 @@ class ListaProduto extends \yii\db\ActiveRecord
             );
         }
 
-        /* =======================
-         * 2️⃣ MQTT – notificar remoção
-         * ======================= */
-        if ($this->lista && $this->lista->casa_id) {
+        // MQTT – notificar remoção (por lista_id)
+        $mensagem = json_encode([
+            'acao'        => 'delete',
+            'lista_id'    => $this->lista_id,
+            'produto_id'  => $this->produto_id,
+            'timestamp'   => date('Y-m-d H:i:s')
+        ]);
 
-            $casaId = $this->lista->casa_id;
-
-            $mensagem = json_encode([
-                'acao'       => 'delete',
-                'lista_id'   => $this->lista_id,
-                'produto_id'=> $this->produto_id,
-                'timestamp' => date('Y-m-d H:i:s')
-            ]);
-
-            $cmd = 'mosquitto_pub -t casa/' . $casaId . '/lista -m ' . escapeshellarg($mensagem);
-            exec($cmd);
-        }
+        $cmd = 'mosquitto_pub -t lista/' . $this->lista_id . ' -m ' . escapeshellarg($mensagem);
+        exec($cmd);
     }
 
 }

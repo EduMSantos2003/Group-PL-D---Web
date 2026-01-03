@@ -176,7 +176,7 @@ class ProdutoController extends Controller
     {
         $model = $this->findModel($id);
 
-        // 🔒 Verificar se o produto está associado a alguma lista
+        //Verificar se o produto está associado a alguma lista
         if ($model->getListaProdutos()->count() > 0) {
             Yii::$app->session->setFlash(
                 'error',
