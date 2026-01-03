@@ -7,6 +7,10 @@ use common\models\StockProdutoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use common\models\Produto;
+use Yii;
+
 
 /**
  * StockProdutoController implements the CRUD actions for StockProduto model.
@@ -16,6 +20,19 @@ class StockProdutoController extends Controller
     /**
      * @inheritDoc
      */
+
+    public function actionGetPreco($id)
+    {
+        $produto = Produto::find()
+            ->select(['preco'])
+            ->where(['id' => $id])
+            ->one();
+
+        return $this->asJson([
+            'preco' => $produto ? $produto->preco : null
+        ]);
+    }
+
     public function behaviors()
     {
         return array_merge(
@@ -69,18 +86,28 @@ class StockProdutoController extends Controller
     {
         $model = new StockProduto();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+        if ($model->load($this->request->post())) {
+
+            $produto = Produto::findOne($model->produto_id);
+
+            if ($produto) {
+                $model->preco = $produto->preco * $model->quantidade;
+                $model->validade = $produto->validade;
+            }
+
+            $model->utilizador_id = Yii::$app->user->id;
+
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
-        } else {
-            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
     }
+
+
 
     /**
      * Updates an existing StockProduto model.

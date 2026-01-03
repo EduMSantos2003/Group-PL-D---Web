@@ -56,7 +56,6 @@ AppAsset::register($this);
                             <?= Html::encode(Yii::$app->user->identity->username) ?>
                         </a>
                         <div class="dropdown-menu m-0">
-                            <?= Html::a('Perfil', ['#'], ['class' => 'dropdown-item']) ?>
                             <?= Html::beginForm(['/site/logout'], 'post')
                             . Html::submitButton('Logout', ['class' => 'dropdown-item text-start'])
                             . Html::endForm(); ?>
