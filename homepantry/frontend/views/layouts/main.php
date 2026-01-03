@@ -56,7 +56,6 @@ AppAsset::register($this);
                             <?= Html::encode(Yii::$app->user->identity->username) ?>
                         </a>
                         <div class="dropdown-menu m-0">
-                            <?= Html::a('Perfil', ['#'], ['class' => 'dropdown-item']) ?>
                             <?= Html::beginForm(['/site/logout'], 'post')
                             . Html::submitButton('Logout', ['class' => 'dropdown-item text-start'])
                             . Html::endForm(); ?>
@@ -227,8 +226,8 @@ AppAsset::register($this);
                 <a class="btn btn-link text-start text-black-50 d-block" href="<?= Url::to(['/produto/index']) ?>">
                     <i class="fa fa-arrow-right me-2 text-primary"></i> Produtos
                 </a>
-                <a class="btn btn-link text-start text-black-50 d-block" href="<?= Url::to(['/local/index']) ?>">
-                    <i class="fa fa-arrow-right me-2 text-primary"></i> Locais
+                <a class="btn btn-link text-start text-black-50 d-block" href="<?= Url::to(['/stock-produto/index']) ?>">
+                    <i class="fa fa-arrow-right me-2 text-primary"></i> Stock
                 </a>
                 <a class="btn btn-link text-start text-black-50 d-block" href="#">
                     <i class="fa fa-arrow-right me-2 text-primary"></i> Ajuda

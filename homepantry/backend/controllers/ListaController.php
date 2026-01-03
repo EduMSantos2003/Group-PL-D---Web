@@ -1,38 +1,21 @@
 <?php
 
-namespace frontend\controllers;
+namespace backend\controllers;
 
-use common\models\StockProduto;
-use common\models\StockProdutoSearch;
+use common\models\Lista;
+use common\models\ListaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\Response;
-use common\models\Produto;
-use Yii;
-
 
 /**
- * StockProdutoController implements the CRUD actions for StockProduto model.
+ * ListaController implements the CRUD actions for Lista model.
  */
-class StockProdutoController extends Controller
+class ListaController extends Controller
 {
     /**
      * @inheritDoc
      */
-
-    public function actionGetPreco($id)
-    {
-        $produto = Produto::find()
-            ->select(['preco'])
-            ->where(['id' => $id])
-            ->one();
-
-        return $this->asJson([
-            'preco' => $produto ? $produto->preco : null
-        ]);
-    }
-
     public function behaviors()
     {
         return array_merge(
@@ -49,13 +32,13 @@ class StockProdutoController extends Controller
     }
 
     /**
-     * Lists all StockProduto models.
+     * Lists all Lista models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new StockProdutoSearch();
+        $searchModel = new ListaSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -65,7 +48,7 @@ class StockProdutoController extends Controller
     }
 
     /**
-     * Displays a single StockProduto model.
+     * Displays a single Lista model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -78,28 +61,20 @@ class StockProdutoController extends Controller
     }
 
     /**
-     * Creates a new StockProduto model.
+     * Creates a new Lista model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new StockProduto();
+        $model = new Lista();
 
-        if ($model->load($this->request->post())) {
-
-            $produto = Produto::findOne($model->produto_id);
-
-            if ($produto) {
-                $model->preco = $produto->preco * $model->quantidade;
-                $model->validade = $produto->validade;
-            }
-
-            $model->utilizador_id = Yii::$app->user->id;
-
-            if ($model->save()) {
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
+        } else {
+            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
@@ -107,10 +82,8 @@ class StockProdutoController extends Controller
         ]);
     }
 
-
-
     /**
-     * Updates an existing StockProduto model.
+     * Updates an existing Lista model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -130,7 +103,7 @@ class StockProdutoController extends Controller
     }
 
     /**
-     * Deletes an existing StockProduto model.
+     * Deletes an existing Lista model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -144,15 +117,15 @@ class StockProdutoController extends Controller
     }
 
     /**
-     * Finds the StockProduto model based on its primary key value.
+     * Finds the Lista model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return StockProduto the loaded model
+     * @return Lista the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = StockProduto::findOne(['id' => $id])) !== null) {
+        if (($model = Lista::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

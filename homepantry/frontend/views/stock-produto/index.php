@@ -20,10 +20,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-<!--    <p>
-        // Html::a('Create Stock Produto', ['create'], ['class' => 'btn btn-success']);
+  <p>
+      <?= Html::a('Entrada de Novo Produto', ['create'], ['class' => 'btn btn-success']);?>
     </p>
--->
+
     <?php $form = ActiveForm::begin([
         'method' => 'get',
         'action' => ['index'],
@@ -66,9 +66,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => 'local.nome',
             ],
             'quantidade',
+            'preco',
             [
                 'class' => ActionColumn::class,
             ],
+
         ],
     ]); ?>
 

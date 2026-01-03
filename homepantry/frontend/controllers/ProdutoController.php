@@ -53,6 +53,8 @@ class ProdutoController extends Controller
                 ],
             ];
         }
+
+        return parent::behaviors();
     }
 
 
