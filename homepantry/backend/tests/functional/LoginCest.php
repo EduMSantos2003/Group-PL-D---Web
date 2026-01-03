@@ -2,6 +2,7 @@
 
 namespace backend\tests\functional;
 
+use common\models\User;
 use backend\tests\FunctionalTester;
 use common\fixtures\UserFixture;
 
@@ -35,6 +36,16 @@ class LoginCest
         // Abre a página de login do backend
         $I->amOnRoute('/site/login');
 
+        // teste campos vazios
+        $I->fillField('input[name="LoginForm[username]"]', '');
+        $I->fillField('input[name="LoginForm[password]"]', '');
+        $I->click('Login');
+
+        // teste login errado
+        $I->fillField('input[name="LoginForm[username]"]', 'wrong');
+        $I->fillField('input[name="LoginForm[password]"]', 'wrong');
+        $I->click('Login');
+
         // Preenche os campos (usa os names reais do formulário)
         $I->fillField('input[name="LoginForm[username]"]', 'erau');
         $I->fillField('input[name="LoginForm[password]"]', 'password_0');
@@ -45,7 +56,7 @@ class LoginCest
         // Garante pelo menos que já não estás na página de login
         $I->dontSee('LOGIN', 'button[name="login-button"]');
     }
-
+}
 
 //    public function loginUser(FunctionalTester $I)
 //    {
@@ -58,4 +69,3 @@ class LoginCest
 //        $I->dontSeeLink('Login');
 //        $I->dontSeeLink('Signup');
 //    }
-}

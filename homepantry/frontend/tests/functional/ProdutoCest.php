@@ -18,17 +18,21 @@ final class ProdutoCest
             ],
         ];
     }
-
-    private function login(FunctionalTester $I, string $username = 'admin', string $password = 'TUNTUN_123'): void
-    {
-        $I->amOnRoute('/site/login');
-        $I->fillField('Username', $username);
-        $I->fillField('Password', $password);
-        $I->click('login-button');
-
-        // Ajusta se no teu layout não aparecer exatamente assim
-        $I->see('Logout');
-    }
+//    public function login(\frontend\tests\FunctionalTester $I)
+//    {
+//        // Abre a página de login do backend
+//        $I->amOnRoute('/site/login');
+//
+//        // Preenche os campos (usa os names reais do formulário)
+//        $I->fillField('input[name="LoginForm[username]"]', 'erau');
+//        $I->fillField('input[name="LoginForm[password]"]', 'password_0');
+//
+//        // Clica no botão de login (name="login-button" e texto LOGIN)
+//        $I->click('button[name="login-button"]');
+//
+//        // Garante pelo menos que já não estás na página de login
+//        $I->dontSee('LOGIN', 'button[name="login-button"]');
+//    }
 
     public function createProduto(FunctionalTester $I): void
     {
