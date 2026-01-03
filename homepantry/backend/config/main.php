@@ -48,8 +48,6 @@ return [
     'components' => [
 
         'urlManager' => [
-            'enablePrettyUrl' => false,
-            'showScriptName' => false,
 
             'rules' => [
 

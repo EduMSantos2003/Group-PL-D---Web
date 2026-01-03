@@ -178,7 +178,25 @@ class ProdutoController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        // 🔒 Verificar se o produto está associado a alguma lista
+        if ($model->getListaProdutos()->count() > 0) {
+            Yii::$app->session->setFlash(
+                'error',
+                'Não é possível apagar o produto porque está associado a uma ou mais listas.'
+            );
+
+            return $this->redirect(['index']);
+        }
+
+        // Se não estiver associado, pode apagar
+        $model->delete();
+
+        Yii::$app->session->setFlash(
+            'success',
+            'Produto apagado com sucesso.'
+        );
 
         return $this->redirect(['index']);
     }

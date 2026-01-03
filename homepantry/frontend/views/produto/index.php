@@ -35,17 +35,22 @@ $this->registerJsFile('@web/js/produtos.js', ['depends' => [\yii\web\JqueryAsset
         'options' => ['class' => 'mb-3'],
     ]); ?>
 
-    <div class="input-group" style="max-width: 420px;">
-        <span class="input-group-text">🔍</span>
-        <?= Html::activeTextInput($searchModel, 'nome', [
-            'class' => 'form-control',
-            'placeholder' => 'Pesquisar Produto',
-        ]) ?>
-        <?= Html::submitButton('Pesquisar', ['class' => 'btn btn-outline-secondary']) ?>
-        <?= Html::a('Limpar', ['index'], ['class' => 'btn btn-outline-danger']) ?>
+    <div class="d-flex justify-content-center">
+        <div class="input-group" style="max-width: 420px;">
+            <span class="input-group-text">🔍</span>
+
+            <?= Html::activeTextInput($searchModel, 'globalSearch', [
+                'class' => 'form-control',
+                'placeholder' => 'Pesquisar produto, preço ou validade',
+            ]) ?>
+
+            <?= Html::submitButton('Pesquisar', ['class' => 'btn btn-outline-secondary']) ?>
+            <?= Html::a('Limpar', ['index'], ['class' => 'btn btn-outline-danger']) ?>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>
+
 
     <div class="row">
 
