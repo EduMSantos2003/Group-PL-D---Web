@@ -5,6 +5,8 @@ namespace common\models;
 use Yii;
 use yii\web\UploadedFile;
 use common\models\HistoricoPreco;
+use common\models\StockProduto;
+
 
 
 
@@ -56,6 +58,15 @@ class Produto extends \yii\db\ActiveRecord
         return $scenarios;
     }
 
+    public function atualizarUnidade()
+    {
+        $total = StockProduto::find()
+            ->where(['produto_id' => $this->id])
+            ->sum('quantidade');
+
+        $this->unidade = $total ?: 0;
+        $this->save(false);
+    }
 
     public $imageFile;
 
@@ -73,7 +84,7 @@ class Produto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['categoria_id', 'nome', 'descricao', 'unidade', 'preco', 'validade'], 'required'],
+            [['categoria_id', 'nome', 'descricao', 'preco', 'validade'], 'required'],
             [['categoria_id', 'unidade'], 'integer'],
             [['preco'], 'number'],
             [['validade'], 'safe'],

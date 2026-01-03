@@ -51,6 +51,8 @@ class StockProdutoController extends Controller
         $stock->preco = $precoUnitario * $stock->quantidade;
 
         $stock->save(false);
+        $stock->produto->atualizarUnidade();
+
 
         return [
             'success' => true,
@@ -77,6 +79,8 @@ class StockProdutoController extends Controller
         $stock->preco = $precoUnitario * $stock->quantidade;
 
         $stock->save(false);
+        $stock->produto->atualizarUnidade();
+
 
         return [
             'success' => true,
@@ -153,8 +157,10 @@ class StockProdutoController extends Controller
             $model->utilizador_id = Yii::$app->user->id;
 
             if ($model->save()) {
+                $model->produto->atualizarUnidade();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
+
         }
 
         return $this->render('create', [
@@ -193,6 +199,11 @@ class StockProdutoController extends Controller
      */
     public function actionDelete($id)
     {
+
+        $produto = $model->produto;
+        $model->delete();
+        $produto->atualizarUnidade();
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
