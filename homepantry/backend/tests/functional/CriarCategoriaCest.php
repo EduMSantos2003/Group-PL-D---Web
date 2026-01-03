@@ -6,8 +6,9 @@ namespace backend\tests\Functional;
 
 use backend\tests\FunctionalTester;
 use common\fixtures\UserFixture;
+use common\models\Categoria;
 
-final class CategoriaCest
+final class CriarCategoriaCest
 {
 //    public function _before(FunctionalTester $I): void
 //    {
@@ -46,33 +47,32 @@ final class CategoriaCest
     }
 
     /** CREATE */
-    public function createCategoria(FunctionalTester $I)
+    public function createCategoria(FunctionalTester $I): void
     {
         $this->login($I);
 
-        $I->amOnRoute('/categoria/create');
+        $I->amOnRoute('categoria/create');
 
-        // Como Categoria::formName() retorna '', o input chama-se "nome"
-        $I->fillField('nome', 'Mercearia');
-        $I->click('Save'); // troca para 'Guardar' se for esse o texto
+        $I->fillField('Categoria[nome]', 'Mercearia');
+        $I->click('Save'); // ou o texto real do botão
 
         $I->see('Mercearia');
     }
 
-    /** READ (ver a página view de uma categoria existente) */
+    /** READ */
     public function testSaveAndReadCategoria(FunctionalTester $I)
     {
         $this->login($I);
 
-        // cria categoria diretamente na BD de testes
-        $categoriaId = $I->haveRecord(\common\models\Categoria::class, [
+        $categoriaId = $I->haveRecord(Categoria::class, [
             'nome' => 'Laticínios',
+            // exemplo se for obrigatório:
+            // 'casa_id' => $casaId,
+            // 'user_id' => 1,
         ]);
 
-        // abre a view
-        $I->amOnRoute('/categoria/view', ['id' => $categoriaId]);
+        $I->amOnRoute('categoria/view', ['id' => $categoriaId]);
 
-        // confirma que o nome aparece
         $I->see('Laticínios');
     }
 
@@ -81,39 +81,40 @@ final class CategoriaCest
     {
         $this->login($I);
 
-        $categoriaId = $I->haveRecord(\common\models\Categoria::class, [
+        $categoriaId = $I->haveRecord(Categoria::class, [
             'nome' => 'Bebidas',
+            // 'casa_id' => $casaId,
+            // 'user_id' => 1,
         ]);
 
-        $I->amOnRoute('/categoria/update', ['id' => $categoriaId]);
+        $I->amOnRoute('categoria/update', ['id' => $categoriaId]);
 
         $I->fillField('nome', 'Bebidas (Atualizado)');
-        $I->click('Guardar');
+        $I->click('Update');
 
         $I->see('Bebidas (Atualizado)');
     }
 
     /** DELETE */
-    public function deleteCategoria(FunctionalTester $I): void
+    public function deleteCategoria(FunctionalTester $I)
     {
         $this->login($I);
 
-        $categoriaId = $I->haveRecord(\common\models\Categoria::class, [
-            'nome' => 'A Apagar',
+        $categoriaId = $I->haveRecord(Categoria::class, [
+            'nome' => 'Delete',
+            // 'casa_id' => $casaId,
+            // 'user_id' => 1,
         ]);
 
-        /**
-         * O delete normalmente exige POST (VerbFilter).
-         * Esta é a forma mais estável: chamar diretamente a rota com POST.
-         */
-        $I->sendPostRequest('/categoria/delete?id=' . $categoriaId);
+        $I->amOnRoute('categoria/view', ['id' => $categoriaId]);
 
-        // depois do delete, muitos CRUDs redirecionam para o index
-        $I->amOnRoute('/categoria/index');
+        // se for um botão gerado pelo Gii:
+        $I->click('Delete'); // ou 'Apagar', conforme o texto real
 
-        // confirmar que já não aparece no index
-        $I->dontSee('A Apagar');
+        // garante que o registo já não existe
+        $I->dontSeeRecord(Categoria::class, ['id' => $categoriaId]);
     }
+
 }
 
 
