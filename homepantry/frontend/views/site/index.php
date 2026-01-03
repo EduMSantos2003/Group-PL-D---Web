@@ -245,9 +245,9 @@ $this->title = 'HomePantry';
                         distribui os produtos por cada um deles.
                     </p>
                     <?= Html::a(
-                        'Ver casas',
-                        ['/casa/index'],
-                        ['class' => 'btn btn-outline-primary border-2 py-2 px-4 rounded-pill']
+                            'Ver casas',
+                            'http://localhost/Group-PL-D---Web/homepantry/backend/web/index.php?r=casa/index',
+                            ['class' => 'btn btn-outline-primary border-2 py-2 px-4 rounded-pill']
                     ) ?>
                 </div>
             </div>
