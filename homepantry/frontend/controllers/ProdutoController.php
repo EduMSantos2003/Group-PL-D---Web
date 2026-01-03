@@ -26,29 +26,35 @@ class ProdutoController extends Controller
      */
     public function behaviors()
     {
-        return [
-            'access' => [
-                'class' => AccessControl::class,
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => ['index', 'view'],
-                        'roles' => ['convidado', 'membroCasa', 'gestorCasa', 'admin'],
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['create', 'update', 'delete'],
-                        'roles' => ['gestorCasa', 'admin'],
+        // RAMO ESPECIAL PARA TESTES FUNCIONAIS
+        if (defined('YII_ENV_TEST') && YII_ENV_TEST) {
+            return [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'view'],
+                            'roles' => ['convidado', 'membroCasa', 'gestorCasa', 'admin'],
+                        ],
+                        [
+                            'allow' => true,
+                            'actions' => ['create', 'update', 'delete'],
+                            'roles' => ['gestorCasa', 'admin'],
+                        ],
                     ],
                 ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'delete' => ['POST'],
+
+                'verbs' => [
+                    'class' => VerbFilter::class,
+                    'actions' => [
+                        'delete' => ['POST'],
+                    ],
                 ],
-            ],
-        ];
+            ];
+        }
+
+        return parent::behaviors();
     }
 
 

@@ -7,6 +7,10 @@ use common\models\StockProdutoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use common\models\Produto;
+use Yii;
+
 
 /**
  * StockProdutoController implements the CRUD actions for StockProduto model.
@@ -16,6 +20,78 @@ class StockProdutoController extends Controller
     /**
      * @inheritDoc
      */
+
+    public function actionGetPreco($id)
+    {
+        $produto = Produto::find()
+            ->select(['preco'])
+            ->where(['id' => $id])
+            ->one();
+
+        return $this->asJson([
+            'preco' => $produto ? $produto->preco : null
+        ]);
+    }
+
+    public function actionIncrement()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $id = Yii::$app->request->post('id');
+        $stock = StockProduto::findOne($id);
+
+        if (!$stock) {
+            return ['success' => false];
+        }
+
+        $stock->quantidade += 1;
+
+        // 🔒 recalcular a partir do preço do produto (mais correto)
+        $precoUnitario = $stock->produto->preco;
+        $stock->preco = $precoUnitario * $stock->quantidade;
+
+        $stock->save(false);
+        $stock->produto->atualizarUnidade();
+
+
+        return [
+            'success' => true,
+            'quantidade' => $stock->quantidade,
+            'preco' => $stock->preco,
+        ];
+    }
+
+
+    public function actionDecrement()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $id = Yii::$app->request->post('id');
+        $stock = StockProduto::findOne($id);
+
+        if (!$stock || $stock->quantidade <= 0) {
+            return ['success' => false];
+        }
+
+        $stock->quantidade -= 1;
+
+        $precoUnitario = $stock->produto->preco;
+        $stock->preco = $precoUnitario * $stock->quantidade;
+
+        $stock->save(false);
+        $stock->produto->atualizarUnidade();
+
+
+        return [
+            'success' => true,
+            'quantidade' => $stock->quantidade,
+            'preco' => $stock->preco,
+        ];
+    }
+
+
+
+
     public function behaviors()
     {
         return array_merge(
@@ -69,18 +145,30 @@ class StockProdutoController extends Controller
     {
         $model = new StockProduto();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+        if ($model->load($this->request->post())) {
+
+            $produto = Produto::findOne($model->produto_id);
+
+            if ($produto) {
+                $model->preco = $produto->preco * $model->quantidade;
+                $model->validade = $produto->validade;
+            }
+
+            $model->utilizador_id = Yii::$app->user->id;
+
+            if ($model->save()) {
+                $model->produto->atualizarUnidade();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
-        } else {
-            $model->loadDefaultValues();
+
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
     }
+
+
 
     /**
      * Updates an existing StockProduto model.
@@ -111,6 +199,11 @@ class StockProdutoController extends Controller
      */
     public function actionDelete($id)
     {
+
+        $produto = $model->produto;
+        $model->delete();
+        $produto->atualizarUnidade();
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

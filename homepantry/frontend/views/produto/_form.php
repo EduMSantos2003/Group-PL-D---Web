@@ -30,8 +30,6 @@ $this->registerCssFile('@web/css/butoes.css');
 
     <?= $form->field($model, 'descricao')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'unidade')->textInput() ?>
-
     <?= $form->field($model, 'preco')->textInput() ?>
 
     <?= $form->field($model, 'validade')->widget(DatePicker::class, [

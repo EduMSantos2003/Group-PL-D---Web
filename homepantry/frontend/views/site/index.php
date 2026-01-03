@@ -245,9 +245,9 @@ $this->title = 'HomePantry';
                         distribui os produtos por cada um deles.
                     </p>
                     <?= Html::a(
-                        'Ver casas',
-                        ['/casa/index'],
-                        ['class' => 'btn btn-outline-primary border-2 py-2 px-4 rounded-pill']
+                            'Ver casas',
+                            'http://localhost/Group-PL-D---Web/homepantry/backend/web/index.php?r=casa/index',
+                            ['class' => 'btn btn-outline-primary border-2 py-2 px-4 rounded-pill']
                     ) ?>
                 </div>
             </div>
@@ -274,7 +274,7 @@ $this->title = 'HomePantry';
 
         <div class="row g-4">
 
-            <div class="col-md-3 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="col-md-4 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="product-item h-100">
                     <div class="position-relative bg-light overflow-hidden text-center p-4">
                         <i class="fa fa-box fa-3x mb-3 text-primary"></i>
@@ -284,7 +284,7 @@ $this->title = 'HomePantry';
                 </div>
             </div>
 
-            <div class="col-md-3 wow fadeInUp" data-wow-delay="0.2s">
+            <div class="col-md-4 wow fadeInUp" data-wow-delay="0.2s">
                 <div class="product-item h-100">
                     <div class="position-relative bg-light overflow-hidden text-center p-4">
                         <i class="fa fa-list-check fa-3x mb-3 text-primary"></i>
@@ -294,17 +294,8 @@ $this->title = 'HomePantry';
                 </div>
             </div>
 
-            <div class="col-md-3 wow fadeInUp" data-wow-delay="0.3s">
-                <div class="product-item h-100">
-                    <div class="position-relative bg-light overflow-hidden text-center p-4">
-                        <i class="fa fa-house fa-3x mb-3 text-primary"></i>
-                        <h5>Casas</h5>
-                        <?= Html::a('Ver Casas', ['/casa/index'], ['class' => 'btn btn-sm btn-primary rounded-pill px-4']) ?>
-                    </div>
-                </div>
-            </div>
 
-            <div class="col-md-3 wow fadeInUp" data-wow-delay="0.4s">
+            <div class="col-md-4 wow fadeInUp" data-wow-delay="0.4s">
                 <div class="product-item h-100">
                     <div class="position-relative bg-light overflow-hidden text-center p-4">
                         <i class="fa fa-tags fa-3x mb-3 text-primary"></i>
@@ -335,7 +326,7 @@ $this->title = 'HomePantry';
                     <?= Html::a('Criar Conta', ['/site/signup'], ['class' => 'btn btn-lg btn-secondary rounded-pill py-3 px-5 me-2 mb-2']) ?>
                     <?= Html::a('Já tenho conta', ['/site/login'], ['class' => 'btn btn-lg btn-outline-light rounded-pill py-3 px-5 mb-2']) ?>
                 <?php else: ?>
-                    <?= Html::a('Ir para o meu painel', ['/site/index'], ['class' => 'btn btn-lg btn-secondary rounded-pill py-3 px-5']) ?>
+                    <?= Html::a('Criar Nova Conta', ['/site/signup'], ['class' => 'btn btn-lg btn-secondary rounded-pill py-3 px-5']) ?>
                 <?php endif; ?>
             </div>
         </div>

@@ -1,120 +1,165 @@
 <?php
 
-namespace common\tests\Unit;
+namespace common\tests\unit;
 
-use common\models\Local;
+use common\models\ListaProduto;
 use common\tests\UnitTester;
 
-class LocalTest extends \Codeception\Test\Unit
+class ListaProdutoTest extends \Codeception\Test\Unit
 {
-
+    // Valores para testes
     private const STRING = 'ABCDE';
+    private const QUANTIDADE_VALIDA = 2;
+    private const QUANTIDADE_ATUALIZADA = 5;
 
     protected UnitTester $tester;
 
     protected function _before()
     {
-//        $this->createValidLocal(true);
+//        $this->createValidListaProduto(true);
     }
 
-    // tests
+    // 1) Testes de validação das rules() de ListaProduto
     public function testValidations()
     {
-        $local = new Local();
+        $listaProduto = new ListaProduto();
 
-        // 1) Ambos nulos → falham
-        $local->nome = null;
-        $local->casa_id = null;
+        // 1.1) Todos obrigatórios a null → falham
+        $listaProduto->lista_id   = null;
+        $listaProduto->produto_id = null;
+        $listaProduto->quantidade = null;
 
-        $this->assertFalse($local->validate(['nome']));
-        $this->assertFalse($local->validate(['casa_id']));
+        $this->assertFalse($listaProduto->validate(['lista_id']));
+        $this->assertFalse($listaProduto->validate(['produto_id']));
+        $this->assertFalse($listaProduto->validate(['quantidade']));
 
-        // 2) nome válido, casa_id nulo → casa_id ainda falha
-        $local->nome = self::STRING;
-        $local->casa_id = null;
+        // 1.2) Tipos inválidos (string em vez de integer/number)
+        $listaProduto->lista_id      = self::STRING;
+        $listaProduto->produto_id    = self::STRING;
+        $listaProduto->quantidade    = self::STRING;
+        $listaProduto->precoUnitario = self::STRING;
+        $listaProduto->subTotal      = self::STRING;
 
-        $this->assertTrue($local->validate(['nome']));
-        $this->assertFalse($local->validate(['casa_id']));
+        $this->assertFalse($listaProduto->validate(['lista_id']));
+        $this->assertFalse($listaProduto->validate(['produto_id']));
+        $this->assertFalse($listaProduto->validate(['quantidade']));
+        $this->assertFalse($listaProduto->validate(['precoUnitario']));
+        $this->assertFalse($listaProduto->validate(['subTotal']));
 
-        // 3) casa_id não inteiro → falha integer
-        $local->casa_id = 'abc';
-        $this->assertFalse($local->validate(['casa_id']));
+        // 1.3) IDs inteiros mas sem Lista/Produto correspondente → falham exist
+        $listaProduto->lista_id   = 999999; // ids que não existem
+        $listaProduto->produto_id = 999999;
+        $listaProduto->quantidade = self::QUANTIDADE_VALIDA;
 
-        // 4) casa_id inteiro mas sem Casa correspondente → falha existe
-        $local->casa_id = 999999; // id que não existe
-        $this->assertFalse($local->validate(['casa_id']));
+        $this->assertFalse($listaProduto->validate(['lista_id']));
+        $this->assertFalse($listaProduto->validate(['produto_id']));
 
-        // 5) valores totalmente válidos (pressupõe Casa com id=1)
-        $local->casa_id = 1;
-        $this->assertTrue($local->validate(['nome']));
-        $this->assertTrue($local->validate(['casa_id']));
+        // 1.4) Valores totalmente válidos (pressupõe Lista id=1 e Produto id=1)
+        $listaProduto->lista_id      = 2;
+        $listaProduto->produto_id    = 2;
+        $listaProduto->quantidade    = self::QUANTIDADE_VALIDA;
+        $listaProduto->precoUnitario = 1.5;
+        $listaProduto->subTotal      = self::QUANTIDADE_VALIDA * 1.5;
+
+        $this->assertTrue($listaProduto->validate(['lista_id']));
+        $this->assertTrue($listaProduto->validate(['produto_id']));
+        $this->assertTrue($listaProduto->validate(['quantidade']));
+        $this->assertTrue($listaProduto->validate(['precoUnitario']));
+        $this->assertTrue($listaProduto->validate(['subTotal']));
     }
 
-
+    // 2) Guardar e ler
     public function testSaveAndRead()
     {
-        $local = $this->createValidLocal(false);
-        $local->nome = 'frigorifico';
-        $result = $local->save();
+        $listaProduto = $this->createValidListaProduto(false);
+        $listaProduto->quantidade = self::QUANTIDADE_VALIDA;
+
+        $result = $listaProduto->save();
         $this->assertTrue($result);
 
-        $localReadFromDatabase = Local::find()->where(['id' => $local->id])->one();
-        $this->assertNotNull($localReadFromDatabase);
-        $this->assertEquals('frigorifico', $localReadFromDatabase->nome, 'The name of the local found in Database is different');
+        $listaProdutoFromDatebase = ListaProduto::find()->where(['id' => $listaProduto->id])->one();
+        $this->assertNotNull($listaProdutoFromDatebase);
+        $this->assertEquals(self::QUANTIDADE_VALIDA, $listaProdutoFromDatebase->quantidade);
     }
 
-    public function testSaveInvalidName()
+    public function beforeSave($insert)
     {
-        $local = $this->createValidLocal(false);
-        $local->nome = -1;
-        $local->save();
+        if ($this->produto_id) {
+            $produto = Produto::findOne($this->produto_id);
+            if ($produto) {
+                $this->precoUnitario = $produto->preco;
+            }
+        }
 
-        $localReadFromDatabase = Local::find()->where(['nome' => 'frigorifico'])->one();
-        $this->assertNull($localReadFromDatabase);
+        $this->subTotal = $this->quantidade * $this->precoUnitario;
+
+        return parent::beforeSave($insert);
     }
 
+    // 3) beforeSave deve calcular precoUnitario e subTotal a partir do Produto
+    public function testBeforeSaveCalculaSubTotal()
+    {
+        // Arrange
+        $listaProduto = $this->createValidListaProduto(false);
+        $listaProduto->quantidade = self::QUANTIDADE_VALIDA; // 2
+
+        // Act
+        $this->assertTrue($listaProduto->save());
+
+        // Assert
+        $listaProdutoFromDatabase = ListaProduto::findOne($listaProduto->id);
+        $this->assertNotNull($listaProdutoFromDatabase);
+
+        // precoUnitario tem de vir do Produto (por ex., 1.00)
+        $this->assertGreaterThan(0, $listaProdutoFromDatabase->precoUnitario);
+
+        // subTotal = quantidade * precoUnitario
+        $this->assertEquals(
+            $listaProdutoFromDatabase->quantidade * $listaProdutoFromDatabase->precoUnitario,
+            $listaProdutoFromDatabase->subTotal
+        );
+    }
+
+    // 4) Atualizar e ler
     public function testUpdateAndRead()
     {
-        $local = $this->createValidLocal(true);
+        $listaProduto = $this->createValidListaProduto(true);
 
-        $localReadFromDatabase = Local::find()->where(['id' => $local->id])->one();
-        $this->assertNotNull($localReadFromDatabase, 'Nao foi encontrado local com nome frigorifico');
-        $this->assertEquals('frigorifico', $localReadFromDatabase->nome, 'The name of the category found in Database is different');
+        $listaProdutoFromDatebase = ListaProduto::find()->where(['id' => $listaProduto->id])->one();
+        $this->assertNotNull($listaProduto);
 
-        $local->nome = 'dispensa';
-        $local->save();
+        $listaProdutoFromDatebase->quantidade = self::QUANTIDADE_ATUALIZADA;
+        $listaProdutoFromDatebase->save();
 
-        $localReadFromDatabase2 = Local::find()->where(['id' => $local->id])->one();
-        $this->assertEquals('dispensa', $localReadFromDatabase2->nome, 'The name of the category found in Database is different');
+        $listaProdutoFromDatebase2 = ListaProduto::find()->where(['id' => $listaProduto->id])->one();
+        $this->assertEquals(self::QUANTIDADE_ATUALIZADA, $listaProdutoFromDatebase2->quantidade);
     }
 
+    // 5) Apagar
     public function testDelete()
     {
-        $local = $this->createValidLocal(true);
+        $listaProduto = $this->createValidListaProduto(true);
 
-        $localReadFromDatabase = Local::find()->where(['id' => $local->id])->one();
-        $this->assertNotNull($localReadFromDatabase, 'Nao foi encontrada nenhum local com nome frigorifico');
+        $listaProdutoFromDatebase = ListaProduto::find()->where(['id' => $listaProduto->id])->one();
+        $this->assertNotNull($listaProdutoFromDatebase);
 
-        $localReadFromDatabase->delete();
-        $localReadFromDatabase2 = Local::find()->where(['id' => $local->id])->one();
-        $this->assertNull($localReadFromDatabase2, 'O local não foi apagado');
+        $listaProdutoFromDatebase->delete();
+
+        $listaProdutoFromDatebase2 = ListaProduto::find()->where(['id' => $listaProduto->id])->one();
+        $this->assertNull($listaProdutoFromDatebase2);
     }
 
-    private function createValidLocal(bool $save = false)
+    // Helper: cria um ListaProduto válido
+    private function createValidListaProduto(bool $save = false): ListaProduto
     {
-        $local = new Local();
-        $local->nome = 'frigorifico';  // <--- valor inicial
-        $local->casa_id = 1; // tem de existir Casa com id=1 na BD de teste
+        $listaProduto = new ListaProduto();
+        $listaProduto->lista_id   = 2;                     // tem de existir Lista com id=2
+        $listaProduto->produto_id = 2;                     // tem de existir Produto com id=2
+        $listaProduto->quantidade = self::QUANTIDADE_VALIDA;
 
         if ($save) {
-            $this->assertTrue($local->save());
+            $this->assertTrue($listaProduto->save());
         }
-        return $local;
+        return $listaProduto;
     }
-
-    /* public function testSomeFeature()
-    {
-        Espaço para um teste extra específico se o professor pedir algo mais
-    } */
 }
-
