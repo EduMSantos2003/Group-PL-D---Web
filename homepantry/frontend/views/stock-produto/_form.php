@@ -51,6 +51,7 @@ $locais = ArrayHelper::map(
     ]) ?>
 
     <div class="form-group">
+        <p></p>
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 

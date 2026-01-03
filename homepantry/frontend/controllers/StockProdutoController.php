@@ -33,6 +33,61 @@ class StockProdutoController extends Controller
         ]);
     }
 
+    public function actionIncrement()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $id = Yii::$app->request->post('id');
+        $stock = StockProduto::findOne($id);
+
+        if (!$stock) {
+            return ['success' => false];
+        }
+
+        $stock->quantidade += 1;
+
+        // 🔒 recalcular a partir do preço do produto (mais correto)
+        $precoUnitario = $stock->produto->preco;
+        $stock->preco = $precoUnitario * $stock->quantidade;
+
+        $stock->save(false);
+
+        return [
+            'success' => true,
+            'quantidade' => $stock->quantidade,
+            'preco' => $stock->preco,
+        ];
+    }
+
+
+    public function actionDecrement()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $id = Yii::$app->request->post('id');
+        $stock = StockProduto::findOne($id);
+
+        if (!$stock || $stock->quantidade <= 0) {
+            return ['success' => false];
+        }
+
+        $stock->quantidade -= 1;
+
+        $precoUnitario = $stock->produto->preco;
+        $stock->preco = $precoUnitario * $stock->quantidade;
+
+        $stock->save(false);
+
+        return [
+            'success' => true,
+            'quantidade' => $stock->quantidade,
+            'preco' => $stock->preco,
+        ];
+    }
+
+
+
+
     public function behaviors()
     {
         return array_merge(
