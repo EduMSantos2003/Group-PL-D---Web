@@ -199,15 +199,40 @@ class StockProdutoController extends Controller
      */
     public function actionDelete($id)
     {
+        // 1️⃣ Obter o modelo corretamente
+        $model = $this->findModel($id);
 
+        // 2️⃣ Guardar o produto associado (antes de apagar)
         $produto = $model->produto;
-        $model->delete();
-        $produto->atualizarUnidade();
 
-        $this->findModel($id)->delete();
+        try {
+            // 3️⃣ Apagar o stock_produto
+            $model->delete();
 
+            // 4️⃣ Atualizar stock do produto (se existir)
+            if ($produto !== null) {
+                $produto->atualizarUnidade();
+            }
+
+            // 5️⃣ Mensagem de sucesso
+            Yii::$app->session->setFlash(
+                'success',
+                'Produto removido do stock com sucesso.'
+            );
+
+        } catch (\yii\db\IntegrityException $e) {
+
+            // 6️⃣ Mensagem de erro amigável
+            Yii::$app->session->setFlash(
+                'error',
+                'Não é possível apagar este registo porque está associado a outros dados.'
+            );
+        }
+
+        // 7️⃣ Redirecionar
         return $this->redirect(['index']);
     }
+
 
     /**
      * Finds the StockProduto model based on its primary key value.
