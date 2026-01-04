@@ -75,6 +75,11 @@ use yii\helpers\Html;
                         'icon' => 'map-marker-alt',
                         'url' => ['/local/index'],
                     ],
+                        [
+                                'label' => 'Histórico Preços',
+                                'icon' => 'chart-line',
+                                'url' => ['/historico-preco/index'],
+                        ],
                 ],
             ]) ?>
         </nav>

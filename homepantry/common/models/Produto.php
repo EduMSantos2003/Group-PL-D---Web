@@ -152,22 +152,27 @@ class Produto extends \yii\db\ActiveRecord
     {
         parent::afterSave($insert, $changedAttributes);
 
-        if (!$insert && array_key_exists('preco', $changedAttributes)) {
-            try {
-                $historico = new HistoricoPreco([
-                    'produto_id' => $this->id,
-                    'preco' => $this->preco,
-                    'dataAlteracao' => date('Y-m-d H:i:s'),
-                ]);
+        // Ao CRIAR produto → gravar preço inicial
+        if ($insert) {
+            $historico = new HistoricoPreco([
+                'produto_id' => $this->id,
+                'preco' => $this->preco,
+                // dataRegisto é automático
+            ]);
+            $historico->save(false);
+            return;
+        }
 
-                if (!$historico->save()) {
-                    throw new \Exception(json_encode($historico->errors));
-                }
-            } catch (\Throwable $e) {
-                \Yii::error($e->getMessage(), 'historico-preco');
-            }
+        // Ao ATUALIZAR → só se o preço mudou
+        if (array_key_exists('preco', $changedAttributes)) {
+            $historico = new HistoricoPreco([
+                'produto_id' => $this->id,
+                'preco' => $this->preco,
+            ]);
+            $historico->save(false);
         }
     }
+
 
 
 
