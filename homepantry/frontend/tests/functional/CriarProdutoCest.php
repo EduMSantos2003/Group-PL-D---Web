@@ -7,7 +7,7 @@ namespace frontend\tests\functional;
 use frontend\tests\FunctionalTester;
 use common\fixtures\UserFixture;
 
-final class ProdutoCest
+final class CriarProdutoCest
 {
     public function _fixtures(): array
     {
