@@ -91,7 +91,7 @@ class NotificationService
             $items[] = [
                 'label' => 'Produto a expirar: ' . $stock->produto->nome,
                 'icon'  => 'exclamation-triangle',
-                'url'   => ['/stock-produto/view', 'id' => $stock->id],
+                'url' => 'http://localhost/Group-PL-D---Web/homepantry/frontend/web/index.php?r=stock-produto/view&id=' . $stock->id,
                 'date'  => $stock->validade,
                 'type'  => 'warning',
             ];
