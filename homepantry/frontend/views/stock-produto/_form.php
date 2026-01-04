@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use common\models\Produto;
-use common\models\Local;
 use yii\helpers\ArrayHelper;
 
 /** @var yii\web\View $this */
@@ -16,16 +15,7 @@ $produtos = ArrayHelper::map(
         'nome'
 );
 
-$locais = ArrayHelper::map(
-        Local::find()->all(),
-        'id',
-        'nome'
-);
-
-
 ?>
-
-
 
 <div class="stock-produto-form">
 
@@ -39,25 +29,25 @@ $locais = ArrayHelper::map(
             ]
     ) ?>
 
-
-
     <?= $form->field($model, 'local_id')->dropDownList(
-            $locais,
-            ['prompt' => 'Seleciona um local']
+            $locaisList,
+            ['prompt' => 'Selecione um local']
     ) ?>
 
-    <?= $form->field($model, 'quantidade')->textInput([
-            'oninput' => 'atualizarPreco();'
-    ]) ?>
+    <?php if ($model->isNewRecord): ?>
+        <?= $form->field($model, 'quantidade')->textInput([
+                'oninput' => 'atualizarPreco();'
+        ]) ?>
+    <?php endif; ?>
 
-    <div class="form-group">
-        <p></p>
+    <div class="form-group mt-3">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
 
 </div>
+
 
 
 <?php

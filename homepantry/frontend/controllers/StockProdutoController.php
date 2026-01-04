@@ -10,7 +10,9 @@ use yii\filters\VerbFilter;
 use yii\web\Response;
 use common\models\Produto;
 use Yii;
-
+use common\models\Local;
+use common\models\CasaUtilizador;
+use yii\helpers\ArrayHelper;
 
 /**
  * StockProdutoController implements the CRUD actions for StockProduto model.
@@ -145,6 +147,23 @@ class StockProdutoController extends Controller
     {
         $model = new StockProduto();
 
+        $userId = Yii::$app->user->id;
+
+        // casas do utilizador
+        $casasIds = CasaUtilizador::find()
+            ->select('casa_id')
+            ->where(['utilizador_id' => $userId]);
+
+        // locais dessas casas
+        $locais = Local::find()
+            ->where(['casa_id' => $casasIds])
+            ->orderBy('nome')
+            ->all();
+
+        // formato para dropdown
+        $locaisList = ArrayHelper::map($locais, 'id', 'nome');
+
+        // SUBMIT
         if ($model->load($this->request->post())) {
 
             $produto = Produto::findOne($model->produto_id);
@@ -154,19 +173,20 @@ class StockProdutoController extends Controller
                 $model->validade = $produto->validade;
             }
 
-            $model->utilizador_id = Yii::$app->user->id;
+            $model->utilizador_id = $userId;
 
             if ($model->save()) {
                 $model->produto->atualizarUnidade();
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['index']);
             }
-
         }
 
         return $this->render('create', [
             'model' => $model,
+            'locaisList' => $locaisList,
         ]);
     }
+
 
 
 
@@ -180,15 +200,18 @@ class StockProdutoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $quantidadeOriginal = $model->quantidade;
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load($this->request->post())) {
+            $model->quantidade = $quantidadeOriginal; // 🔒 bloqueia alteração
+            if ($model->save()) {
+                return $this->redirect(['index']);
+            }
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        return $this->render('index');
     }
+
 
     /**
      * Deletes an existing StockProduto model.
