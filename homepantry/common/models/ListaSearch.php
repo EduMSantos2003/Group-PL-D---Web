@@ -5,6 +5,8 @@ namespace common\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Lista;
+use Yii;
+
 
 /**
  * ListaSearch represents the model behind the search form of `common\models\Lista`.
@@ -46,8 +48,8 @@ class ListaSearch extends Lista
      */
     public function search($params, $formName = null)
     {
-        $query = Lista::find();
-
+        $query = Lista::find()
+            ->where(['utilizador_id' => Yii::$app->user->id]);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
