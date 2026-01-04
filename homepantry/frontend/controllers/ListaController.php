@@ -9,6 +9,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\ForbiddenHttpException;
+use Yii;
 
 
 /**
@@ -28,19 +29,30 @@ class ListaController extends Controller
                     'class' => AccessControl::class,
                     'only' => ['index', 'view', 'create', 'update', 'delete'],
                     'rules' => [
+
+                        // 👁️ Ver listas → qualquer utilizador autenticado
                         [
                             'allow' => true,
-                            // membros da casa + gestorCasa + admin (porque todos têm manageListas)
+                            'actions' => ['index', 'view'],
+                            'roles' => ['@'],
+                        ],
+
+                        // ✏️ Gerir listas → quem tem permissão
+                        [
+                            'allow' => true,
+                            'actions' => ['create', 'update', 'delete'],
                             'roles' => ['manageListas'],
                         ],
                     ],
+
                     'denyCallback' => function ($rule, $action) {
-                        if (\Yii::$app->user->isGuest) {
-                            return \Yii::$app->response->redirect(['/site/login']);
+                        if (Yii::$app->user->isGuest) {
+                            return Yii::$app->response->redirect(['/site/login']);
                         }
                         throw new ForbiddenHttpException('Não tem permissão para aceder a esta página.');
                     },
                 ],
+
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [

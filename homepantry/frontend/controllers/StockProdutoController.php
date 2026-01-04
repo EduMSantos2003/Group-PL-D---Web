@@ -13,6 +13,7 @@ use Yii;
 use common\models\Local;
 use common\models\CasaUtilizador;
 use yii\helpers\ArrayHelper;
+use yii\filters\AccessControl;
 
 /**
  * StockProdutoController implements the CRUD actions for StockProduto model.
@@ -96,17 +97,30 @@ class StockProdutoController extends Controller
 
     public function behaviors()
     {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+
+                    // Todos podem ver stock
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'view'],
+                        'roles' => ['@'], // logged users
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['increment', 'decrement','update'],
+                        'roles' => ['membroCasa'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create', 'delete','increment', 'decrement'],
+                        'roles' => ['manageStock'],
                     ],
                 ],
-            ]
-        );
+            ],
+        ];
     }
 
     /**

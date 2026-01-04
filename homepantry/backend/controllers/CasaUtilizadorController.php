@@ -7,6 +7,10 @@ use common\models\CasaUtilizadorSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
+use yii\filters\AccessControl;
+use yii\web\ForbiddenHttpException;
+
 
 /**
  * CasaUtilizadorController implements the CRUD actions for CasaUtilizador model.
@@ -21,8 +25,23 @@ class CasaUtilizadorController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['manageCasas'],
+                        ],
+                    ],
+                    'denyCallback' => function () {
+                        if (Yii::$app->user->isGuest) {
+                            return Yii::$app->response->redirect(['/site/login']);
+                        }
+                        throw new ForbiddenHttpException('Não tem permissão para gerir casas.');
+                    },
+                ],
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
