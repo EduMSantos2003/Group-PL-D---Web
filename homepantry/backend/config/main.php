@@ -49,6 +49,9 @@ return [
 
         'urlManager' => [
 
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+
             'rules' => [
 
                 // 🔹 CASA (MASTER)
@@ -79,10 +82,8 @@ return [
                     'pluralize' => false,
                 ],
 
-
-                // 🔹 LOCAL (DETAIL CRUD)
-                // 🔥 API REST
-
+                //  LOCAL (DETAIL CRUD)
+                // API REST
 
                 // PRODUTO (3.º CRUD)
                 [
@@ -122,7 +123,6 @@ return [
                     'controller' => ['api/historico-preco'],
                     'pluralize' => false,
                 ],
-
 
             ],
         ],
