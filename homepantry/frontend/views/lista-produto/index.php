@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $lista->nome;
 
 <div class="lista-produto-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1></h1>
 
     <p>
         <?= Html::a(

@@ -113,7 +113,7 @@ class ProdutoController extends Controller
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
 
             if ($model->upload() && $model->save(false)) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['index']);
             }
         }
 
@@ -135,33 +135,27 @@ class ProdutoController extends Controller
 
     public function actionUpdate($id)
     {
-        $model = Produto::findOne($id);
+        $model = $this->findModel($id);
         $model->scenario = 'update';
 
-
-        // guarda o caminho da imagem antiga, caso não seja escolhida nova
-        $oldImage = $model->imagem;
+        $oldImage = $model->imagem; // guarda imagem antiga
 
         if ($model->load(Yii::$app->request->post())) {
 
-            // obter o ficheiro enviado no form
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
 
-            if ($model->imageFile) {
-                // se foi escolhida uma nova imagem
-                $filePath = 'uploads/produtos/' . $model->id . '_' . $model->imageFile->baseName . '.' . $model->imageFile->extension;
+            // usa SEMPRE a lógica do model
+            if (!$model->upload()) {
+                return $this->render('update', ['model' => $model]);
+            }
 
-                if ($model->imageFile->saveAs($filePath)) {
-                    $model->imagem = $filePath;
-                }
-            } else {
-                // se não foi escolhida nova imagem, mantém a antiga
+            // se não foi feito upload novo, mantém a antiga
+            if (!$model->imageFile) {
                 $model->imagem = $oldImage;
             }
 
-            // guarda as alterações (já com o caminho da imagem atualizado ou mantido)
-            if ($model->save(false)) { // false para não voltar a validar tudo
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->save(false)) {
+                return $this->redirect(['index']);
             }
         }
 

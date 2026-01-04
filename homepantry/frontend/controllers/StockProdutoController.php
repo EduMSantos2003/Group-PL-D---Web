@@ -202,6 +202,21 @@ class StockProdutoController extends Controller
         $model = $this->findModel($id);
         $quantidadeOriginal = $model->quantidade;
 
+        $userId = Yii::$app->user->id;
+
+        // casas do utilizador
+        $casasIds = CasaUtilizador::find()
+            ->select('casa_id')
+            ->where(['utilizador_id' => $userId]);
+
+        // locais dessas casas
+        $locais = Local::find()
+            ->where(['casa_id' => $casasIds])
+            ->orderBy('nome')
+            ->all();
+
+        $locaisList = ArrayHelper::map($locais, 'id', 'nome');
+
         if ($model->load($this->request->post())) {
             $model->quantidade = $quantidadeOriginal; // 🔒 bloqueia alteração
             if ($model->save()) {
@@ -209,8 +224,12 @@ class StockProdutoController extends Controller
             }
         }
 
-        return $this->render('index');
+        return $this->render('update', [
+            'model' => $model,
+            'locaisList' => $locaisList,
+        ]);
     }
+
 
 
     /**

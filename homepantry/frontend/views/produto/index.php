@@ -24,7 +24,7 @@ $this->registerJsFile('@web/js/produtos.js', ['depends' => [\yii\web\JqueryAsset
 <div class="container mt-4">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="fw-bold"><?= Html::encode($this->title) ?></h1>
+        <h1 class="fw-bold"></h1>
 
         <?= Html::a('Criar Produto', ['create'], ['class' => 'btn-create']) ?>
     </div>

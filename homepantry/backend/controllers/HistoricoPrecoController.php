@@ -7,6 +7,8 @@ use common\models\HistoricoPrecoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
+
 
 /**
  * HistoricoPrecoController implements the CRUD actions for HistoricoPreco model.
@@ -46,6 +48,30 @@ class HistoricoPrecoController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+
+    public function actionDadosGrafico($produto_id)
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $historico = HistoricoPreco::find()
+            ->where(['produto_id' => $produto_id])
+            ->orderBy('dataRegisto')
+            ->all();
+
+        $labels = [];
+        $precos = [];
+
+        foreach ($historico as $h) {
+            $labels[] = date('d/m/Y', strtotime($h->dataRegisto));
+            $precos[] = (float)$h->preco;
+        }
+
+        return [
+            'labels' => $labels,
+            'data' => $precos,
+        ];
+    }
+
 
     /**
      * Displays a single HistoricoPreco model.

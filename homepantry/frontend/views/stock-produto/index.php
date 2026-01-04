@@ -60,7 +60,31 @@ $this->registerJsFile('@web/js/produtos.js', [
 
             <?php foreach ($dataProvider->getModels() as $stock): ?>
                 <div class="col-md-4 mb-4">
-                    <div class="produto-card shadow-sm" style="opacity:0; transform:translateY(20px);">
+                    <?php
+                    $hoje = new DateTime();
+                    $validade = $stock->validade ? new DateTime($stock->validade) : null;
+
+                    $diasParaExpirar = null;
+                    $expirado = false;
+                    $expiraEmBreve = false;
+
+                    if ($validade) {
+                        $diff = $hoje->diff($validade);
+                        $diasParaExpirar = (int)$diff->format('%r%a');
+
+                        if ($diasParaExpirar < 0) {
+                            $expirado = true;
+                        } elseif ($diasParaExpirar <= 7) {
+                            $expiraEmBreve = true;
+                        }
+                    }
+                    ?>
+
+                    <div class="produto-card shadow-sm
+                        <?= $expirado ? 'border border-danger' : '' ?>
+                        <?= $expiraEmBreve ? 'border border-warning' : '' ?>"
+                    >
+
 
                         <!-- 🔽 IMAGEM DO PRODUTO -->
                         <?php if ($stock->produto && $stock->produto->imagem): ?>
@@ -83,6 +107,15 @@ $this->registerJsFile('@web/js/produtos.js', [
                             <h4 class="fw-bold mb-2">
                                 <?= Html::encode($stock->produto->nome) ?>
                             </h4>
+                            <?php if ($expirado): ?>
+                                <span class="badge bg-danger mb-2">
+                                    Expirado
+                                </span>
+                            <?php elseif ($expiraEmBreve): ?>
+                                <span class="badge bg-warning text-dark mb-2">
+                                    Expira em <?= $diasParaExpirar ?> dia<?= $diasParaExpirar === 1 ? '' : 's' ?>
+                                </span>
+                            <?php endif; ?>
 
                             <p class="text-muted mb-3">
                                 <strong>Quantidade:</strong>

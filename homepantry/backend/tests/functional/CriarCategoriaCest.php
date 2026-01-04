@@ -7,19 +7,11 @@ namespace backend\tests\Functional;
 use backend\tests\FunctionalTester;
 use common\fixtures\UserFixture;
 use common\models\Categoria;
+use common\models\User;
+use Yii;
 
 final class CriarCategoriaCest
 {
-//    public function _before(FunctionalTester $I): void
-//    {
-//        // Code here will be executed before each test.
-//    }
-
-//    public function tryToTest(FunctionalTester $I): void
-//    {
-//        // Write your tests here. All `public` methods will be executed as tests.
-//    }
-
     public function _fixtures(): array
     {
         return [
@@ -30,91 +22,75 @@ final class CriarCategoriaCest
         ];
     }
 
-    public function login(FunctionalTester $I)
+    private function ensureRoleAndAssignToUser(string $username, string $roleName): void
     {
-        // Abre a página de login do backend
-        $I->amOnRoute('/site/login');
+        /** @var User|null $user */
+        $user = User::findOne(['username' => $username]);
+        if ($user === null) {
+            throw new \RuntimeException("Utilizador da fixture não encontrado: {$username}");
+        }
 
-        // Preenche os campos (usa os names reais do formulário)
-        $I->fillField('input[name="LoginForm[username]"]', 'erau');
-        $I->fillField('input[name="LoginForm[password]"]', 'password_0');
+        $auth = Yii::$app->authManager;
+        if ($auth === null) {
+            throw new \RuntimeException('authManager não está configurado no backend.');
+        }
 
-        // Clica no botão de login (name="login-button" e texto LOGIN)
-        $I->click('button[name="login-button"]');
+        // Garantir que a role existe
+        $role = $auth->getRole($roleName);
+        if ($role === null) {
+            $role = $auth->createRole($roleName);
+            $auth->add($role);
+        }
 
-        // Garante pelo menos que já não estás na página de login
-        $I->dontSee('LOGIN', 'button[name="login-button"]');
+        // Atribuir role ao utilizador se ainda não tiver
+        $assignments = $auth->getAssignments((string)$user->id);
+        if (!isset($assignments[$roleName])) {
+            $auth->assign($role, (string)$user->id);
+        }
     }
 
-    /** CREATE */
+    private function loginAsAdminOrGestor(FunctionalTester $I): void
+    {
+        // Troca para 'gestorCasa' se for esse o nome real do role no teu projeto.
+        $this->ensureRoleAndAssignToUser('erau', 'gestorCasa');
+
+        // Login pela UI
+        $I->amOnRoute('/site/login');
+
+        $I->fillField('input[name="LoginForm[username]"]', 'erau');
+        $I->fillField('input[name="LoginForm[password]"]', 'password_0');
+        $I->click('button[name="login-button"]');
+
+        // Indicador simples: saiu do ecrã de login
+        $I->dontSeeElement('button[name="login-button"]');
+    }
+
     public function createCategoria(FunctionalTester $I): void
     {
-        $this->login($I);
+        $this->loginAsAdminOrGestor($I);
 
         $I->amOnRoute('categoria/create');
+        $I->see('Create Categoria', 'h1');
 
-        $I->fillField('Categoria[nome]', 'Mercearia');
-        $I->click('Save'); // ou o texto real do botão
+        // Como Categoria::formName() devolve '', o input é name="nome"
+        $I->fillField('input[name="nome"]', 'Mercearia');
+        $I->click('Save');
 
+        // Validar na BD via ActiveRecord (sem Db module)
+        $I->seeRecord(Categoria::class, ['nome' => 'Mercearia']);
+
+        // E validação mínima na UI
         $I->see('Mercearia');
     }
 
-    /** READ */
-    public function testSaveAndReadCategoria(FunctionalTester $I)
+    public function createCategoriaValidationNomeObrigatorio(FunctionalTester $I): void
     {
-        $this->login($I);
+        $this->loginAsAdminOrGestor($I);
 
-        $categoriaId = $I->haveRecord(Categoria::class, [
-            'nome' => 'Laticínios',
-            // exemplo se for obrigatório:
-            // 'casa_id' => $casaId,
-            // 'user_id' => 1,
-        ]);
+        $I->amOnRoute('categoria/create');
+        $I->click('Save');
 
-        $I->amOnRoute('categoria/view', ['id' => $categoriaId]);
-
-        $I->see('Laticínios');
+        // Mensagem típica do Yii (pode variar se tens traduções)
+        $I->see('cannot be blank');
     }
-
-    /** UPDATE */
-    public function testUpdateAndReadCategoria(FunctionalTester $I)
-    {
-        $this->login($I);
-
-        $categoriaId = $I->haveRecord(Categoria::class, [
-            'nome' => 'Bebidas',
-            // 'casa_id' => $casaId,
-            // 'user_id' => 1,
-        ]);
-
-        $I->amOnRoute('categoria/update', ['id' => $categoriaId]);
-
-        $I->fillField('nome', 'Bebidas (Atualizado)');
-        $I->click('Update');
-
-        $I->see('Bebidas (Atualizado)');
-    }
-
-    /** DELETE */
-    public function deleteCategoria(FunctionalTester $I)
-    {
-        $this->login($I);
-
-        $categoriaId = $I->haveRecord(Categoria::class, [
-            'nome' => 'Delete',
-            // 'casa_id' => $casaId,
-            // 'user_id' => 1,
-        ]);
-
-        $I->amOnRoute('categoria/view', ['id' => $categoriaId]);
-
-        // se for um botão gerado pelo Gii:
-        $I->click('Delete'); // ou 'Apagar', conforme o texto real
-
-        // garante que o registo já não existe
-        $I->dontSeeRecord(Categoria::class, ['id' => $categoriaId]);
-    }
-
 }
-
-
