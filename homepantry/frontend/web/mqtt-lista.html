@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Produtos da Lista (Tempo Real)</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background: #f4f4f4;
+        }
+
+        .log {
+            margin-top: 20px;
+            background: #111;
+            color: #0f0;
+            padding: 10px;
+            height: 150px;
+            overflow-y: auto;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Produtos da Lista – Tempo Real (MQTT)</h2>
+
+<p>Eventos recebidos quando a lista é alterada no frontend.</p>
+
+<table id="tabela">
+    <thead>
+    <tr>
+        <th>Ação</th>
+        <th>Lista ID</th>
+        <th>Produto ID</th>
+        <th>Quantidade</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<div class="log" id="log"></div>
+
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
+<script>
+    const log = document.getElementById('log');
+    const tbody = document.querySelector('#tabela tbody');
+
+    // ligar ao Mosquitto via WebSockets
+    const client = mqtt.connect('ws://localhost:9001');
+
+    client.on('connect', () => {
+        logMessage('Ligado ao broker MQTT');
+        client.subscribe('lista/#');
+    });
+
+    client.on('message', (topic, message) => {
+        const data = JSON.parse(message.toString());
+
+        logMessage(`[${topic}] ${message.toString()}`);
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${data.acao}</td>
+            <td>${data.lista_id}</td>
+            <td>${data.produto_id ?? '-'}</td>
+            <td>${data.quantidade ?? '-'}</td>
+        `;
+
+        tbody.prepend(tr);
+    });
+
+    function logMessage(msg) {
+        log.textContent += msg + '\n';
+        log.scrollTop = log.scrollHeight;
+    }
+</script>
+
+</body>
+</html>

@@ -96,4 +96,39 @@ class ListaProdutoController extends Controller
     }
 
 
+    public function actionClear($lista_id)
+    {
+        $lista = Lista::findOne($lista_id);
+        if (!$lista) {
+            throw new \yii\web\NotFoundHttpException('Lista não encontrada.');
+        }
+
+        // Apagar todos os produtos da lista
+        ListaProduto::deleteAll(['lista_id' => $lista_id]);
+
+        // Atualizar total da lista
+        $lista->totalEstimado = 0;
+        $lista->save(false);
+
+        // 🔔 MQTT (opcional mas TOP)
+        $mensagem = json_encode([
+            'acao' => 'clear',
+            'lista_id' => $lista_id,
+            'timestamp' => date('Y-m-d H:i:s')
+        ]);
+
+        exec(
+            '"C:\Program Files\mosquitto\mosquitto_pub.exe" '
+            . '-h localhost '
+            . '-t lista/' . $lista_id . ' '
+            . '-m ' . escapeshellarg($mensagem)
+        );
+
+        Yii::$app->session->setFlash('success', 'Todos os produtos da lista foram apagados.');
+
+        return $this->redirect(['index', 'lista_id' => $lista_id]);
+    }
+
+
+
 }
