@@ -112,7 +112,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <thead>
                         <tr>
                             <th>Nome</th>
-                            <th>Utilizador</th>
                             <th>Total estimado</th>
                             <th>Data</th>
                         </tr>
@@ -128,7 +127,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?php foreach ($listasRecentes as $lista): ?>
                                 <tr>
                                     <td><?= Html::encode($lista->nome) ?></td>
-                                    <td><?= Html::encode($lista->utilizador->nome ?? '—') ?></td>
                                     <td><?= Html::encode($lista->totalEstimado) ?> €</td>
                                     <td><?= Html::encode($lista->dataCriacao) ?></td>
                                 </tr>
