@@ -49,31 +49,43 @@ use yii\helpers\Html;
                         'label' => 'Dashboard',
                         'icon' => 'tachometer-alt',
                         'url' => ['/site/index'],
+                        'visible' => !Yii::$app->user->isGuest,
                     ],
                     [
                         'label' => 'Utilizadores',
                         'icon' => 'users',
                         'url' => ['/user/index'],
+                        'visible' => !Yii::$app->user->isGuest,
                     ],
                     [
                         'label' => 'Casas',
                         'icon' => 'home',
                         'url' => ['/casa/index'],
+                        'visible' => !Yii::$app->user->isGuest,
                     ],
                     [
                         'label' => 'Casas-Utilizadores',
                         'icon' => 'user-friends',
                         'url' => ['/casa-utilizador/index'],
+                        'visible' => !Yii::$app->user->isGuest,
                     ],
                     [
                         'label' => 'Categorias',
                         'icon' => 'tags',
                         'url' => ['/categoria/index'],
+                        'visible' => !Yii::$app->user->isGuest,
                     ],
                     [
                         'label' => 'Locais',
                         'icon' => 'map-marker-alt',
                         'url' => ['/local/index'],
+                        'visible' => !Yii::$app->user->isGuest,
+                    ],
+                    [
+                        'label' => 'Histórico Preços',
+                        'icon' => 'chart-line',
+                        'url' => ['/historico-preco/index'],
+                        'visible' => !Yii::$app->user->isGuest,
                     ],
                 ],
             ]) ?>

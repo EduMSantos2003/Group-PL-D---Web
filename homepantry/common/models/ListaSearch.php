@@ -5,6 +5,8 @@ namespace common\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Lista;
+use Yii;
+
 
 /**
  * ListaSearch represents the model behind the search form of `common\models\Lista`.
@@ -14,12 +16,16 @@ class ListaSearch extends Lista
     /**
      * {@inheritdoc}
      */
+
+    public $globalSearch;
+
     public function rules()
     {
         return [
             [['id', 'utilizador_id'], 'integer'],
             [['nome', 'tipo', 'dataCriacao'], 'safe'],
             [['totalEstimado'], 'number'],
+            [['globalSearch'], 'safe'],
         ];
     }
 
@@ -42,8 +48,8 @@ class ListaSearch extends Lista
      */
     public function search($params, $formName = null)
     {
-        $query = Lista::find();
-
+        $query = Lista::find()
+            ->where(['utilizador_id' => Yii::$app->user->id]);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -65,9 +71,33 @@ class ListaSearch extends Lista
             'totalEstimado' => $this->totalEstimado,
             'dataCriacao' => $this->dataCriacao,
         ]);
+        // 🔍 PESQUISA GLOBAL
+        // 🔍 PESQUISA GLOBAL (texto, número e data)
+        if ($this->globalSearch !== null && $this->globalSearch !== '') {
 
-        $query->andFilterWhere(['like', 'nome', $this->nome])
-            ->andFilterWhere(['like', 'tipo', $this->tipo]);
+            // texto (nome, tipo)
+            $query->orFilterWhere(['like', 'nome', $this->globalSearch])
+                ->orFilterWhere(['like', 'tipo', $this->globalSearch]);
+
+            // número (totalEstimado) - pesquisa parcial
+        if (is_numeric(str_replace(',', '.', $this->globalSearch))) {
+            $valor = str_replace(',', '.', $this->globalSearch);
+
+            $query->orFilterWhere([
+                'like',
+                'CAST(totalEstimado AS CHAR)',
+                $valor
+            ]);
+}
+
+            // data (YYYY-MM-DD ou parte da data)
+            $query->orFilterWhere([
+                'like',
+                'DATE(dataCriacao)',
+                $this->globalSearch
+            ]);
+        }
+
 
         return $dataProvider;
     }

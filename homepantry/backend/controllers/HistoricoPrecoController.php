@@ -7,6 +7,10 @@ use common\models\HistoricoPrecoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
+use yii\filters\AccessControl;
+use yii\web\ForbiddenHttpException;
+
 
 /**
  * HistoricoPrecoController implements the CRUD actions for HistoricoPreco model.
@@ -21,8 +25,23 @@ class HistoricoPrecoController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['manageCasas'],
+                        ],
+                    ],
+                    'denyCallback' => function () {
+                        if (Yii::$app->user->isGuest) {
+                            return Yii::$app->response->redirect(['/site/login']);
+                        }
+                        throw new ForbiddenHttpException('Não tem permissão para gerir casas.');
+                    },
+                ],
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -46,6 +65,30 @@ class HistoricoPrecoController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+
+    public function actionDadosGrafico($produto_id)
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $historico = HistoricoPreco::find()
+            ->where(['produto_id' => $produto_id])
+            ->orderBy('dataRegisto')
+            ->all();
+
+        $labels = [];
+        $precos = [];
+
+        foreach ($historico as $h) {
+            $labels[] = date('d/m/Y', strtotime($h->dataRegisto));
+            $precos[] = (float)$h->preco;
+        }
+
+        return [
+            'labels' => $labels,
+            'data' => $precos,
+        ];
+    }
+
 
     /**
      * Displays a single HistoricoPreco model.

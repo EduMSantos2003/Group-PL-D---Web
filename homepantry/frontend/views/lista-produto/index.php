@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $lista->nome;
 
 <div class="lista-produto-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1></h1>
 
     <p>
         <?= Html::a(
@@ -52,5 +52,54 @@ $this->params['breadcrumbs'][] = $lista->nome;
             ],
         ],
     ]); ?>
+
+    <?php
+    $listaId = Yii::$app->request->get('lista_id');
+    ?>
+
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
+    <script>
+        const listaId = <?= (int)$listaId ?>;
+
+        // liga ao broker por WebSocket
+        const client = mqtt.connect('ws://localhost:9001');
+
+        client.on('connect', () => {
+            console.log('Ligado ao broker MQTT');
+            client.subscribe('lista/' + listaId);
+        });
+
+        client.on('message', (topic, message) => {
+            const data = JSON.parse(message.toString());
+
+            // mensagem visível ao utilizador
+            const alerta = document.createElement('div');
+            alerta.className = 'alert alert-warning';
+            alerta.innerHTML =
+                '⚠️ A lista foi alterada (' + data.acao + ')<br>' +
+                'Produto ID: ' + (data.produto_id ?? '-') +
+                ' | Quantidade: ' + (data.quantidade ?? '-');
+
+            document.querySelector('.container').prepend(alerta);
+
+            // opcional: remover após 5s
+            setTimeout(() => alerta.remove(), 5000);
+        });
+
+    </script>
+    <?= \yii\helpers\Html::a(
+        'Apagar todos os produtos',
+        ['lista-produto/clear', 'lista_id' => $lista->id],
+        [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => 'Tem a certeza que quer apagar TODOS os produtos desta lista?',
+                'method' => 'post',
+            ],
+        ]
+    ) ?>
+
+
 
 </div>

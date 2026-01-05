@@ -4,6 +4,8 @@ namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use Yii;
+use common\models\CasaUtilizador;
 
 class StockProdutoSearch extends StockProduto
 {
@@ -32,6 +34,15 @@ class StockProdutoSearch extends StockProduto
 
         // Ordenar por data de criação (opcional)
         $query->orderBy(['dataCriacao' => SORT_DESC]);
+
+        // 🔒 FILTRO POR CASA DO UTILIZADOR
+        $userId = Yii::$app->user->id;
+
+        $casasIds = CasaUtilizador::find()
+            ->select('casa_id')
+            ->where(['utilizador_id' => $userId]);
+
+        $query->andWhere(['locais.casa_id' => $casasIds]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

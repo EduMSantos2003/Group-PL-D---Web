@@ -56,7 +56,6 @@ AppAsset::register($this);
                             <?= Html::encode(Yii::$app->user->identity->username) ?>
                         </a>
                         <div class="dropdown-menu m-0">
-                            <?= Html::a('Perfil', ['#'], ['class' => 'dropdown-item']) ?>
                             <?= Html::beginForm(['/site/logout'], 'post')
                             . Html::submitButton('Logout', ['class' => 'dropdown-item text-start'])
                             . Html::endForm(); ?>
@@ -69,30 +68,6 @@ AppAsset::register($this);
             <!-- ICONES LADO DIREITO -->
             <div class="d-none d-lg-flex ms-2 align-items-center">
 
-                <?php if (!Yii::$app->user->isGuest): ?>
-                    <!-- LUPA (toggle) -->
-                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="#" id="searchToggle" aria-label="Abrir pesquisa">
-                        <small class="fa fa-search text-body"></small>
-                    </a>
-                <!-- FORM PESQUISA (escondido) -->
-                    <form
-                            id="searchForm"
-                            class="d-none align-items-center ms-2"
-                            action="<?= Url::to(['/search/index']) ?>"
-                            method="get"
-                    >
-                        <input
-                            type="search"
-                            name="q"
-                            class="form-control form-control-sm"
-                            placeholder="Pesquisar..."
-                            aria-label="Pesquisar"
-                            style="width: 180px;"
-                            value="<?= Html::encode(Yii::$app->request->get('q', '')) ?>"
-                        >
-                    </form>
-                <?php endif; ?>
-
                 <!-- User icon = LOGIN quando guest / PERFIL (ou outra rota) quando autenticado -->
                 <?php if (Yii::$app->user->isGuest): ?>
                     <a class="btn-sm-square bg-white rounded-circle ms-3" href="<?= Url::to(['/site/login']) ?>">
@@ -101,13 +76,6 @@ AppAsset::register($this);
                 <?php else: ?>
                     <a class="btn-sm-square bg-white rounded-circle ms-3" href="#">
                         <small class="fa fa-user text-body"></small>
-                    </a>
-                <?php endif; ?>
-
-                <?php if (!Yii::$app->user->isGuest): ?>
-                    <!-- Carrinho / saco -->
-                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="#">
-                        <small class="fa fa-shopping-bag text-body"></small>
                     </a>
                 <?php endif; ?>
             </div>
@@ -227,8 +195,8 @@ AppAsset::register($this);
                 <a class="btn btn-link text-start text-black-50 d-block" href="<?= Url::to(['/produto/index']) ?>">
                     <i class="fa fa-arrow-right me-2 text-primary"></i> Produtos
                 </a>
-                <a class="btn btn-link text-start text-black-50 d-block" href="<?= Url::to(['/local/index']) ?>">
-                    <i class="fa fa-arrow-right me-2 text-primary"></i> Locais
+                <a class="btn btn-link text-start text-black-50 d-block" href="<?= Url::to(['/stock-produto/index']) ?>">
+                    <i class="fa fa-arrow-right me-2 text-primary"></i> Stock
                 </a>
                 <a class="btn btn-link text-start text-black-50 d-block" href="#">
                     <i class="fa fa-arrow-right me-2 text-primary"></i> Ajuda

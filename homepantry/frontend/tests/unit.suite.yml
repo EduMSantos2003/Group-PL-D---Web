@@ -11,7 +11,7 @@ actor: UnitTester
 modules:
   enabled:
     - Db:
-        dsn: 'mysql:host=localhost;dbname=mytestDatabase'
+        dsn: 'mysql:host=localhost;dbname=mytestdatabase'
         user: 'root'
         password: ''
     - Yii2:

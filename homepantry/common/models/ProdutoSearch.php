@@ -14,12 +14,16 @@ class ProdutoSearch extends Produto
     /**
      * {@inheritdoc}
      */
+
+    public $globalSearch;
+
     public function rules()
     {
         return [
             [['id', 'categoria_id', 'unidade'], 'integer'],
             [['nome', 'descricao', 'validade', 'imagem'], 'safe'],
             [['preco'], 'number'],
+            [['globalSearch'], 'safe'],
         ];
     }
 
@@ -44,8 +48,6 @@ class ProdutoSearch extends Produto
     {
         $query = Produto::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -53,24 +55,35 @@ class ProdutoSearch extends Produto
         $this->load($params, $formName);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'categoria_id' => $this->categoria_id,
-            'unidade' => $this->unidade,
-            'preco' => $this->preco,
-            'validade' => $this->validade,
-        ]);
+        // 🔍 PESQUISA GLOBAL (texto, número e data)
+        if ($this->globalSearch !== null && $this->globalSearch !== '') {
 
-        $query->andFilterWhere(['like', 'nome', $this->nome])
-            ->andFilterWhere(['like', 'descricao', $this->descricao])
-            ->andFilterWhere(['like', 'imagem', $this->imagem]);
+            // texto
+            $query->orFilterWhere(['like', 'nome', $this->globalSearch])
+                ->orFilterWhere(['like', 'descricao', $this->globalSearch]);
+
+            // número (preço) - flexível
+            $valor = str_replace(',', '.', $this->globalSearch);
+            if (is_numeric($valor)) {
+                $query->orFilterWhere([
+                    'like',
+                    'CAST(preco AS CHAR)',
+                    $valor
+                ]);
+            }
+
+            // data (validade)
+            $query->orFilterWhere([
+                'like',
+                'validade',
+                $this->globalSearch
+            ]);
+        }
 
         return $dataProvider;
     }
+
 }

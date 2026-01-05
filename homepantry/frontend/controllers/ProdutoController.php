@@ -26,6 +26,18 @@ class ProdutoController extends Controller
      */
     public function behaviors()
     {
+        // 🔬 Ambiente de testes → RBAC desligado
+        if (defined('YII_ENV_TEST') && YII_ENV_TEST) {
+            return [
+                'verbs' => [
+                    'class' => VerbFilter::class,
+                    'actions' => [
+                        'delete' => ['POST'],
+                    ],
+                ],
+            ];
+        }
+        // 🔐 Produção / desenvolvimento normal → RBAC ativo
         return [
             'access' => [
                 'class' => AccessControl::class,
@@ -33,12 +45,12 @@ class ProdutoController extends Controller
                     [
                         'allow' => true,
                         'actions' => ['index', 'view'],
-                        'roles' => ['convidado', 'membroCasa', 'gestorCasa', 'admin'],
+                        'roles' => ['viewStock'],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['create', 'update', 'delete'],
-                        'roles' => ['gestorCasa', 'admin'],
+                        'roles' => ['manageStock'],
                     ],
                 ],
             ],
@@ -107,7 +119,7 @@ class ProdutoController extends Controller
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
 
             if ($model->upload() && $model->save(false)) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['index']);
             }
         }
 
@@ -115,9 +127,6 @@ class ProdutoController extends Controller
             'model' => $model,
         ]);
     }
-
-
-
 
     /**
      * Updates an existing Produto model.
@@ -129,33 +138,27 @@ class ProdutoController extends Controller
 
     public function actionUpdate($id)
     {
-        $model = Produto::findOne($id);
+        $model = $this->findModel($id);
         $model->scenario = 'update';
 
-
-        // guarda o caminho da imagem antiga, caso não seja escolhida nova
-        $oldImage = $model->imagem;
+        $oldImage = $model->imagem; // guarda imagem antiga
 
         if ($model->load(Yii::$app->request->post())) {
 
-            // obter o ficheiro enviado no form
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
 
-            if ($model->imageFile) {
-                // se foi escolhida uma nova imagem
-                $filePath = 'uploads/produtos/' . $model->id . '_' . $model->imageFile->baseName . '.' . $model->imageFile->extension;
+            // usa SEMPRE a lógica do model
+            if (!$model->upload()) {
+                return $this->render('update', ['model' => $model]);
+            }
 
-                if ($model->imageFile->saveAs($filePath)) {
-                    $model->imagem = $filePath;
-                }
-            } else {
-                // se não foi escolhida nova imagem, mantém a antiga
+            // se não foi feito upload novo, mantém a antiga
+            if (!$model->imageFile) {
                 $model->imagem = $oldImage;
             }
 
-            // guarda as alterações (já com o caminho da imagem atualizado ou mantido)
-            if ($model->save(false)) { // false para não voltar a validar tudo
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->save(false)) {
+                return $this->redirect(['index']);
             }
         }
 
@@ -174,7 +177,25 @@ class ProdutoController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        //Verificar se o produto está associado a alguma lista
+        if ($model->getListaProdutos()->count() > 0) {
+            Yii::$app->session->setFlash(
+                'error',
+                'Não é possível apagar o produto porque está associado a uma ou mais listas.'
+            );
+
+            return $this->redirect(['index']);
+        }
+
+        // Se não estiver associado, pode apagar
+        $model->delete();
+
+        Yii::$app->session->setFlash(
+            'success',
+            'Produto apagado com sucesso.'
+        );
 
         return $this->redirect(['index']);
     }

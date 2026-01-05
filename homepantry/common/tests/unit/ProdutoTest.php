@@ -7,31 +7,29 @@ use common\tests\UnitTester;
 
 class ProdutoTest extends \Codeception\Test\Unit
 {
-    // Strings para testar limites de tamanho
-    private const STRING_PEQUENA = 'ABCDE';
-    private const STRING_300 =
-        'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' .
-        'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' .
-        'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+    // IDs válidos (têm de existir na BD de teste)
+    private const CATEGORIA_VALIDA = 1;
 
-    // Valores numéricos usados nos testes
-    private const CATEGORIA_VALIDA = 1;   // tem de existir Categoria com id=1 na BD de teste
+    // Valores válidos
+    private const NOME_VALIDO      = 'Arroz';
+    private const DESCRICAO_VALIDA = 'Arroz agulha';
     private const UNIDADE_VALIDA   = 1;
-    private const PRECO_VALIDO     = 2.50;
+    private const PRECO_VALIDO     = 1.99;
+    private const VALIDADE_PT      = '31/12/2025'; // formato dd/mm/yyyy
+
+    // Valores inválidos
+    private const STRING_PEQUENA = 'ABCDE';
+    private const STRING_300     = 'A'; // depois usamos str_repeat
+    private const PRECO_NEGATIVO = -5.0;
 
     protected UnitTester $tester;
 
-    protected function _before()
-    {
-        // opcional: $this->createValidProduto(true);
-    }
-
-    // 1) Testes de validação das rules() do Produto
+    // 1) Testes de validação das rules() de Produto
     public function testValidations()
     {
         $produto = new Produto();
 
-        // 1.1) Todos obrigatórios a null → falham
+        // 1.1) Campos obrigatórios a null → falham required
         $produto->categoria_id = null;
         $produto->nome         = null;
         $produto->descricao    = null;
@@ -42,7 +40,8 @@ class ProdutoTest extends \Codeception\Test\Unit
         $this->assertFalse($produto->validate(['categoria_id']));
         $this->assertFalse($produto->validate(['nome']));
         $this->assertFalse($produto->validate(['descricao']));
-        $this->assertFalse($produto->validate(['unidade']));
+        // unidade NÃO é required → deve ser válida mesmo a null
+        $this->assertTrue($produto->validate(['unidade']));
         $this->assertFalse($produto->validate(['preco']));
         $this->assertFalse($produto->validate(['validade']));
 
@@ -55,25 +54,37 @@ class ProdutoTest extends \Codeception\Test\Unit
         $this->assertFalse($produto->validate(['unidade']));
         $this->assertFalse($produto->validate(['preco']));
 
-        // 1.3) Strings demasiado grandes para nome/descricao (max 255)
-        $produto->nome      = self::STRING_300;
-        $produto->descricao = self::STRING_300;
+        // 1.3) Strings demasiado longas para nome/descricao/imagem
+        $produto->nome      = str_repeat('A', 256);
+        $produto->descricao = str_repeat('B', 256);
+        $produto->imagem    = str_repeat('C', 256);
 
         $this->assertFalse($produto->validate(['nome']));
         $this->assertFalse($produto->validate(['descricao']));
+        $this->assertFalse($produto->validate(['imagem']));
 
-        // 1.4) categoria_id inteiro mas sem Categoria correspondente → falha exist
-        $produto->categoria_id = 999999; // id que não existe
-        $produto->nome         = 'Leite';
-        $produto->descricao    = 'Leite meio-gordo';
+        // 1.4) categoria_id inexistente → falha exist
+        $produto->categoria_id = 999999;
+        $produto->nome         = self::NOME_VALIDO;
+        $produto->descricao    = self::DESCRICAO_VALIDA;
         $produto->unidade      = self::UNIDADE_VALIDA;
         $produto->preco        = self::PRECO_VALIDO;
-        $produto->validade     = '2025-12-31';
+        $produto->validade     = self::VALIDADE_PT;
 
         $this->assertFalse($produto->validate(['categoria_id']));
 
-        // 1.5) Valores totalmente válidos (pressupõe Categoria com id = 1)
+        // 1.5) Valores totalmente válidos (pressupõe Categoria id=1)
         $produto->categoria_id = self::CATEGORIA_VALIDA;
+        $produto->nome         = self::NOME_VALIDO;
+        $produto->descricao    = self::DESCRICAO_VALIDA;
+        $produto->unidade      = self::UNIDADE_VALIDA;
+        $produto->preco        = self::PRECO_VALIDO;
+        $produto->validade     = self::VALIDADE_PT;
+
+        if (!$produto->validate()) {
+            var_dump($produto->getErrors());
+        }
+
         $this->assertTrue($produto->validate(['categoria_id']));
         $this->assertTrue($produto->validate(['nome']));
         $this->assertTrue($produto->validate(['descricao']));
@@ -81,81 +92,109 @@ class ProdutoTest extends \Codeception\Test\Unit
         $this->assertTrue($produto->validate(['preco']));
         $this->assertTrue($produto->validate(['validade']));
 
-        // 1.6) imageFile opcional → sem ficheiro continua válido
+        // 1.6) imageFile é opcional → válido mesmo sem ficheiro
         $this->assertTrue($produto->validate(['imageFile']));
     }
 
-    // 2) Guardar e ler um produto válido
+    // 2) Guardar e ler um Produto válido (inclui teste ao beforeSave)
     public function testSaveAndRead()
     {
-        $produto = $this->createValidProduto(false);
-        $produto->nome = 'Leite gordo';
+        $produto = $this->createValidProduto(true);
 
-        $result = $produto->save();
-        $this->assertTrue($result);
+        $ProdutoReadFromDatabase = Produto::find()
+            ->where(['id' => $produto->id])
+            ->one();
 
-        $produtoReadFromDatabase = Produto::find()->where(['id' => $produto->id])->one();
-        $this->assertNotNull($produtoReadFromDatabase);
-        $this->assertEquals('Leite gordo', $produtoReadFromDatabase->nome);
+        $this->assertNotNull($ProdutoReadFromDatabase);
+
+        // Verificar se os campos simples foram persistidos
+        $this->assertEquals(self::CATEGORIA_VALIDA, $ProdutoReadFromDatabase->categoria_id);
+        $this->assertEquals(self::NOME_VALIDO, $ProdutoReadFromDatabase->nome);
+        $this->assertEquals(self::DESCRICAO_VALIDA, $ProdutoReadFromDatabase->descricao);
+        $this->assertEquals(self::UNIDADE_VALIDA, $ProdutoReadFromDatabase->unidade);
+        $this->assertEquals(self::PRECO_VALIDO, $ProdutoReadFromDatabase->preco);
+
+        // beforeSave: validade normalizada para Y-m-d
+        $this->assertEquals('2025-12-31', $ProdutoReadFromDatabase->validade);
     }
 
-    // 3) Tentar guardar com nome inválido (demasiado grande)
-    public function testSaveInvalidName()
+    // 3) Tentar guardar com preco inválido (string) → falha save
+    public function testSaveInvalidPreco()
     {
-        $produto = $this->createValidProduto(false);
-        $produto->nome = self::STRING_300; // inválido pelo max
+        $produto = new Produto();
+        $produto->categoria_id = self::CATEGORIA_VALIDA;
+        $produto->nome         = self::NOME_VALIDO;
+        $produto->descricao    = self::DESCRICAO_VALIDA;
+        $produto->unidade      = self::UNIDADE_VALIDA;
+        $produto->preco        = self::STRING_PEQUENA; // inválido
+        $produto->validade     = self::VALIDADE_PT;
 
-        $result = $produto->save();
-        $this->assertFalse($result);
+        $this->assertFalse($produto->save());
     }
 
-    // 4) Atualizar e ler o produto
+    // 4) Atualizar e ler Produto (inclui teste preco negativo → 0)
     public function testUpdateAndRead()
     {
         $produto = $this->createValidProduto(true);
 
-        // Ler da BD o produto acabado de criar
-        $produtoReadFromDatabase = Produto::find()->where(['id' => $produto->id])->one();
-        $this->assertNotNull($produtoReadFromDatabase, 'Nao foi encontrado produto na BD');
-        $this->assertEquals('Arroz', $produtoReadFromDatabase->nome, 'O nome inicial do produto é diferente');
+        $ProdutoReadFromDatabase = Produto::findOne($produto->id);
+        $this->assertNotNull($ProdutoReadFromDatabase);
 
-        // Atualizar o nome
-        $produtoReadFromDatabase->nome = 'Massa';
-        $produtoReadFromDatabase->save();
+        // Quantidade de alterações: mudar preco para negativo e nome
+        $ProdutoReadFromDatabase->preco = self::PRECO_NEGATIVO;
+        $ProdutoReadFromDatabase->nome  = 'Arroz integral';
 
-        // Voltar a ler e confirmar o update
-        $produtoReadFromDatabase2 = Produto::find()->where(['id' => $produto->id])->one();
-        $this->assertEquals('Massa', $produtoReadFromDatabase2->nome, 'O nome do produto após update é diferente');
+        if (!$ProdutoReadFromDatabase->validate()) {
+            var_dump($ProdutoReadFromDatabase->getErrors());
+        }
+
+        $this->assertTrue($ProdutoReadFromDatabase->save());
+
+        $ProdutoReadFromDatabase2 = Produto::findOne($produto->id);
+
+        // beforeSave: preco negativo deve ser guardado como 0
+        $this->assertEquals(0.0, $ProdutoReadFromDatabase2->preco);
+        $this->assertEquals('Arroz integral', $ProdutoReadFromDatabase2->nome);
     }
 
-    // 5) Apagar um produto
+    // 5) Apagar um Produto
     public function testDelete()
     {
         $produto = $this->createValidProduto(true);
 
-        $produtoReadFromDatabase = Produto::find()->where(['id' => $produto->id])->one();
-        $this->assertNotNull($produtoReadFromDatabase);
+        $ProdutoReadFromDatabase = Produto::findOne($produto->id);
+        $this->assertNotNull($ProdutoReadFromDatabase);
 
-        $produtoReadFromDatabase->delete();
+        // Apagar históricos associados (para respeitar a FK RESTRICT)
+        foreach ($ProdutoReadFromDatabase->historicoPrecos as $hist) {
+            $hist->delete();
+        }
 
-        $produtoReadFromDatabase2 = Produto::find()->where(['id' => $produto->id])->one();
-        $this->assertNull($produtoReadFromDatabase2);
+        $ProdutoReadFromDatabase->delete();
+
+        $ProdutoReadFromDatabase2 = Produto::findOne($produto->id);
+        $this->assertNull($ProdutoReadFromDatabase2);
     }
 
-    // Helper para criar um produto válido de acordo com as rules()
+    // Helper para criar um Produto válido
     private function createValidProduto(bool $save = false): Produto
     {
         $produto = new Produto();
-        $produto->categoria_id = self::CATEGORIA_VALIDA;  // tem de existir Categoria com id=1 na BD de teste
-        $produto->nome         = 'Arroz';
-        $produto->descricao    = 'Arroz agulha';
+        $produto->categoria_id = self::CATEGORIA_VALIDA;
+        $produto->nome         = self::NOME_VALIDO;
+        $produto->descricao    = self::DESCRICAO_VALIDA;
         $produto->unidade      = self::UNIDADE_VALIDA;
         $produto->preco        = self::PRECO_VALIDO;
-        $produto->validade     = '2025-12-31';
+        $produto->validade     = self::VALIDADE_PT;
+
+        if (!$produto->validate()) {
+            var_dump($produto->getErrors());
+        }
 
         if ($save) {
-            $produto->save();
+            $this->assertTrue($produto->save());
         }
+
         return $produto;
     }
 }

@@ -27,8 +27,6 @@ return [
             ],
         ],
 
-
-
         'denyCallback' => function ($rule, $action) {
             if (\Yii::$app->user->isGuest) {
                 // não autenticado → vai para login
@@ -46,9 +44,17 @@ return [
         ],
     ],
     'components' => [
+        // IMPORTANTE: permite POST/PUT/PATCH JSON na API
+        'request' => [
+            'csrfParam' => '_csrf-backend',
+            'parsers' => [
+                'application/json' => \yii\web\JsonParser::class,
+            ],
+        ],
 
         'urlManager' => [
-            'enablePrettyUrl' => false  ,
+
+            'enablePrettyUrl' => false,
             'showScriptName' => false,
 
             'rules' => [
@@ -81,10 +87,8 @@ return [
                     'pluralize' => false,
                 ],
 
-
-                // 🔹 LOCAL (DETAIL CRUD)
-                // 🔥 API REST
-
+                //  LOCAL (DETAIL CRUD)
+                // API REST
 
                 // PRODUTO (3.º CRUD)
                 [
@@ -125,13 +129,10 @@ return [
                     'pluralize' => false,
                 ],
 
-
             ],
         ],
 
-        'request' => [
-            'csrfParam' => '_csrf-backend',
-        ],
+
 
         'user' => [
             'identityClass' => 'common\models\User',

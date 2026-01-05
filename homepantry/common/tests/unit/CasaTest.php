@@ -6,10 +6,9 @@ use common\tests\UnitTester;
 
 class CasaTest extends \Codeception\Test\Unit
 {
-
     private const STRING = 'ABCDE';
     private const DATETIME = '2025-12-31 23:59:59';
-    private const INTEGER  = 2;
+//    private const INTEGER  = 2;
 
     protected UnitTester $tester;
 
@@ -39,7 +38,7 @@ class CasaTest extends \Codeception\Test\Unit
 
         $casa->nome = self::STRING;
         $casa->dataCriacao = self::DATETIME;
-        $casa->utilizadorPrincipal_id = self::INTEGER;
+        $casa->utilizadorPrincipal_id = 1;
 
         $this->assertTrue($casa -> validate(['nome']));
         $this->assertTrue($casa -> validate(['dataCriacao']));
@@ -98,7 +97,7 @@ class CasaTest extends \Codeception\Test\Unit
     {
         $casa = new Casa();
         $casa->nome = 'casaSerrana';
-        $casa->utilizadorPrincipal_id = 2; // precisa existir user 1
+        $casa->utilizadorPrincipal_id = 1; // precisa existir user 1
 
         if ($save) {
             $this->assertTrue($casa->save());
