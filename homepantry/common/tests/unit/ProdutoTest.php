@@ -40,7 +40,8 @@ class ProdutoTest extends \Codeception\Test\Unit
         $this->assertFalse($produto->validate(['categoria_id']));
         $this->assertFalse($produto->validate(['nome']));
         $this->assertFalse($produto->validate(['descricao']));
-        $this->assertFalse($produto->validate(['unidade']));
+        // unidade NÃO é required → deve ser válida mesmo a null
+        $this->assertTrue($produto->validate(['unidade']));
         $this->assertFalse($produto->validate(['preco']));
         $this->assertFalse($produto->validate(['validade']));
 
@@ -163,6 +164,11 @@ class ProdutoTest extends \Codeception\Test\Unit
 
         $ProdutoReadFromDatabase = Produto::findOne($produto->id);
         $this->assertNotNull($ProdutoReadFromDatabase);
+
+        // Apagar históricos associados (para respeitar a FK RESTRICT)
+        foreach ($ProdutoReadFromDatabase->historicoPrecos as $hist) {
+            $hist->delete();
+        }
 
         $ProdutoReadFromDatabase->delete();
 
