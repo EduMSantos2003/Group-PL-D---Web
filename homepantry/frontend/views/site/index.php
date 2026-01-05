@@ -326,7 +326,7 @@ $this->title = 'HomePantry';
                     <?= Html::a('Criar Conta', ['/site/signup'], ['class' => 'btn btn-lg btn-secondary rounded-pill py-3 px-5 me-2 mb-2']) ?>
                     <?= Html::a('Já tenho conta', ['/site/login'], ['class' => 'btn btn-lg btn-outline-light rounded-pill py-3 px-5 mb-2']) ?>
                 <?php else: ?>
-                    <?= Html::a('Criar Nova Conta', ['/site/signup'], ['class' => 'btn btn-lg btn-secondary rounded-pill py-3 px-5']) ?>
+                    <?= Html::a('Gere os teus Produtos', ['/produto/index'], ['class' => 'btn btn-lg btn-secondary rounded-pill py-3 px-5']) ?>
                 <?php endif; ?>
             </div>
         </div>

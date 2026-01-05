@@ -74,9 +74,7 @@ AppAsset::register($this);
                         <small class="fa fa-user text-body"></small>
                     </a>
                 <?php else: ?>
-                    <a class="btn-sm-square bg-white rounded-circle ms-3" href="#">
-                        <small class="fa fa-user text-body"></small>
-                    </a>
+
                 <?php endif; ?>
             </div>
         </div>
