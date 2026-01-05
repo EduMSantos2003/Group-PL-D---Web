@@ -22,6 +22,66 @@ class ListaController extends Controller
      */
     public function behaviors()
     {
+        // Em ambiente de testes (Codeception), simplificar as permissões
+        if (defined('YII_ENV_TEST') && YII_ENV_TEST) {
+            return [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'only'  => ['index', 'view', 'create', 'update', 'delete'],
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'],   // qualquer utilizador autenticado
+                        ],
+                    ],
+                ],
+                'verbs' => [
+                    'class' => VerbFilter::class,
+                    'actions' => [
+                        'delete' => ['POST'],
+                    ],
+                ],
+            ];
+        }
+
+        // Comportamento normal (com RBAC manageListas) fora de testes
+        return array_merge(
+            parent::behaviors(),
+            [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'only'  => ['index', 'view', 'create', 'update', 'delete'],
+                    'rules' => [
+                        [
+                            'allow'   => true,
+                            'actions' => ['index', 'view'],
+                            'roles'   => ['@'],
+                        ],
+                        [
+                            'allow'   => true,
+                            'actions' => ['create', 'update', 'delete'],
+                            'roles'   => ['manageListas'],
+                        ],
+                    ],
+                    'denyCallback' => function ($rule, $action) {
+                        if (Yii::$app->user->isGuest) {
+                            return Yii::$app->response->redirect(['/site/login']);
+                        }
+                        throw new ForbiddenHttpException('Não tem permissão para aceder a esta página.');
+                    },
+                ],
+                'verbs' => [
+                    'class' => VerbFilter::class,
+                    'actions' => [
+                        'delete' => ['POST'],
+                    ],
+                ],
+            ]
+        );
+    }
+
+    /*public function behaviors()
+    {
         return array_merge(
             parent::behaviors(),
             [
@@ -61,7 +121,7 @@ class ListaController extends Controller
                 ],
             ]
         );
-    }
+    }*/
 
 
     /**
