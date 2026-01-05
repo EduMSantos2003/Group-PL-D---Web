@@ -93,4 +93,31 @@ final class CriarCategoriaCest
         // Mensagem típica do Yii (pode variar se tens traduções)
         $I->see('cannot be blank');
     }
+
+    public function updateCategoria(FunctionalTester $I): void
+    {
+        $this->loginAsAdminOrGestor($I);
+
+        // 1) Criar uma categoria inicial diretamente na BD
+        $categoriaId = $I->haveRecord(Categoria::class, [
+            'nome' => 'Categoria Original',
+        ]);
+
+        // 2) Ir à página de update dessa categoria
+        $I->amOnRoute('categoria/update', ['id' => $categoriaId]);
+        $I->see('Update Categoria', 'h1');
+
+        // 3) Alterar o nome e gravar
+        $I->fillField('input[name="nome"]', 'Categoria Atualizada');
+        $I->click('Save');
+
+        // 4) Verificar na BD
+        $I->seeRecord(Categoria::class, [
+            'id'   => $categoriaId,
+            'nome' => 'Categoria Atualizada',
+        ]);
+
+        // 5) Verificar na UI (por ex. na index/view)
+        $I->see('Categoria Atualizada');
+    }
 }

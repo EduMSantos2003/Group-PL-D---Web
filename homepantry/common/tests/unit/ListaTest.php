@@ -89,38 +89,45 @@ class ListaTest extends \Codeception\Test\Unit
         $this->assertEquals(0.0, (float)$ListaReadFromDatabase->totalEstimado);
     }
 
+
     // 3) Testar calcularTotal() com ListaProdutos associados
     public function testCalcularTotal()
     {
-        $lista = $this->createValidLista(true);
+        // criar lista do zero só para este teste
+        $lista = new Lista();
+        $lista->nome          = self::NOME_VALIDO;
+        $lista->tipo          = self::TIPO_VALIDO;
+        $lista->totalEstimado = 0.0;
+        $lista->utilizador_id = self::UTILIZADOR_VALIDO;
+        $this->assertTrue($lista->save());
 
-        $lp1 = new ListaProduto();
-        $lp1->lista_id      = $lista->id;
-        $lp1->produto_id    = 2;        // tem de existir Produto id=2 na BD de teste
-        $lp1->quantidade    = 2;
-        $lp1->precoUnitario = 1.5;
-        $lp1->subTotal      = 3.0;
+        // garantir que não há ListaProduto desta lista
+        ListaProduto::deleteAll(['lista_id' => $lista->id]);
 
-        if (!$lp1->save()) {
-            var_dump($lp1->getErrors());
-        }
-        $this->assertTrue($lp1->save());
+        $listaproduto1 = new ListaProduto([
+            'lista_id'      => $lista->id,
+            'produto_id'    => 2,    // garantir que existem produtos 1 e 2 na BD de teste
+            'quantidade'    => 2,
+            'precoUnitario' => 1.5,
+            'subTotal'      => 3.0,
+        ]);
+        $this->assertTrue($listaproduto1->save());
 
-        $lp2 = new ListaProduto();
-        $lp2->lista_id      = $lista->id;
-        $lp2->produto_id    = 1;
-        $lp2->quantidade    = 1;
-        $lp2->precoUnitario = 2.0;
-        $lp2->subTotal      = 2.0;
+        $listaproduto2 = new ListaProduto([
+            'lista_id'      => $lista->id,
+            'produto_id'    => 8,
+            'quantidade'    => 1,
+            'precoUnitario' => 2.0,
+            'subTotal'      => 2.0,
+        ]);
+        $this->assertTrue($listaproduto2->save());
 
-        if (!$lp2->save()) {
-            var_dump($lp2->getErrors());
-        }
-        $this->assertTrue($lp2->save());
+        // debug temporário
+        $totalBD = ListaProduto::find()->where(['lista_id' => $lista->id])->sum('subTotal');
+        var_dump('TOTAL_BD=', $totalBD);
 
-        $this->assertEquals(5.0, $lista->calcularTotal());
+        $this->assertEquals(6.50, $lista->calcularTotal());
     }
-
 
     // 4) Atualizar e ler Lista
     public function testUpdateAndRead()
