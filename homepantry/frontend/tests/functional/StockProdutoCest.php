@@ -6,6 +6,8 @@ namespace frontend\tests\functional;
 
 use frontend\tests\FunctionalTester;
 use common\fixtures\UserFixture;
+use common\models\Produto;
+use common\models\Categoria;
 
 final class CriarProdutoCest
 {
@@ -22,11 +24,9 @@ final class CriarProdutoCest
     private function login(FunctionalTester $I): void
     {
         $I->amOnRoute('/site/login');
-
         $I->fillField('#loginform-username', 'erau');
         $I->fillField('#loginform-password', 'password_0');
         $I->click('button[name="login-button"]');
-
         $I->dontSee('LOGIN');
     }
 
@@ -34,7 +34,7 @@ final class CriarProdutoCest
     {
         $this->login($I);
 
-        $categoriaId = $I->haveRecord(\common\models\Categoria::class, [
+        $categoriaId = $I->haveRecord(Categoria::class, [
             'nome' => 'Categoria Teste',
         ]);
 
@@ -46,11 +46,11 @@ final class CriarProdutoCest
         $I->fillField('input[name="preco"]', '1.99');
         $I->fillField('input[name="validade"]', '20/01/2026');
 
-        // ⚠NÃO testar upload em funcional
+        $I->attachFile('input[type="file"][name="imageFile"]', 'teste.jpg');
+
         $I->click('Guardar');
 
-        // verifica diretamente na BD
-        $I->seeRecord(\common\models\Produto::class, [
+        $I->seeRecord(Produto::class, [
             'nome' => 'Arroz Agulha',
         ]);
     }
@@ -59,11 +59,11 @@ final class CriarProdutoCest
     {
         $this->login($I);
 
-        $categoriaId = $I->haveRecord(\common\models\Categoria::class, [
+        $categoriaId = $I->haveRecord(Categoria::class, [
             'nome' => 'Categoria Update',
         ]);
 
-        $produtoId = $I->haveRecord(\common\models\Produto::class, [
+        $produtoId = $I->haveRecord(Produto::class, [
             'categoria_id' => $categoriaId,
             'nome' => 'Leite Meio-Gordo',
             'descricao' => 'Produto para editar',
@@ -77,7 +77,7 @@ final class CriarProdutoCest
         $I->fillField('input[name="nome"]', 'Leite Meio-Gordo (Atualizado)');
         $I->click('Guardar');
 
-        $I->seeRecord(\common\models\Produto::class, [
+        $I->seeRecord(Produto::class, [
             'nome' => 'Leite Meio-Gordo (Atualizado)',
         ]);
     }

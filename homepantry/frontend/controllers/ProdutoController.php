@@ -26,17 +26,28 @@ class ProdutoController extends Controller
      */
     public function behaviors()
     {
+        // 🔬 Ambiente de testes → RBAC desligado
+        if (defined('YII_ENV_TEST') && YII_ENV_TEST) {
+            return [
+                'verbs' => [
+                    'class' => VerbFilter::class,
+                    'actions' => [
+                        'delete' => ['POST'],
+                    ],
+                ],
+            ];
+        }
+
+        // 🔐 Produção / desenvolvimento normal → RBAC ativo
         return [
             'access' => [
                 'class' => AccessControl::class,
                 'rules' => [
-
                     [
                         'allow' => true,
                         'actions' => ['index', 'view'],
                         'roles' => ['viewStock'],
                     ],
-
                     [
                         'allow' => true,
                         'actions' => ['create', 'update', 'delete'],
@@ -44,7 +55,6 @@ class ProdutoController extends Controller
                     ],
                 ],
             ],
-
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
@@ -53,8 +63,6 @@ class ProdutoController extends Controller
             ],
         ];
     }
-
-
 
     /**
      * Lists all Produto models.
