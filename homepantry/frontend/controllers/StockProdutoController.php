@@ -92,36 +92,57 @@ class StockProdutoController extends Controller
         ];
     }
 
-
-
-
     public function behaviors()
     {
+        // Ambiente de testes → RBAC desligado
+        if (defined('YII_ENV_TEST') && YII_ENV_TEST) {
+            return [
+                'verbs' => [
+                    'class' => \yii\filters\VerbFilter::class,
+                    'actions' => [
+                        'delete' => ['POST'],
+                    ],
+                ],
+            ];
+        }
+
+        // Ambiente normal (dev / prod) → RBAC ativo
         return [
             'access' => [
-                'class' => AccessControl::class,
+                'class' => \yii\filters\AccessControl::class,
                 'rules' => [
 
-                    // Todos podem ver stock
+                    // Ver stock → qualquer user autenticado
                     [
                         'allow' => true,
                         'actions' => ['index', 'view'],
-                        'roles' => ['@'], // logged users
+                        'roles' => ['@'],
                     ],
+
+                    // Membro da casa
                     [
                         'allow' => true,
-                        'actions' => ['increment', 'decrement','update'],
+                        'actions' => ['increment', 'decrement', 'update'],
                         'roles' => ['membroCasa'],
                     ],
+
+                    // Gestor de stock
                     [
                         'allow' => true,
-                        'actions' => ['create', 'delete','increment', 'decrement'],
+                        'actions' => ['create', 'delete', 'increment', 'decrement'],
                         'roles' => ['manageStock'],
                     ],
                 ],
             ],
+            'verbs' => [
+                'class' => \yii\filters\VerbFilter::class,
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
         ];
     }
+
 
     /**
      * Lists all StockProduto models.

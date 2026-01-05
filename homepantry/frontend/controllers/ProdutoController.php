@@ -37,7 +37,6 @@ class ProdutoController extends Controller
                 ],
             ];
         }
-
         // 🔐 Produção / desenvolvimento normal → RBAC ativo
         return [
             'access' => [
@@ -63,6 +62,7 @@ class ProdutoController extends Controller
             ],
         ];
     }
+
 
     /**
      * Lists all Produto models.

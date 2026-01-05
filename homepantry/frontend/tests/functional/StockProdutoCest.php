@@ -6,10 +6,14 @@ namespace frontend\tests\functional;
 
 use frontend\tests\FunctionalTester;
 use common\fixtures\UserFixture;
-use common\models\Produto;
 use common\models\Categoria;
+use common\models\Produto;
+use common\models\Casa;
+use common\models\CasaUtilizador;
+use common\models\Local;
+use common\models\StockProduto;
 
-final class CriarProdutoCest
+final class StockProdutoCest
 {
     public function _fixtures(): array
     {
@@ -21,64 +25,68 @@ final class CriarProdutoCest
         ];
     }
 
-    private function login(FunctionalTester $I): void
+    private function loginComPermissao(FunctionalTester $I): int
     {
         $I->amOnRoute('/site/login');
         $I->fillField('#loginform-username', 'erau');
         $I->fillField('#loginform-password', 'password_0');
         $I->click('button[name="login-button"]');
         $I->dontSee('LOGIN');
+
+        return 1; // user id
     }
 
-    public function createProduto(FunctionalTester $I): void
+    public function createStockProduto(FunctionalTester $I): void
     {
-        $this->login($I);
+        $userId = $this->loginComPermissao($I);
 
+        // Categoria
         $categoriaId = $I->haveRecord(Categoria::class, [
-            'nome' => 'Categoria Teste',
+            'nome' => 'Categoria Stock',
         ]);
 
-        $I->amOnRoute('/produto/create');
-
-        $I->selectOption('select[name="categoria_id"]', (string)$categoriaId);
-        $I->fillField('input[name="nome"]', 'Arroz Agulha');
-        $I->fillField('input[name="descricao"]', 'Arroz para testes funcionais');
-        $I->fillField('input[name="preco"]', '1.99');
-        $I->fillField('input[name="validade"]', '20/01/2026');
-
-        $I->attachFile('input[type="file"][name="imageFile"]', 'teste.jpg');
-
-        $I->click('Guardar');
-
-        $I->seeRecord(Produto::class, [
-            'nome' => 'Arroz Agulha',
-        ]);
-    }
-
-    public function updateProduto(FunctionalTester $I): void
-    {
-        $this->login($I);
-
-        $categoriaId = $I->haveRecord(Categoria::class, [
-            'nome' => 'Categoria Update',
-        ]);
-
+        // Produto
         $produtoId = $I->haveRecord(Produto::class, [
             'categoria_id' => $categoriaId,
-            'nome' => 'Leite Meio-Gordo',
-            'descricao' => 'Produto para editar',
-            'preco' => 0.89,
-            'validade' => '2026-02-10',
+            'nome' => 'Arroz Stock',
+            'descricao' => 'Produto para stock',
+            'preco' => 1.50,
+            'validade' => '2026-12-31',
             'imagem' => 'dummy.jpg',
         ]);
 
-        $I->amOnRoute('/produto/update', ['id' => $produtoId]);
+        // Casa
+        $casaId = $I->haveRecord(Casa::class, [
+            'nome' => 'Casa Teste',
+            'utilizadorPrincipal_id' => $userId,
+        ]);
 
-        $I->fillField('input[name="nome"]', 'Leite Meio-Gordo (Atualizado)');
-        $I->click('Guardar');
+        // CasaUtilizador
+        $I->haveRecord(CasaUtilizador::class, [
+            'casa_id' => $casaId,
+            'utilizador_id' => $userId,
+        ]);
 
-        $I->seeRecord(Produto::class, [
-            'nome' => 'Leite Meio-Gordo (Atualizado)',
+        // Local
+        $localId = $I->haveRecord(Local::class, [
+            'nome' => 'Despensa',
+            'casa_id' => $casaId,
+        ]);
+
+        // abrir form
+        $I->amOnRoute('/stock-produto/create');
+
+        $I->selectOption('#stockproduto-produto_id', (string)$produtoId);
+        $I->selectOption('#stockproduto-local_id', (string)$localId);
+        $I->fillField('#stockproduto-quantidade', '3');
+
+        $I->click('Save');
+
+        // ASSERT DB
+        $I->seeRecord(StockProduto::class, [
+            'produto_id' => $produtoId,
+            'local_id' => $localId,
+            'quantidade' => 3,
         ]);
     }
 }
