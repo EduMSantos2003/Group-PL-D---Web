@@ -23,7 +23,7 @@ class ProdutoController extends ActiveController
     public function actions()
     {
         $actions = parent::actions();
-        unset($actions['delete']); // 👈 FUNDAMENTAL
+        unset($actions['delete']); //  FUNDAMENTAL
         return $actions;
     }
 

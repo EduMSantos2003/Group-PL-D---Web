@@ -19,11 +19,13 @@ class ListaProdutoController extends ActiveController
                 'index'  => ['GET'],
                 'view'   => ['GET'],
                 'create' => ['POST'],
-                'update' => ['PUT','PATCH'],
+                'update' => ['PUT', 'PATCH'],
                 'delete' => ['DELETE'],
             ],
         ];
 
         return $behaviors;
     }
+
+
 }

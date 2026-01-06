@@ -4,11 +4,13 @@ namespace backend\modules\api\controllers;
 
 use yii\rest\ActiveController;
 use yii\filters\VerbFilter;
-use Yii;
-use common\models\Local;
-
 use yii\web\Response;
 use yii\filters\ContentNegotiator;
+use yii\web\ConflictHttpException;
+use yii\db\IntegrityException;
+use Yii;
+use Throwable;
+use common\models\Local;
 
 class LocalController extends ActiveController
 {
@@ -18,10 +20,8 @@ class LocalController extends ActiveController
     {
         $behaviors = parent::behaviors();
 
-        // remove AccessControl herdado
         unset($behaviors['access']);
 
-        //  FORÇAR JSON SEMPRE
         $behaviors['contentNegotiator'] = [
             'class' => ContentNegotiator::class,
             'formats' => [
@@ -32,12 +32,12 @@ class LocalController extends ActiveController
         $behaviors['verbs'] = [
             'class' => VerbFilter::class,
             'actions' => [
-                'index'        => ['GET'],          // GET /api/local
-                'view'         => ['GET'],          // GET /api/local/1
-                'create'       => ['POST'],         // POST /api/local
-                'update'       => ['PUT','PATCH'],  // PUT /api/local/1
-                'delete'       => ['DELETE'],       // DELETE /api/local/1
-                'locais-casa'  => ['GET'],          // GET /api/local/casa/2
+                'index'        => ['GET'],
+                'view'         => ['GET'],
+                'create'       => ['POST'],
+                'update'       => ['PUT','PATCH'],
+                'delete'       => ['DELETE'],
+                'locais-casa'  => ['GET'],
             ],
         ];
 
@@ -45,13 +45,55 @@ class LocalController extends ActiveController
     }
 
     /**
-     * 🔥 GET /api/local/casa/{id}
-     * Devolve os locais de uma casa (JSON PURO)
+     * DESATIVAR DELETE AUTOMÁTICO
+     */
+    public function actions()
+    {
+        $actions = parent::actions();
+        unset($actions['delete']); //  FUNDAMENTAL
+        return $actions;
+    }
+
+    protected function findModel($id)
+    {
+        $model = Local::findOne($id);
+
+        if ($model === null) {
+            throw new \yii\web\NotFoundHttpException('Local não encontrado.');
+        }
+
+        return $model;
+    }
+
+
+    /**
+     *  DELETE /api/local/{id}
+     */
+    public function actionDelete($id)
+    {
+        try {
+            $model = $this->findModel($id);
+            $model->delete();
+
+            Yii::$app->response->statusCode = 204;
+            return null;
+
+        } catch (IntegrityException $e) {
+
+            throw new ConflictHttpException(
+                'Não é possível apagar o local porque tem stock associado.'
+            );
+
+        } catch (Throwable $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     *  GET /api/local/casa/{id}
      */
     public function actionLocaisCasa($id)
     {
-        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
         return Local::find()
             ->where(['casa_id' => $id])
             ->asArray()
