@@ -54,7 +54,7 @@ return [
 
         'urlManager' => [
 
-            'enablePrettyUrl' => false,
+            'enablePrettyUrl' => true,
             'showScriptName' => false,
 
             'rules' => [
@@ -125,9 +125,13 @@ return [
                 // HISTORICO PRECO
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => ['api/historico-preco'],
+                    'controller' => ['api/produto'],
                     'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET {id}/historico-preco' => 'historico-preco',
+                    ],
                 ],
+
 
             ],
         ],
