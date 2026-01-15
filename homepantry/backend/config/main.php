@@ -74,7 +74,7 @@ return [
 
         // URL MANAGER (REST)
         'urlManager' => [
-            'enablePrettyUrl' => false, // usa index.php?r=
+            'enablePrettyUrl' => true,
             'showScriptName' => true,
             'rules' => [
 
