@@ -17,10 +17,8 @@ class ProdutoController extends ActiveController
     {
         $behaviors = parent::behaviors();
 
-        // remover AccessControl (como em Casa)
         unset($behaviors['access']);
 
-        // FORÇAR JSON
         $behaviors['contentNegotiator'] = [
             'class' => \yii\filters\ContentNegotiator::class,
             'formats' => [
