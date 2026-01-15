@@ -75,7 +75,7 @@ return [
         // URL MANAGER (REST)
         'urlManager' => [
             'enablePrettyUrl' => true,
-            'showScriptName' => true,
+            'showScriptName' => false,
             'rules' => [
 
                 // CASA
