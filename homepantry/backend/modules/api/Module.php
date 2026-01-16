@@ -11,25 +11,15 @@ class Module extends \yii\base\Module
     {
         parent::init();
 
-        // LIMPA QUALQUER OUTPUT ANTES DO JSON
         Yii::$app->response->on(Response::EVENT_BEFORE_SEND, function () {
+
+            // FORÇAR SEMPRE JSON
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            // LIMPAR OUTPUT (evita lixo antes do JSON)
             if (ob_get_length()) {
                 ob_clean();
             }
         });
-    }
-
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
-
-        $behaviors['contentNegotiator'] = [
-            'class' => \yii\filters\ContentNegotiator::class,
-            'formats' => [
-                'application/json' => Response::FORMAT_JSON,
-            ],
-        ];
-
-        return $behaviors;
     }
 }
