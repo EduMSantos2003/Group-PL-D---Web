@@ -67,7 +67,12 @@ class ListaController extends ActiveController
     }
 
     /**
-     * POST /api/lista/{id}/produtos
+     * POST /api/lista/{id}/adicionar-produto
+     * Body JSON exemplo:
+     * {
+     *   "produto_id": 10,
+     *   "quantidade": 2
+     * }
      */
     public function actionAdicionarProduto($id)
     {

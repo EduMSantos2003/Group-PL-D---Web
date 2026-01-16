@@ -120,6 +120,15 @@ return [
                     'pluralize' => false,
                 ],
 
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/matematica'],
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET raizdois' => 'raizdois',
+                    ],
+                ],
+
                 // LISTA
                 [
                     'class' => 'yii\rest\UrlRule',
@@ -127,7 +136,7 @@ return [
                     'pluralize' => false,
                     'extraPatterns' => [
                         'GET {id}/produtos'  => 'produtos',
-                        'POST {id}/produtos' => 'adicionar-produto',
+                        'POST {id}/adicionar-produto' => 'adicionar-produto',
                     ],
                 ],
 
