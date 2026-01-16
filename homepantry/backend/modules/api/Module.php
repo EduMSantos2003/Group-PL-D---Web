@@ -1,6 +1,7 @@
 <?php
 
 namespace backend\modules\api;
+
 use Yii;
 use yii\web\Response;
 
@@ -16,5 +17,19 @@ class Module extends \yii\base\Module
                 ob_clean();
             }
         });
+    }
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+
+        $behaviors['contentNegotiator'] = [
+            'class' => \yii\filters\ContentNegotiator::class,
+            'formats' => [
+                'application/json' => Response::FORMAT_JSON,
+            ],
+        ];
+
+        return $behaviors;
     }
 }
