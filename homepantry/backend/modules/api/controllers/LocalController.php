@@ -11,6 +11,8 @@ use yii\db\IntegrityException;
 use Yii;
 use Throwable;
 use common\models\Local;
+use common\models\Produto;
+
 
 class LocalController extends ActiveController
 {
@@ -38,6 +40,7 @@ class LocalController extends ActiveController
                 'update'       => ['PUT','PATCH'],
                 'delete'       => ['DELETE'],
                 'locais-casa'  => ['GET'],
+                'produtos'     => ['GET'],   // 👈 produtos por local
             ],
         ];
 
@@ -99,4 +102,21 @@ class LocalController extends ActiveController
             ->asArray()
             ->all();
     }
+
+    /**
+     * GET /api/local/{id}/produtos
+     */
+    public function actionProdutos($id)
+    {
+        $local = $this->findModel($id);
+
+        return Produto::find()
+            ->innerJoin('stock_produtos sp', 'sp.produto_id = produtos.id')
+            ->where(['sp.local_id' => $id])
+            ->asArray()
+            ->all();
+    }
+
+
+
 }

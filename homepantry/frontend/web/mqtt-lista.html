@@ -67,35 +67,42 @@
     const log = document.getElementById('log');
     const tbody = document.querySelector('#tabela tbody');
 
-    // ligar ao Mosquitto via WebSockets
+    function logMessage(msg) {
+        log.textContent += msg + '\n';
+        log.scrollTop = log.scrollHeight;
+    }
+
     const client = mqtt.connect('ws://localhost:9001');
 
     client.on('connect', () => {
         logMessage('Ligado ao broker MQTT');
-        client.subscribe('lista/#');
+        client.subscribe('casa/+/stock');
     });
 
     client.on('message', (topic, message) => {
-        const data = JSON.parse(message.toString());
+        let data;
 
-        logMessage(`[${topic}] ${message.toString()}`);
+        try {
+            data = JSON.parse(message.toString());
+        } catch {
+            logMessage('Mensagem inválida: ' + message.toString());
+            return;
+        }
+
+        logMessage(`[${topic}] ${data.acao}`);
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${data.acao}</td>
-            <td>${data.lista_id}</td>
+            <td>${data.casa_id}</td>
             <td>${data.produto_id ?? '-'}</td>
             <td>${data.quantidade ?? '-'}</td>
         `;
 
         tbody.prepend(tr);
     });
-
-    function logMessage(msg) {
-        log.textContent += msg + '\n';
-        log.scrollTop = log.scrollHeight;
-    }
 </script>
+
 
 </body>
 </html>

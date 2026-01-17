@@ -41,16 +41,25 @@ class StockProdutoController extends ActiveController
             return $model;
         }
 
-        // descobrir a casa através do local
         $local = Local::findOne($model->local_id);
 
         if ($local) {
             $topic = "casa/{$local->casa_id}/stock";
-            MqttHelper::publish($topic, 'Stock atualizado POST');
+
+            $payload = [
+                'acao' => 'create',
+                'casa_id' => $local->casa_id,
+                'local_id' => $model->local_id,
+                'produto_id' => $model->produto_id,
+                'quantidade' => $model->quantidade,
+            ];
+
+            MqttHelper::publish($topic, json_encode($payload));
         }
 
         return $model;
     }
+
 
     public function actionUpdate($id)
     {
@@ -65,11 +74,21 @@ class StockProdutoController extends ActiveController
 
         if ($local) {
             $topic = "casa/{$local->casa_id}/stock";
-            MqttHelper::publish($topic, 'Stock atualizado UPDATE');
+
+            $payload = [
+                'acao' => 'update',
+                'casa_id' => $local->casa_id,
+                'local_id' => $model->local_id,
+                'produto_id' => $model->produto_id,
+                'quantidade' => $model->quantidade,
+            ];
+
+            MqttHelper::publish($topic, json_encode($payload));
         }
 
         return $model;
     }
+
 
     public function actionDelete($id)
     {
@@ -80,11 +99,20 @@ class StockProdutoController extends ActiveController
 
         if ($local) {
             $topic = "casa/{$local->casa_id}/stock";
-            MqttHelper::publish($topic, 'Stock atualizado DELETE');
+
+            $payload = [
+                'acao' => 'delete',
+                'casa_id' => $local->casa_id,
+                'local_id' => $model->local_id,
+                'produto_id' => $model->produto_id,
+            ];
+
+            MqttHelper::publish($topic, json_encode($payload));
         }
 
         \Yii::$app->response->statusCode = 204;
     }
+
 
 
 

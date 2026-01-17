@@ -18,7 +18,7 @@ return [
             'site/login',
             'site/error',
             'site/logout',
-            'api/*'
+            'api/login'
         ],
         'rules' => [
             [
@@ -59,6 +59,19 @@ return [
 
             'rules' => [
 
+                //MatematicaController
+
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/matematica'],
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET raizdois' => 'raizdois',
+                    ],
+                ],
+
+
+
                 // 🔹 CASA (MASTER)
                 [
                     'class' => 'yii\rest\UrlRule',
@@ -68,8 +81,13 @@ return [
                         // MASTER → DETAIL
                         'GET {id}/locais' => 'locais',
                         'GET {id}/stock'  => 'stock', //StockProdutos
+                        'GET {id}/produtos' => 'produtos',//Produtos de uma casa
                     ],
                 ],
+
+//"
+
+
 
                 //Local
                 [
@@ -78,8 +96,10 @@ return [
                     'pluralize' => false,
                     'extraPatterns' => [
                         'GET casa/{id}' => 'locais-casa',
+                        'GET {id}/produtos' => 'produtos',
                     ],
                 ],
+
 
                 [
                     'class' => 'yii\rest\UrlRule',
@@ -130,6 +150,13 @@ return [
                     'extraPatterns' => [
                         'GET {id}/historico-preco' => 'historico-preco',
                     ],
+                ],
+
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/login'],
+                    'pluralize' => false,
+                    'only' => ['index'],
                 ],
 
 

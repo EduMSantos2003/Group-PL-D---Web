@@ -4,14 +4,13 @@ namespace common\components;
 
 class MqttHelper
 {
-    public static function publish($topic, $message)
+    public static function publish(string $topic, string $message): void
     {
-        $mosquittoPath = 'C:\Program Files\mosquitto\mosquitto_pub.exe';
+        $cmd = '"C:\Program Files\mosquitto\mosquitto_pub.exe" ' .
+            '-h 172.22.21.242 ' .
+            '-t ' . escapeshellarg($topic) . ' ' .
+            '-m ' . escapeshellarg($message);
 
-        $cmd = "\"{$mosquittoPath}\" -t \"{$topic}\" -m \"{$message}\"";
-
-        exec($cmd, $output, $returnCode);
-
-        return $returnCode === 0;
+        shell_exec($cmd);
     }
 }

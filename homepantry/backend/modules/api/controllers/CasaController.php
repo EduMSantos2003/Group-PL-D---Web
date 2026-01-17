@@ -7,6 +7,7 @@ use yii\web\NotFoundHttpException;
 use common\models\StockProduto;
 use common\models\Casa;
 use yii\web\Response;
+use common\models\Produto;
 
 class CasaController extends ActiveController
 {
@@ -39,6 +40,18 @@ class CasaController extends ActiveController
 
         return $behaviors;
     }
+
+    protected function findModel($id)
+    {
+        $model = Casa::findOne($id);
+
+        if ($model === null) {
+            throw new NotFoundHttpException('Casa não encontrada.');
+        }
+
+        return $model;
+    }
+
 
 
 
@@ -88,6 +101,24 @@ class CasaController extends ActiveController
             ->asArray()
             ->all();
     }
+
+    /**
+     * GET /api/casa/{id}/produtos
+     */
+    public function actionProdutos($id)
+    {
+        // valida se a casa existe
+        $this->findModel($id);
+
+        return Produto::find()
+            ->innerJoin('stock_produtos sp', 'sp.produto_id = produtos.id')
+            ->innerJoin('locais l', 'l.id = sp.local_id')
+            ->where(['l.casa_id' => $id])
+            ->distinct()
+            ->asArray()
+            ->all();
+    }
+
 
 
 
