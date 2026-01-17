@@ -9,17 +9,16 @@ $params = array_merge(
 return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
+
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-
-    // 🔐 ACCESS CONTROL (backoffice)
     'as access' => [
         'class' => \yii\filters\AccessControl::class,
         'except' => [
             'site/login',
             'site/error',
             'site/logout',
-            'api/*',
+            'api/login'
         ],
         'rules' => [
             [
@@ -27,27 +26,25 @@ return [
                 'roles' => ['admin', 'gestorCasa'],
             ],
         ],
-        'denyCallback' => function () {
+
+        'denyCallback' => function ($rule, $action) {
             if (\Yii::$app->user->isGuest) {
+                // não autenticado → vai para login
                 return \Yii::$app->response->redirect(['/site/login']);
             }
+            // autenticado mas sem permissões → 403
             throw new \yii\web\ForbiddenHttpException(
                 'Não tem permissões para aceder ao back-office.'
             );
         },
     ],
-
-    // 🔌 API MODULE
     'modules' => [
         'api' => [
             'class' => 'backend\modules\api\Module',
         ],
     ],
-
-    // 🔧 COMPONENTES (UM SÓ BLOCO, SEM DUPLICAÇÕES)
     'components' => [
-
-        // JSON ENTRADA (POST / PUT / PATCH)
+        // IMPORTANTE: permite POST/PUT/PATCH JSON na API
         'request' => [
             'csrfParam' => '_csrf-backend',
             'parsers' => [
@@ -84,51 +81,13 @@ return [
 
         // URL MANAGER (REST)
         'urlManager' => [
+
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+
             'rules' => [
 
-                // CASA
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => ['api/casa'],
-                    'pluralize' => false,
-                    'extraPatterns' => [
-                        'GET {id}/locais' => 'locais',
-                        'GET {id}/stock'  => 'stock',
-                    ],
-                ],
-
-                // LOCAL
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => ['api/local'],
-                    'pluralize' => false,
-                    'extraPatterns' => [
-                        'GET casa/{id}' => 'locais-casa',
-                    ],
-                ],
-
-                // STOCK PRODUTO
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => ['api/stock-produto'],
-                    'pluralize' => false,
-                ],
-
-                // PRODUTO
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => ['api/produto'],
-                    'pluralize' => false,
-                ],
-
-                // CATEGORIA
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => ['api/categoria'],
-                    'pluralize' => false,
-                ],
+                //MatematicaController
 
                 [
                     'class' => 'yii\rest\UrlRule',
@@ -139,25 +98,79 @@ return [
                     ],
                 ],
 
-                // LISTA
+
+
+                // 🔹 CASA (MASTER)
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/casa'],
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        // MASTER → DETAIL
+                        'GET {id}/locais' => 'locais',
+                        'GET {id}/stock'  => 'stock', //StockProdutos
+                        'GET {id}/produtos' => 'produtos',//Produtos de uma casa
+                    ],
+                ],
+
+//"
+
+
+
+                //Local
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/local'],
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET casa/{id}' => 'locais-casa',
+                        'GET {id}/produtos' => 'produtos',
+                    ],
+                ],
+
+
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/stock-produto'],  //StockProdutos
+                    'pluralize' => false,
+                ],
+
+                //  LOCAL (DETAIL CRUD)
+                // API REST
+
+                // PRODUTO (3.º CRUD)
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/produto'],
+                    'pluralize' => false,
+                ],
+                //CATEGORIA
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/categoria'],
+                    'pluralize' => false,
+                ],
+
+                // 🔹 LISTA
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['api/lista'],
                     'pluralize' => false,
                     'extraPatterns' => [
-                        'GET {id}/produtos'  => 'produtos',
-                        'POST {id}/adicionar-produto' => 'adicionar-produto',
+                        'GET {id}/produtos' => 'produtos',
+                        'POST {id}/produtos' => 'adicionar-produto',
                     ],
+
                 ],
 
-                // LISTA-PRODUTO
+                // 🔹 LISTA PRODUTO
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['api/lista-produto'],
                     'pluralize' => false,
                 ],
 
-                // HISTÓRICO PREÇO
+                // HISTORICO PRECO
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['api/produto'],
@@ -166,15 +179,33 @@ return [
                         'GET {id}/historico-preco' => 'historico-preco',
                     ],
                 ],
+
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/login'],
+                    'pluralize' => false,
+                    'only' => ['index'],
+                ],
+
+
             ],
         ],
 
-        // SESSION
+
+
+        'user' => [
+            'identityClass' => 'common\models\User',
+            'enableAutoLogin' => true,
+            'identityCookie' => [
+                'name' => '_identity-backend',
+                'httpOnly' => true
+            ],
+        ],
+
         'session' => [
             'name' => 'advanced-backend',
         ],
 
-        // LOG
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -185,11 +216,9 @@ return [
             ],
         ],
 
-        // ERROS
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
     ],
 
-    'params' => $params,
 ];
