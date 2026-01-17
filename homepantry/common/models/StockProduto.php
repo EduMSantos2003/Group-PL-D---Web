@@ -133,23 +133,6 @@ class StockProduto extends \yii\db\ActiveRecord
         return $this->hasOne(User::class, ['id' => 'utilizador_id']);
     }
 
-    public function fields()
-    {
-        $fields = parent::fields();
-
-        // adicionar nome do produto e nome do local no JSON
-        $fields['produto_nome'] = function () {
-            return $this->produto ? $this->produto->nome : null;
-        };
-
-        $fields['local_nome'] = function () {
-            return $this->local ? $this->local->nome : null;
-        };
-
-        return $fields;
-    }
-
-
 
 
 }

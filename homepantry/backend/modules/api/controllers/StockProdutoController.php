@@ -60,35 +60,6 @@ class StockProdutoController extends ActiveController
         return $model;
     }
 
-    public function actions()
-    {
-        $actions = parent::actions();
-
-        $actions['index']['prepareDataProvider'] = function () {
-            $query = \common\models\StockProduto::find()
-                ->with(['produto', 'local']);
-
-            $localId = \Yii::$app->request->get('local_id');
-            if ($localId) {
-                $query->andWhere(['local_id' => $localId]);
-            }
-
-            $casaId = \Yii::$app->request->get('casa_id');
-            if ($casaId) {
-                $query->joinWith('local')
-                    ->andWhere(['local.casa_id' => $casaId]);
-            }
-
-            return new \yii\data\ActiveDataProvider([
-                'query' => $query,
-                'pagination' => false
-            ]);
-        };
-
-        return $actions;
-    }
-
-
 
     public function actionUpdate($id)
     {
