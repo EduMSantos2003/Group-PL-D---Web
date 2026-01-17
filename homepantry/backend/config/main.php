@@ -71,6 +71,16 @@ return [
                 'httpOnly' => true,
             ],
         ],
+        
+        [
+            'class' => 'yii\rest\UrlRule',
+            'controller' => ['api/auth'],
+            'pluralize' => false,
+            'extraPatterns' => [
+                'POST login' => 'login',
+            ],
+        ],
+
 
         // URL MANAGER (REST)
         'urlManager' => [
