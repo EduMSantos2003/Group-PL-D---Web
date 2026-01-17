@@ -4,6 +4,7 @@ namespace backend\modules\api;
 
 use Yii;
 use yii\web\Response;
+use yii\filters\auth\HttpBearerAuth;
 
 class Module extends \yii\base\Module
 {
@@ -21,5 +22,20 @@ class Module extends \yii\base\Module
                 ob_clean();
             }
         });
+    }
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+
+        // Autenticação por token Bearer
+        $behaviors['authenticator'] = [
+            'class' => HttpBearerAuth::class,
+            'except' => [
+                'auth/login', 
+            ],
+        ];
+
+        return $behaviors;
     }
 }

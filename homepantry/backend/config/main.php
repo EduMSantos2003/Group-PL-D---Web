@@ -71,7 +71,7 @@ return [
                 'httpOnly' => true,
             ],
         ],
-        
+
         [
             'class' => 'yii\rest\UrlRule',
             'controller' => ['api/auth'],
