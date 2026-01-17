@@ -1,4 +1,5 @@
 <?php
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -9,16 +10,19 @@ $params = array_merge(
 return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
-
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
+
+    // ACCESS CONTROL (apenas para back-office)
     'as access' => [
         'class' => \yii\filters\AccessControl::class,
         'except' => [
             'site/login',
             'site/error',
             'site/logout',
-            'api/login'
+
+            // API toda fora do back-office access control
+            'api/*',
         ],
         'rules' => [
             [
@@ -26,25 +30,26 @@ return [
                 'roles' => ['admin', 'gestorCasa'],
             ],
         ],
-
-        'denyCallback' => function ($rule, $action) {
-            if (\Yii::$app->user->isGuest) {
-                // não autenticado → vai para login
-                return \Yii::$app->response->redirect(['/site/login']);
+        'denyCallback' => function () {
+            if (Yii::$app->user->isGuest) {
+                return Yii::$app->response->redirect(['/site/login']);
             }
-            // autenticado mas sem permissões → 403
             throw new \yii\web\ForbiddenHttpException(
                 'Não tem permissões para aceder ao back-office.'
             );
         },
     ],
+
+    // 🔌 API MODULE
     'modules' => [
         'api' => [
             'class' => 'backend\modules\api\Module',
         ],
     ],
+
     'components' => [
-        // IMPORTANTE: permite POST/PUT/PATCH JSON na API
+
+        // JSON entrada (POST / PUT / PATCH)
         'request' => [
             'csrfParam' => '_csrf-backend',
             'parsers' => [
@@ -52,43 +57,37 @@ return [
             ],
         ],
 
-        // JSON SAÍDA (API)
+        // JSON saída
         'response' => [
             'format' => yii\web\Response::FORMAT_JSON,
             'charset' => 'UTF-8',
         ],
 
-        // USER (backend + API)
+        // USER (API token / sem sessão)
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => false,
             'enableSession' => false,
-            'identityCookie' => [
-                'name' => '_identity-backend',
-                'httpOnly' => true,
-            ],
         ],
 
-        [
-            'class' => 'yii\rest\UrlRule',
-            'controller' => ['api/auth'],
-            'pluralize' => false,
-            'extraPatterns' => [
-                'POST login' => 'login',
-            ],
-        ],
-
-
-        // URL MANAGER (REST)
+        //  URL MANAGER
         'urlManager' => [
-
             'enablePrettyUrl' => true,
             'showScriptName' => false,
 
             'rules' => [
 
-                //MatematicaController
+                //  AUTH (LOGIN)
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/auth'],
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'POST login' => 'login',
+                    ],
+                ],
 
+                // MATEMÁTICA
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['api/matematica'],
@@ -98,79 +97,37 @@ return [
                     ],
                 ],
 
-
-
-                // 🔹 CASA (MASTER)
+                // CASA
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['api/casa'],
                     'pluralize' => false,
                     'extraPatterns' => [
-                        // MASTER → DETAIL
-                        'GET {id}/locais' => 'locais',
-                        'GET {id}/stock'  => 'stock', //StockProdutos
-                        'GET {id}/produtos' => 'produtos',//Produtos de uma casa
+                        'GET {id}/locais'   => 'locais',
+                        'GET {id}/stock'    => 'stock',
+                        'GET {id}/produtos' => 'produtos',
                     ],
                 ],
 
-//"
-
-
-
-                //Local
+                // LOCAL
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['api/local'],
                     'pluralize' => false,
                     'extraPatterns' => [
-                        'GET casa/{id}' => 'locais-casa',
+                        'GET casa/{id}'     => 'locais-casa',
                         'GET {id}/produtos' => 'produtos',
                     ],
                 ],
 
-
+                // STOCK PRODUTO
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => ['api/stock-produto'],  //StockProdutos
+                    'controller' => ['api/stock-produto'],
                     'pluralize' => false,
                 ],
 
-                //  LOCAL (DETAIL CRUD)
-                // API REST
-
-                // PRODUTO (3.º CRUD)
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => ['api/produto'],
-                    'pluralize' => false,
-                ],
-                //CATEGORIA
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => ['api/categoria'],
-                    'pluralize' => false,
-                ],
-
-                // 🔹 LISTA
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => ['api/lista'],
-                    'pluralize' => false,
-                    'extraPatterns' => [
-                        'GET {id}/produtos' => 'produtos',
-                        'POST {id}/produtos' => 'adicionar-produto',
-                    ],
-
-                ],
-
-                // 🔹 LISTA PRODUTO
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => ['api/lista-produto'],
-                    'pluralize' => false,
-                ],
-
-                // HISTORICO PRECO
+                // PRODUTO
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['api/produto'],
@@ -180,32 +137,39 @@ return [
                     ],
                 ],
 
+                // CATEGORIA
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => ['api/login'],
+                    'controller' => ['api/categoria'],
                     'pluralize' => false,
-                    'only' => ['index'],
                 ],
 
+                // LISTA
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/lista'],
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'GET {id}/produtos'  => 'produtos',
+                        'POST {id}/produtos' => 'adicionar-produto',
+                    ],
+                ],
 
+                // LISTA-PRODUTO
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['api/lista-produto'],
+                    'pluralize' => false,
+                ],
             ],
         ],
 
-
-
-        'user' => [
-            'identityClass' => 'common\models\User',
-            'enableAutoLogin' => true,
-            'identityCookie' => [
-                'name' => '_identity-backend',
-                'httpOnly' => true
-            ],
-        ],
-
+        // SESSION (opcional, para backoffice)
         'session' => [
             'name' => 'advanced-backend',
         ],
 
+        // LOG
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -216,9 +180,11 @@ return [
             ],
         ],
 
+        // ERROS
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
     ],
 
+    'params' => $params,
 ];
