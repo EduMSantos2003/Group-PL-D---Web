@@ -32,7 +32,7 @@ class Module extends \yii\base\Module
         $behaviors['authenticator'] = [
             'class' => HttpBearerAuth::class,
             'except' => [
-                'auth/login', 
+                'auth/login',
             ],
         ];
 
