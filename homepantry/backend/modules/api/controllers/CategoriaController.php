@@ -16,6 +16,18 @@ class CategoriaController extends ActiveController
     {
         $behaviors = parent::behaviors();
 
+        // remover AccessControl (como nos outros)
+        unset($behaviors['access']);
+
+        // FORÇAR JSON
+        $behaviors['contentNegotiator'] = [
+            'class' => \yii\filters\ContentNegotiator::class,
+            'formats' => [
+                'application/json' => \yii\web\Response::FORMAT_JSON,
+            ],
+        ];
+
+        // manter VerbFilter
         $behaviors['verbs'] = [
             'class' => VerbFilter::class,
             'actions' => [

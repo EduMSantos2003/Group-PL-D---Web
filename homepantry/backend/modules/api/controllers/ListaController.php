@@ -63,11 +63,36 @@ class ListaController extends ActiveController
             throw new NotFoundHttpException('Lista não encontrada');
         }
 
-        return $lista->listaProdutos;
+        $items = ListaProduto::find()
+            ->where(['lista_id' => $id])
+            ->with('produto')   // precisa da relation getProduto() no model
+            ->all();
+
+        $res = [];
+
+        foreach ($items as $lp) {
+            $res[] = [
+                'id' => $lp->id,
+                'lista_id' => $lp->lista_id,
+                'produto_id' => $lp->produto_id,
+                'produto_nome' => $lp->produto ? $lp->produto->nome : null,
+                'quantidade' => $lp->quantidade,
+                'precoUnitario' => $lp->precoUnitario,
+                'subTotal' => $lp->subTotal,
+            ];
+        }
+
+        return $res;
     }
 
+
     /**
-     * POST /api/lista/{id}/produtos
+     * POST /api/lista/{id}/adicionar-produto
+     * Body JSON exemplo:
+     * {
+     *   "produto_id": 10,
+     *   "quantidade": 2
+     * }
      */
     public function actionAdicionarProduto($id)
     {
