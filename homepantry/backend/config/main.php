@@ -58,10 +58,10 @@ return [
         ],
 
         // JSON saída
-        'response' => [
-            'format' => yii\web\Response::FORMAT_JSON,
-            'charset' => 'UTF-8',
-        ],
+        //'response' => [
+        //    'format' => yii\web\Response::FORMAT_JSON,
+        //    'charset' => 'UTF-8',
+        //],
 
         // USER (API token / sem sessão)
         'user' => [
