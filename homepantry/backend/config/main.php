@@ -66,8 +66,8 @@ return [
         // USER (API token / sem sessão)
         'user' => [
             'identityClass' => 'common\models\User',
-            'enableAutoLogin' => false,
-            'enableSession' => false,
+            'enableAutoLogin' => true,
+            'enableSession' => true,
         ],
 
         //  URL MANAGER
