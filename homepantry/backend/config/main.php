@@ -72,7 +72,7 @@ return [
 
         //  URL MANAGER
         'urlManager' => [
-            'enablePrettyUrl' => false,
+            'enablePrettyUrl' => true,
             'showScriptName' => false,
 
             'rules' => [
