@@ -87,12 +87,6 @@ use yii\helpers\Html;
                         'url' => ['/historico-preco/index'],
                         'visible' => !Yii::$app->user->isGuest,
                     ],
-                    [
-                        'label' => 'Tarefas',
-                        'icon' => 'list',
-                        'url' => ['/tarefa/index'],
-                        'visible' => !Yii::$app->user->isGuest,
-                    ],
                 ],
             ]) ?>
         </nav>

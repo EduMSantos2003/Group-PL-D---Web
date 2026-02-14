@@ -50,8 +50,6 @@ AppAsset::register($this);
                     <?= Html::a('Stock', ['/stock-produto/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
                     <?= Html::a('Listas', ['/lista/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
                     <?= Html::a('Produtos', ['/produto/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
-                    <?= Html::a('Tarefas', ['/tarefa/index'], ['class' => 'nav-item nav-link fw-bold']) ?>
-
 
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle fw-bold" data-bs-toggle="dropdown">
